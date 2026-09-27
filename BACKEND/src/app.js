@@ -21,9 +21,10 @@ import orderRoutes from "./routes/orderRoutes.js";
 import careerRoutes from "./routes/careerRoutes.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
 
-// Contact / Bulk Inquiries (NEW)
+// Contact / Bulk Inquiries
 import contactRoutes from "./routes/contactRoutes.js";
 
+// Customizations
 import customizationRoutes from "./routes/customizationRoutes.js";
 
 // =========================================================
@@ -32,13 +33,11 @@ import customizationRoutes from "./routes/customizationRoutes.js";
 
 import errorMiddleware from "./middleware/errorMiddleware.js";
 
-
 // =========================================================
 // APP
 // =========================================================
 
 const app = express();
-
 
 // =========================================================
 // FILE PATH
@@ -47,14 +46,38 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
 // =========================================================
 // CORS
 // =========================================================
 
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  "http://localhost:5173",
+  "http://localhost:3000",
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "*",
+    origin: (origin, callback) => {
+      // Allow requests without origin
+      // Example: Postman, mobile apps, server-to-server
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      // Allow all origins if CLIENT_URL is *
+      if (process.env.CLIENT_URL === "*") {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(
+        new Error(`CORS blocked for origin: ${origin}`)
+      );
+    },
 
     methods: [
       "GET",
@@ -62,15 +85,17 @@ app.use(
       "PUT",
       "PATCH",
       "DELETE",
+      "OPTIONS",
     ],
 
     allowedHeaders: [
       "Content-Type",
       "Authorization",
     ],
+
+    credentials: true,
   })
 );
-
 
 // =========================================================
 // BODY PARSERS
@@ -89,7 +114,6 @@ app.use(
   })
 );
 
-
 // =========================================================
 // STATIC UPLOADS
 // =========================================================
@@ -101,41 +125,58 @@ app.use(
   )
 );
 
+// =========================================================
+// ROOT / HOME ROUTE
+// =========================================================
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+
+    message:
+      "Voxcelnova Clothing Manufacturing Backend API is running",
+
+    version: "1.0.0",
+
+    environment:
+      process.env.NODE_ENV || "development",
+
+    endpoints: {
+      health: "/api",
+
+      auth: "/api/auth",
+      users: "/api/users",
+      products: "/api/products",
+      profile: "/api/profile",
+      addresses: "/api/addresses",
+      wishlist: "/api/wishlist",
+      password: "/api/password",
+      orders: "/api/orders",
+
+      careers: "/api/careers",
+      applications: "/api/applications",
+
+      contact: "/api/contact",
+
+      customizations: "/api/customizations",
+    },
+  });
+});
 
 // =========================================================
-// HOME ROUTE
+// API HEALTH CHECK
 // =========================================================
 
-app.get(
-  "/",
-  (req, res) => {
-    res.status(200).json({
-      success: true,
-
-      message:
-        "Clothing Manufacturing Backend API is running",
-
-      version: "1.0.0",
-
-      endpoints: {
-        auth: "/api/auth",
-        users: "/api/users",
-        products: "/api/products",
-        profile: "/api/profile",
-        addresses: "/api/addresses",
-        wishlist: "/api/wishlist",
-        password: "/api/password",
-        orders: "/api/orders",
-
-        careers: "/api/careers",
-        applications: "/api/applications",
-
-        contact: "/api/contact", // <-- Added Contact Endpoint
-      },
-    });
-  }
-);
-
+app.get("/api", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Voxcelnova API is running",
+    version: "1.0.0",
+    environment:
+      process.env.NODE_ENV || "development",
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // =========================================================
 // AUTH ROUTES
@@ -146,7 +187,6 @@ app.use(
   authRoutes
 );
 
-
 // =========================================================
 // USER ROUTES
 // =========================================================
@@ -155,7 +195,6 @@ app.use(
   "/api/users",
   userRoutes
 );
-
 
 // =========================================================
 // PRODUCT ROUTES
@@ -166,7 +205,6 @@ app.use(
   productRoutes
 );
 
-
 // =========================================================
 // CUSTOMER PROFILE
 // =========================================================
@@ -175,7 +213,6 @@ app.use(
   "/api/profile",
   profileRoutes
 );
-
 
 // =========================================================
 // CUSTOMER ADDRESSES
@@ -186,7 +223,6 @@ app.use(
   addressRoutes
 );
 
-
 // =========================================================
 // WISHLIST
 // =========================================================
@@ -195,7 +231,6 @@ app.use(
   "/api/wishlist",
   wishlistRoutes
 );
-
 
 // =========================================================
 // PASSWORD
@@ -206,7 +241,6 @@ app.use(
   passwordRoutes
 );
 
-
 // =========================================================
 // ORDERS
 // =========================================================
@@ -215,7 +249,6 @@ app.use(
   "/api/orders",
   orderRoutes
 );
-
 
 // =========================================================
 // CAREERS
@@ -226,7 +259,6 @@ app.use(
   careerRoutes
 );
 
-
 // =========================================================
 // JOB APPLICATIONS
 // =========================================================
@@ -236,18 +268,17 @@ app.use(
   applicationRoutes
 );
 
-app.use("/api/customizations", customizationRoutes);
+// =========================================================
+// CUSTOMIZATIONS
+// =========================================================
+
+app.use(
+  "/api/customizations",
+  customizationRoutes
+);
 
 // =========================================================
-// CONTACT & BULK INQUIRIES (NEW)
-// =========================================================
-//
-// Public:
-// POST /api/contact       - Submit bulk order inquiry
-//
-// Admin / Internal:
-// GET  /api/contact       - View all received inquiries
-//
+// CONTACT & BULK INQUIRIES
 // =========================================================
 
 app.use(
@@ -255,32 +286,23 @@ app.use(
   contactRoutes
 );
 
-
 // =========================================================
 // 404 ROUTE
 // =========================================================
 
-app.use(
-  (req, res) => {
-    res.status(404).json({
-      success: false,
-
-      message: "Route not found.",
-
-      path: req.originalUrl,
-    });
-  }
-);
-
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found.",
+    path: req.originalUrl,
+  });
+});
 
 // =========================================================
 // GLOBAL ERROR HANDLER
 // =========================================================
 
-app.use(
-  errorMiddleware
-);
-
+app.use(errorMiddleware);
 
 // =========================================================
 // EXPORT
