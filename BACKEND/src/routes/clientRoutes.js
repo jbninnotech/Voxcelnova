@@ -21,7 +21,6 @@ import upload from "../middleware/upload.js";
 
 const router = express.Router();
 
-// Multi-field upload configurations
 const projectUploadFields = upload.fields([
   { name: "image", maxCount: 1 },
   { name: "clientLogo", maxCount: 1 },
@@ -34,48 +33,15 @@ const reviewUploadFields = upload.fields([
 ]);
 
 // ==========================================
-// 0. QUICK TEST (To verify routes in browser)
+// 1. STATS (Must be above /:id)
 // ==========================================
 router.get("/test", (req, res) => {
   res.json({ success: true, message: "Client API routes are working!" });
 });
-
-// ==========================================
-// 1. STATS
-// ==========================================
 router.get(["/stats", "/client-stats"], getClientStats);
 
 // ==========================================
-// 2. DELIVERIES & CLIENT PROJECTS
-// ==========================================
-router.get(["/", "/projects", "/client-projects"], getClientProjects);
-router.get(["/project/:id", "/projects/:id", "/:id"], getSingleClientProject);
-
-router.post(
-  ["/", "/projects", "/client-projects"],
-  protect,
-  adminOnly,
-  projectUploadFields,
-  createClientProject
-);
-
-router.put(
-  ["/:id", "/projects/:id", "/client-projects/:id"],
-  protect,
-  adminOnly,
-  projectUploadFields,
-  updateClientProject
-);
-
-router.delete(
-  ["/:id", "/projects/:id", "/client-projects/:id"],
-  protect,
-  adminOnly,
-  deleteClientProject
-);
-
-// ==========================================
-// 3. CLIENT REVIEWS
+// 2. CLIENT REVIEWS (Must be above /:id)
 // ==========================================
 router.get(["/reviews", "/client-reviews"], getClientReviews);
 
@@ -108,7 +74,7 @@ router.delete(
 );
 
 // ==========================================
-// 4. CLIENT FEEDBACKS
+// 3. CLIENT FEEDBACKS (Must be above /:id)
 // ==========================================
 router.get(["/feedbacks", "/feedback", "/client-feedbacks", "/client-feedback"], getClientFeedbacks);
 
@@ -132,6 +98,39 @@ router.delete(
   protect,
   adminOnly,
   deleteClientFeedback
+);
+
+// ==========================================
+// 4. CLIENT PROJECTS / DELIVERIES (LIST & CREATE)
+// ==========================================
+router.get(["/", "/projects", "/client-projects"], getClientProjects);
+
+router.post(
+  ["/", "/projects", "/client-projects"],
+  protect,
+  adminOnly,
+  projectUploadFields,
+  createClientProject
+);
+
+// ==========================================
+// 5. WILDCARD /:id ROUTES (MUST BE AT THE VERY BOTTOM!)
+// ==========================================
+router.get(["/projects/:id", "/project/:id", "/:id"], getSingleClientProject);
+
+router.put(
+  ["/projects/:id", "/client-projects/:id", "/:id"],
+  protect,
+  adminOnly,
+  projectUploadFields,
+  updateClientProject
+);
+
+router.delete(
+  ["/projects/:id", "/client-projects/:id", "/:id"],
+  protect,
+  adminOnly,
+  deleteClientProject
 );
 
 export default router;
