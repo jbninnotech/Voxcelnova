@@ -3,68 +3,45 @@ import api from "./api";
 const clientService = {
   // ================= STATS =================
   getStats: async () => {
-    try {
-      const res = await api.get("/clients/stats");
-      return res.data;
-    } catch {
-      const res = await api.get("/client-stats");
-      return res.data;
-    }
+    const res = await api.get("/clients/stats");
+    return res.data;
   },
 
   // ================= PROJECTS / DELIVERIES =================
   getProjects: async (category = "All") => {
     const query = category && category !== "All" ? `?category=${encodeURIComponent(category)}` : "";
-    try {
-      // First try /clients/projects
-      const res = await api.get(`/clients/projects${query}`);
-      return res.data;
-    } catch (err) {
-      // Fallback to /clients
-      const res = await api.get(`/clients${query}`);
-      return res.data;
-    }
+    const res = await api.get(`/clients/projects${query}`);
+    return res.data;
   },
 
+  // FIXED: Forces browser to set multipart/form-data boundary
   createProject: async (formData) => {
-    try {
-      const res = await api.post("/clients/projects", formData);
-      return res.data;
-    } catch {
-      const res = await api.post("/clients", formData);
-      return res.data;
-    }
+    const res = await api.post("/clients/projects", formData, {
+      headers: {
+        "Content-Type": undefined, // CRITICAL: Allows browser to attach boundary
+      },
+    });
+    return res.data;
   },
 
   updateProject: async (id, formData) => {
-    try {
-      const res = await api.put(`/clients/projects/${id}`, formData);
-      return res.data;
-    } catch {
-      const res = await api.put(`/clients/${id}`, formData);
-      return res.data;
-    }
+    const res = await api.put(`/clients/projects/${id}`, formData, {
+      headers: {
+        "Content-Type": undefined,
+      },
+    });
+    return res.data;
   },
 
   deleteProject: async (id) => {
-    try {
-      const res = await api.delete(`/clients/projects/${id}`);
-      return res.data;
-    } catch {
-      const res = await api.delete(`/clients/${id}`);
-      return res.data;
-    }
+    const res = await api.delete(`/clients/projects/${id}`);
+    return res.data;
   },
 
   // ================= REVIEWS =================
   getReviews: async (all = false) => {
-    try {
-      const res = await api.get(`/clients/reviews?all=${all}`);
-      return res.data;
-    } catch {
-      const res = await api.get(`/reviews?all=${all}`);
-      return res.data;
-    }
+    const res = await api.get(`/clients/reviews?all=${all}`);
+    return res.data;
   },
 
   submitReview: async (reviewData) => {
@@ -73,13 +50,12 @@ const clientService = {
   },
 
   adminCreateReview: async (formData) => {
-    try {
-      const res = await api.post("/clients/admin/reviews", formData);
-      return res.data;
-    } catch {
-      const res = await api.post("/clients/reviews/admin", formData);
-      return res.data;
-    }
+    const res = await api.post("/clients/admin/reviews", formData, {
+      headers: {
+        "Content-Type": undefined,
+      },
+    });
+    return res.data;
   },
 
   toggleReviewApproval: async (id) => {
@@ -99,7 +75,11 @@ const clientService = {
   },
 
   createFeedback: async (formData) => {
-    const res = await api.post("/clients/feedbacks", formData);
+    const res = await api.post("/clients/feedbacks", formData, {
+      headers: {
+        "Content-Type": undefined,
+      },
+    });
     return res.data;
   },
 

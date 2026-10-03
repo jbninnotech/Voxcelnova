@@ -3,8 +3,15 @@ import ClientReview from "../models/ClientReview.js";
 import ClientFeedback from "../models/ClientFeedback.js";
 import { uploadBufferToCloudinary } from "../config/cloudinary.js";
 
+// Safe string extractor
+const getUrlString = (res) => {
+  if (!res) return "";
+  if (typeof res === "string") return res;
+  return res.secure_url || res.url || "";
+};
+
 // =========================================================
-// 1. GET ALL CLIENT PROJECTS / DELIVERIES (Public & Filterable)
+// 1. GET ALL CLIENT PROJECTS / DELIVERIES
 // =========================================================
 export const getClientProjects = async (req, res) => {
   try {
@@ -44,7 +51,7 @@ export const getClientProjects = async (req, res) => {
 };
 
 // =========================================================
-// 2. GET SINGLE PROJECT / DELIVERY DETAILS
+// 2. GET SINGLE PROJECT
 // =========================================================
 export const getSingleClientProject = async (req, res) => {
   try {
@@ -59,7 +66,7 @@ export const getSingleClientProject = async (req, res) => {
 };
 
 // =========================================================
-// 3. ADMIN: CREATE CLIENT PROJECT / DELIVERY SHOWCASE
+// 3. ADMIN: CREATE CLIENT PROJECT (FIXED CLOUDINARY UPLOAD)
 // =========================================================
 export const createClientProject = async (req, res) => {
   try {
@@ -78,63 +85,71 @@ export const createClientProject = async (req, res) => {
       orderIndex,
     } = req.body;
 
-    let imageUrl = req.body.image;
-    let clientLogoUrl = req.body.clientLogo || "";
+    let imageUrl = "";
+    let clientLogoUrl = "";
     let galleryUrls = [];
 
-    // Parse existing gallery URLs if provided as stringified JSON or array
-    if (req.body.gallery) {
-      try {
-        galleryUrls = typeof req.body.gallery === "string" ? JSON.parse(req.body.gallery) : req.body.gallery;
-      } catch {
-        galleryUrls = Array.isArray(req.body.gallery) ? req.body.gallery : [req.body.gallery];
-      }
-    }
-
-    // Handle Uploaded Files
-    if (req.files) {
-      // Primary Showcase Image
-      if (req.files.image && req.files.image[0]) {
-        imageUrl = await uploadBufferToCloudinary(req.files.image[0].buffer, "voxcel_deliveries");
-      }
-
-      // Optional Client Logo
-      if (req.files.clientLogo && req.files.clientLogo[0]) {
-        clientLogoUrl = await uploadBufferToCloudinary(req.files.clientLogo[0].buffer, "voxcel_logos");
-      }
-
-      // Optional Delivery Gallery Photos
-      if (req.files.gallery && req.files.gallery.length > 0) {
-        for (const file of req.files.gallery) {
-          const uploadedUrl = await uploadBufferToCloudinary(file.buffer, "voxcel_delivery_gallery");
-          galleryUrls.push(uploadedUrl);
-        }
-      }
+    // --- 1. EXTRACT AND UPLOAD PRIMARY IMAGE ---
+    let primaryFile = null;
+    if (req.files && req.files.image && req.files.image[0]) {
+      primaryFile = req.files.image[0];
     } else if (req.file) {
-      imageUrl = await uploadBufferToCloudinary(req.file.buffer, "voxcel_deliveries");
+      primaryFile = req.file;
     }
 
-    if (!title || !client || !category || !volume || !fabric || !imageUrl) {
+    if (primaryFile && primaryFile.buffer) {
+      const uploadRes = await uploadBufferToCloudinary(primaryFile.buffer, "voxcel_deliveries");
+      imageUrl = getUrlString(uploadRes);
+    } else if (typeof req.body.image === "string" && req.body.image.startsWith("http")) {
+      imageUrl = req.body.image.trim();
+    }
+
+    // Fail gracefully if image was not provided
+    if (!imageUrl) {
       return res.status(400).json({
         success: false,
-        message: "Title, client, category, volume, fabric, and primary showcase image are required.",
+        message: "Primary showcase image file is required and must be uploaded.",
       });
     }
 
+    // --- 2. EXTRACT AND UPLOAD CLIENT LOGO ---
+    let logoFile = null;
+    if (req.files && req.files.clientLogo && req.files.clientLogo[0]) {
+      logoFile = req.files.clientLogo[0];
+    }
+
+    if (logoFile && logoFile.buffer) {
+      const logoRes = await uploadBufferToCloudinary(logoFile.buffer, "voxcel_logos");
+      clientLogoUrl = getUrlString(logoRes);
+    } else if (typeof req.body.clientLogo === "string") {
+      clientLogoUrl = req.body.clientLogo.trim();
+    }
+
+    // --- 3. EXTRACT AND UPLOAD GALLERY PHOTOS ---
+    if (req.files && req.files.gallery && req.files.gallery.length > 0) {
+      for (const gFile of req.files.gallery) {
+        if (gFile.buffer) {
+          const galRes = await uploadBufferToCloudinary(gFile.buffer, "voxcel_delivery_gallery");
+          const urlStr = getUrlString(galRes);
+          if (urlStr) galleryUrls.push(urlStr);
+        }
+      }
+    }
+
     const project = await ClientProject.create({
-      title,
-      client,
-      clientLogo: clientLogoUrl,
-      category,
-      volume,
-      fabric,
+      title: title || "Uniform Delivery Batch",
+      client: client || "Client Institution",
+      category: category || "School Uniforms",
+      volume: volume || "Batch Run",
+      fabric: fabric || "Poly-Cotton Twill",
       location: location || "Pan India",
       deliveryDate: deliveryDate || "Completed",
       badge: badge || "DELIVERED",
       description: description || "",
       clientQuote: clientQuote || "",
-      image: imageUrl,
-      gallery: galleryUrls,
+      image: String(imageUrl), // ALWAYS A STRING URL
+      clientLogo: String(clientLogoUrl || ""),
+      gallery: galleryUrls.map(String),
       isFeatured: isFeatured !== undefined ? isFeatured === "true" || isFeatured === true : true,
       orderIndex: Number(orderIndex) || 0,
     });
@@ -151,7 +166,7 @@ export const createClientProject = async (req, res) => {
 };
 
 // =========================================================
-// 4. ADMIN: UPDATE CLIENT PROJECT / DELIVERY
+// 4. ADMIN: UPDATE CLIENT PROJECT
 // =========================================================
 export const updateClientProject = async (req, res) => {
   try {
@@ -162,26 +177,35 @@ export const updateClientProject = async (req, res) => {
       return res.status(404).json({ success: false, message: "Project not found" });
     }
 
-    // Handle File Uploads
-    if (req.files) {
-      if (req.files.image && req.files.image[0]) {
-        project.image = await uploadBufferToCloudinary(req.files.image[0].buffer, "voxcel_deliveries");
-      }
-      if (req.files.clientLogo && req.files.clientLogo[0]) {
-        project.clientLogo = await uploadBufferToCloudinary(req.files.clientLogo[0].buffer, "voxcel_logos");
-      }
-      if (req.files.gallery && req.files.gallery.length > 0) {
-        for (const file of req.files.gallery) {
-          const uploadedUrl = await uploadBufferToCloudinary(file.buffer, "voxcel_delivery_gallery");
-          project.gallery.push(uploadedUrl);
-        }
-      }
+    let primaryFile = null;
+    if (req.files && req.files.image && req.files.image[0]) {
+      primaryFile = req.files.image[0];
     } else if (req.file) {
-      project.image = await uploadBufferToCloudinary(req.file.buffer, "voxcel_deliveries");
+      primaryFile = req.file;
     }
 
-    if (req.body.image) project.image = req.body.image;
-    if (req.body.clientLogo) project.clientLogo = req.body.clientLogo;
+    if (primaryFile && primaryFile.buffer) {
+      const upRes = await uploadBufferToCloudinary(primaryFile.buffer, "voxcel_deliveries");
+      project.image = getUrlString(upRes);
+    } else if (typeof req.body.image === "string" && req.body.image.startsWith("http")) {
+      project.image = req.body.image.trim();
+    }
+
+    if (req.files && req.files.clientLogo && req.files.clientLogo[0]) {
+      const logoRes = await uploadBufferToCloudinary(req.files.clientLogo[0].buffer, "voxcel_logos");
+      project.clientLogo = getUrlString(logoRes);
+    }
+
+    if (req.files && req.files.gallery && req.files.gallery.length > 0) {
+      for (const file of req.files.gallery) {
+        if (file.buffer) {
+          const galRes = await uploadBufferToCloudinary(file.buffer, "voxcel_delivery_gallery");
+          const urlStr = getUrlString(galRes);
+          if (urlStr) project.gallery.push(urlStr);
+        }
+      }
+    }
+
     if (req.body.title) project.title = req.body.title;
     if (req.body.client) project.client = req.body.client;
     if (req.body.category) project.category = req.body.category;
@@ -191,9 +215,7 @@ export const updateClientProject = async (req, res) => {
     if (req.body.deliveryDate) project.deliveryDate = req.body.deliveryDate;
     if (req.body.badge) project.badge = req.body.badge;
     if (req.body.description !== undefined) project.description = req.body.description;
-    if (req.body.clientQuote !== undefined) project.clientQuote = req.body.clientQuote;
     if (req.body.isFeatured !== undefined) project.isFeatured = req.body.isFeatured === "true" || req.body.isFeatured === true;
-    if (req.body.orderIndex !== undefined) project.orderIndex = Number(req.body.orderIndex);
 
     await project.save();
 
@@ -265,8 +287,9 @@ export const submitClientReview = async (req, res) => {
 
     let avatarUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80";
 
-    if (req.file) {
-      avatarUrl = await uploadBufferToCloudinary(req.file.buffer, "voxcel_avatars");
+    if (req.file && req.file.buffer) {
+      const upRes = await uploadBufferToCloudinary(req.file.buffer, "voxcel_avatars");
+      avatarUrl = getUrlString(upRes);
     }
 
     const newReview = await ClientReview.create({
@@ -296,23 +319,26 @@ export const submitClientReview = async (req, res) => {
 };
 
 // =========================================================
-// 8. ADMIN: CREATE CLIENT REVIEW WITH AVATAR & COMPANY LOGO
+// 8. ADMIN: CREATE CLIENT REVIEW (WITH AVATAR & LOGO)
 // =========================================================
 export const adminCreateClientReview = async (req, res) => {
   try {
     const { author, designation, company, rating, review, projectDelivered, isVerifiedClient } = req.body;
-    let avatarUrl = req.body.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80";
-    let companyLogoUrl = req.body.companyLogo || "";
+    let avatarUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80";
+    let companyLogoUrl = "";
 
     if (req.files) {
-      if (req.files.avatar && req.files.avatar[0]) {
-        avatarUrl = await uploadBufferToCloudinary(req.files.avatar[0].buffer, "voxcel_avatars");
+      if (req.files.avatar && req.files.avatar[0] && req.files.avatar[0].buffer) {
+        const upRes = await uploadBufferToCloudinary(req.files.avatar[0].buffer, "voxcel_avatars");
+        avatarUrl = getUrlString(upRes);
       }
-      if (req.files.companyLogo && req.files.companyLogo[0]) {
-        companyLogoUrl = await uploadBufferToCloudinary(req.files.companyLogo[0].buffer, "voxcel_logos");
+      if (req.files.companyLogo && req.files.companyLogo[0] && req.files.companyLogo[0].buffer) {
+        const logoRes = await uploadBufferToCloudinary(req.files.companyLogo[0].buffer, "voxcel_logos");
+        companyLogoUrl = getUrlString(logoRes);
       }
-    } else if (req.file) {
-      avatarUrl = await uploadBufferToCloudinary(req.file.buffer, "voxcel_avatars");
+    } else if (req.file && req.file.buffer) {
+      const upRes = await uploadBufferToCloudinary(req.file.buffer, "voxcel_avatars");
+      avatarUrl = getUrlString(upRes);
     }
 
     if (!author || !review || !company) {
@@ -346,7 +372,7 @@ export const adminCreateClientReview = async (req, res) => {
 };
 
 // =========================================================
-// 9. ADMIN: TOGGLE REVIEW APPROVAL & DELETE REVIEW
+// 9. ADMIN: TOGGLE REVIEW APPROVAL & DELETE
 // =========================================================
 export const toggleReviewApproval = async (req, res) => {
   try {
@@ -384,7 +410,6 @@ export const getClientStats = async (req, res) => {
   try {
     const totalProjects = await ClientProject.countDocuments();
     const totalReviews = await ClientReview.countDocuments({ isApproved: true });
-    const totalFeedbacks = await ClientFeedback.countDocuments({ isPublished: true });
 
     res.status(200).json({
       success: true,
@@ -423,8 +448,9 @@ export const createClientFeedback = async (req, res) => {
     const { author, company, designation, rating, feedback } = req.body;
     let avatarUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80";
 
-    if (req.file) {
-      avatarUrl = await uploadBufferToCloudinary(req.file.buffer, "voxcel_feedbacks");
+    if (req.file && req.file.buffer) {
+      const upRes = await uploadBufferToCloudinary(req.file.buffer, "voxcel_feedbacks");
+      avatarUrl = getUrlString(upRes);
     }
 
     if (!author || !feedback) {
