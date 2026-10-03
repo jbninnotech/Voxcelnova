@@ -7,12 +7,10 @@ const API_URL =
 // TOKEN
 // =========================================================
 
+import authStorage from "../utils/authStorage";
+
 const getToken = () => {
-  return (
-    sessionStorage.getItem("token") ||
-    localStorage.getItem("token") ||
-    ""
-  );
+  return authStorage.getToken() || "";
 };
 
 

@@ -1,66 +1,115 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {
   FaArrowRight,
-  FaShieldAlt,
-  FaCheckCircle,
   FaFileDownload,
   FaConciergeBell,
-  FaUtensils,
-  FaBed
+  FaShieldAlt,
+  FaCheckCircle,
+  FaWhatsapp
 } from "react-icons/fa";
 import Customizations from "../../components/bulk/Customization";
 import HotelCatalogSection from "../../components/bulk/hotel/HotelCatalogSection";
 
 export default function HotelUniforms() {
+  // Replace with your real WhatsApp Business phone number (including country code, e.g., 91 for India, 1 for US)
+  const WHATSAPP_PHONE_NUMBER = "919876543210"; 
+  const defaultMessage = encodeURIComponent(
+    "Hello! I am interested in placing a Bulk Uniform Order for our hotel/hospitality business. Please provide a catalog and quotation."
+  );
+  const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${defaultMessage}`;
+
   return (
     <div className="hotel-hero-page">
       <style>{`
         /* ==========================================================
-           CLEAN LIGHT THEME COLOR PROFILE & TOKENS
+           COLOR PROFILE & DESIGN SYSTEM
         =========================================================== */
         :root {
-          /* Canvas & Backgrounds */
-          --bg-main:            #F4F8FE; /* Ultra-clean ice porcelain canvas */
-          --bg-surface:         #FFFFFF; /* Pure white card surface */
-          --bg-badge-tint:      #E8F5FE; /* Soft light-cyan badge & chip background */
-          
-          /* Logo Accent Blue & Cyan */
-          --color-cobalt:       #0052FF; /* Primary buttons, links, active icons */
-          --color-cobalt-hover: #003ECC; /* Darker cobalt for hover states */
-          --color-cyan:         #00D4FF; /* Swoosh highlights, secondary icons, glows */
-          
-          /* Typography */
-          --text-title:         #071838; /* Crisp, high-contrast dark navy for headings */
-          --text-body:          #495E7C; /* Soft slate navy for paragraphs */
-          --text-muted:         #6B82A0; /* Light slate for captions and small labels */
-
-          /* Borders & Dividers */
-          --border-subtle:      rgba(0, 82, 255, 0.14);  /* Clean card borders */
-          --border-hover:       rgba(0, 212, 255, 0.60); /* Cyan glowing border on hover */
-          
-          /* Shadows & Glows */
-          --shadow-card:        0 12px 32px rgba(0, 48, 143, 0.06);
-          --shadow-card-hover:  0 20px 48px rgba(0, 82, 255, 0.12);
-          --shadow-glow:        0 8px 25px rgba(0, 82, 255, 0.32);
-          --shadow-glow-hover:  0 12px 32px rgba(0, 82, 255, 0.45);
+          --color-cyan:         #00d4ff;
+          --color-cyan-glow:    rgba(0, 212, 255, 0.45);
+          --color-cobalt:       #0052ff;
+          --whatsapp-green:     #25d366;
+          --whatsapp-hover:     #1ebe5d;
+          --text-light:         #ffffff;
+          --text-subtle:        #e2e8f0;
         }
 
         .hotel-hero-page {
-          background-color: var(--bg-main);
-          color: var(--text-body);
+          background-color: #060b17;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           min-height: 100vh;
           overflow-x: hidden;
         }
 
         /* ==========================================================
+           HERO SECTION WITH HIGH-GRADE APPAREL BACKGROUND
+        =========================================================== */
+        .hero-banner-section {
+          position: relative;
+          min-height: 85vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          padding: 110px 24px 95px;
+          overflow: hidden;
+          background-color: #060c18;
+        }
+
+        /* High-Definition Apparel Rack Backdrop with cinematic dark overlay */
+        .hero-banner-bg {
+          position: absolute;
+          inset: 0;
+          background-image: 
+            linear-gradient(180deg, rgba(6, 12, 24, 0.85) 0%, rgba(3, 8, 18, 0.94) 100%),
+            url('https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=2000&q=85');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          transform: scale(1.03);
+          animation: subtleZoom 14s infinite alternate ease-in-out;
+          z-index: 1;
+        }
+
+        /* Dynamic Cyan Center Glow */
+        .hero-ambient-glow {
+          position: absolute;
+          width: 580px;
+          height: 380px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(0, 212, 255, 0.22) 0%, transparent 70%);
+          top: 45%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          filter: blur(60px);
+          pointer-events: none;
+          z-index: 2;
+          animation: floatGlow 7s infinite alternate ease-in-out;
+        }
+
+        .hero-content-wrapper {
+          position: relative;
+          z-index: 3;
+          max-width: 980px;
+          margin: 0 auto;
+        }
+
+        /* ==========================================================
            KEYFRAME ANIMATIONS
         =========================================================== */
-        @keyframes fadeInUp {
+        @keyframes subtleZoom {
+          0% {
+            transform: scale(1.0);
+          }
+          100% {
+            transform: scale(1.06);
+          }
+        }
+
+        @keyframes fadeInDown {
           from {
             opacity: 0;
-            transform: translateY(24px);
+            transform: translateY(-22px);
           }
           to {
             opacity: 1;
@@ -68,456 +117,242 @@ export default function HotelUniforms() {
           }
         }
 
-        @keyframes floatCard {
-          0%, 100% {
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(28px);
+          }
+          to {
+            opacity: 1;
             transform: translateY(0);
           }
-          50% {
-            transform: translateY(-8px);
-          }
         }
 
-        @keyframes pulseBadge {
-          0%, 100% {
-            box-shadow: 0 0 0 0 rgba(0, 82, 255, 0.25);
-          }
-          50% {
-            box-shadow: 0 0 0 8px rgba(0, 82, 255, 0);
-          }
-        }
-
-        @keyframes shimmerBtn {
+        @keyframes floatGlow {
           0% {
-            background-position: -200% 0;
+            transform: translate(-50%, -50%) scale(0.9);
+            opacity: 0.6;
           }
           100% {
-            background-position: 200% 0;
+            transform: translate(-50%, -46%) scale(1.2);
+            opacity: 1;
           }
         }
 
         /* ==========================================================
-           HERO CONTAINER
+           TYPOGRAPHY & TAGS
         =========================================================== */
-        .hero-section-box {
-          position: relative;
-          background-color: var(--bg-main);
-          padding: 85px 24px 75px;
-          border-bottom: 1.5px solid var(--border-subtle);
-          background-image: 
-            radial-gradient(circle at 12% 18%, rgba(0, 212, 255, 0.10) 0%, transparent 40%),
-            radial-gradient(circle at 88% 82%, rgba(0, 82, 255, 0.08) 0%, transparent 45%);
-        }
-
-        .hero-inner-container {
-          max-width: 1220px;
-          margin: 0 auto;
-          display: grid;
-          grid-template-columns: 1.15fr 0.85fr;
-          gap: 48px;
-          align-items: center;
-        }
-
-        /* ==========================================================
-           LEFT COLUMN ELEMENTS & ANIMATIONS
-        =========================================================== */
-        .hero-tag-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          background-color: var(--bg-badge-tint);
-          color: var(--color-cobalt);
-          border: 1px solid var(--border-subtle);
-          padding: 7px 18px;
-          border-radius: 50px;
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.6px;
-          text-transform: uppercase;
-          margin-bottom: 18px;
-          animation: fadeInUp 0.6s ease-out forwards;
-          transition: all 0.3s ease;
-          cursor: default;
-        }
-
-        .hero-tag-badge:hover {
-          background-color: #FFFFFF;
-          border-color: var(--color-cyan);
-          transform: translateY(-2px);
-          box-shadow: 0 4px 15px rgba(0, 212, 255, 0.25);
-        }
-
-        .hero-main-title {
-          color: var(--text-title);
-          font-size: clamp(2.3rem, 4vw, 3.4rem);
-          font-weight: 800;
-          line-height: 1.15;
-          letter-spacing: -0.8px;
-          margin-bottom: 18px;
-          animation: fadeInUp 0.7s ease-out forwards;
-        }
-
-        .hero-main-title .blue-accent {
-          color: var(--color-cobalt);
-          position: relative;
-          display: inline-block;
-          transition: color 0.3s ease;
-        }
-
-        .hero-main-title .blue-accent:hover {
-          color: var(--color-cyan);
-        }
-
-        .hero-body-text {
-          color: var(--text-body);
-          font-size: 16px;
-          line-height: 1.65;
-          max-width: 560px;
-          margin-bottom: 32px;
-          animation: fadeInUp 0.8s ease-out forwards;
-        }
-
-        /* CTA BUTTON INTERACTIONS */
-        .hero-btn-group {
-          display: flex;
-          gap: 14px;
-          flex-wrap: wrap;
-          animation: fadeInUp 0.9s ease-out forwards;
-        }
-
-        .btn-cobalt-fill {
-          background-color: var(--color-cobalt);
-          color: #FFFFFF;
-          padding: 14px 28px;
-          border-radius: 12px;
-          font-size: 15px;
-          font-weight: 700;
-          text-decoration: none;
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          box-shadow: var(--shadow-glow);
-          border: none;
-          transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-          position: relative;
-          overflow: hidden;
-        }
-
-        .btn-cobalt-fill:hover {
-          background-color: var(--color-cobalt-hover);
-          transform: translateY(-3px) scale(1.02);
-          box-shadow: var(--shadow-glow-hover);
-          color: #FFFFFF;
-        }
-
-        .btn-cobalt-fill .btn-arrow-icon {
-          transition: transform 0.25s ease;
-        }
-
-        .btn-cobalt-fill:hover .btn-arrow-icon {
-          transform: translateX(4px);
-        }
-
-        .btn-surface-outline {
-          background-color: var(--bg-surface);
-          color: var(--text-title);
-          border: 1.5px solid var(--border-subtle);
-          padding: 14px 24px;
-          border-radius: 12px;
-          font-size: 15px;
-          font-weight: 600;
-          text-decoration: none;
+        .hero-pill-badge {
           display: inline-flex;
           align-items: center;
           gap: 9px;
-          box-shadow: var(--shadow-card);
-          transition: all 0.28s ease;
-        }
-
-        .btn-surface-outline:hover {
-          border-color: var(--border-hover);
-          color: var(--color-cobalt);
-          transform: translateY(-3px);
-          box-shadow: var(--shadow-card-hover);
-        }
-
-        /* STATS COUNTER TILES */
-        .hero-stats-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
-          padding-top: 24px;
-          border-top: 1.5px solid var(--border-subtle);
-          margin-top: 36px;
-          animation: fadeInUp 1s ease-out forwards;
-        }
-
-        .stat-tile {
-          padding: 10px 12px;
-          border-radius: 12px;
-          transition: all 0.25s ease;
-        }
-
-        .stat-tile:hover {
-          background: #FFFFFF;
-          box-shadow: var(--shadow-card);
-          transform: translateY(-2px);
-        }
-
-        .stat-figure {
-          color: var(--text-title);
-          font-size: 26px;
-          font-weight: 800;
-          margin: 0;
-          transition: color 0.25s ease;
-        }
-
-        .stat-tile:hover .stat-figure {
-          color: var(--color-cobalt);
-        }
-
-        .stat-label {
-          color: var(--text-muted);
-          font-size: 12px;
-          font-weight: 600;
+          background: rgba(0, 212, 255, 0.12);
+          color: var(--color-cyan);
+          border: 1px solid rgba(0, 212, 255, 0.38);
+          backdrop-filter: blur(10px);
+          padding: 8px 22px;
+          border-radius: 50px;
+          font-size: 13px;
+          font-weight: 700;
+          letter-spacing: 0.8px;
           text-transform: uppercase;
-          margin: 4px 0 0;
+          margin-bottom: 22px;
+          animation: fadeInDown 0.7s ease-out forwards;
+        }
+
+        .hero-center-headline {
+          color: var(--text-light);
+          font-size: clamp(2.4rem, 5.2vw, 4.3rem);
+          font-weight: 800;
+          line-height: 1.15;
+          letter-spacing: -1px;
+          margin: 0 auto 20px;
+          animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* Bright Cyan Word Emphasis (Just like the reference image) */
+        .cyan-emphasis {
+          color: var(--color-cyan);
+          position: relative;
+          display: inline-block;
+          text-shadow: 0 0 25px var(--color-cyan-glow);
+          transition: transform 0.3s ease;
+        }
+
+        .cyan-emphasis:hover {
+          transform: scale(1.03);
+        }
+
+        .hero-sub-quotation {
+          color: var(--text-subtle);
+          font-size: clamp(1.02rem, 1.4vw, 1.22rem);
+          line-height: 1.7;
+          max-width: 820px;
+          margin: 0 auto 36px;
+          font-weight: 400;
+          animation: fadeInUp 0.9s ease-out forwards;
         }
 
         /* ==========================================================
-           RIGHT COLUMN: SHOWCASE CARD & HOVER EFFECTS
+           BUTTONS WITH WHATSAPP INTEGRATION
         =========================================================== */
-        .surface-showcase-card {
-          background-color: var(--bg-surface);
-          border: 1.5px solid var(--border-subtle);
-          border-radius: 24px;
-          padding: 30px;
-          box-shadow: var(--shadow-card);
-          position: relative;
-          transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-          animation: floatCard 6s ease-in-out infinite;
-        }
-
-        .surface-showcase-card:hover {
-          border-color: var(--border-hover);
-          box-shadow: var(--shadow-card-hover);
-          transform: translateY(-6px);
-        }
-
-        .card-top-pill {
-          position: absolute;
-          top: -14px;
-          right: 28px;
-          background-color: var(--bg-badge-tint);
-          color: var(--color-cobalt);
-          border: 1px solid var(--border-subtle);
-          font-size: 11px;
-          font-weight: 800;
-          padding: 6px 14px;
-          border-radius: 50px;
-          animation: pulseBadge 3s infinite;
-          transition: transform 0.25s ease;
-        }
-
-        .surface-showcase-card:hover .card-top-pill {
-          transform: scale(1.05);
-        }
-
-        /* SPEC TILES WITH SLIDE-RIGHT HOVER */
-        .spec-item-box {
+        .hero-action-buttons {
           display: flex;
-          align-items: flex-start;
-          gap: 14px;
-          padding: 14px 16px;
-          border-radius: 14px;
-          background-color: var(--bg-main);
-          border: 1px solid var(--border-subtle);
-          margin-bottom: 12px;
-          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+          justify-content: center;
+          align-items: center;
+          gap: 16px;
+          flex-wrap: wrap;
+          animation: fadeInUp 1s ease-out forwards;
         }
 
-        .spec-item-box:hover {
-          background-color: #FFFFFF;
-          border-color: var(--border-hover);
-          transform: translateX(6px);
-          box-shadow: 0 6px 18px rgba(0, 82, 255, 0.08);
+        /* WhatsApp Button */
+        .btn-whatsapp-action {
+          background-color: var(--whatsapp-green);
+          color: #ffffff;
+          padding: 15px 32px;
+          border-radius: 12px;
+          font-size: 15px;
+          font-weight: 700;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          gap: 11px;
+          border: none;
+          box-shadow: 0 6px 24px rgba(37, 211, 102, 0.35);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .spec-icon-wrapper {
-          width: 42px;
-          height: 42px;
-          border-radius: 10px;
-          background-color: var(--bg-badge-tint);
-          color: var(--color-cobalt);
+        .btn-whatsapp-action:hover {
+          background-color: var(--whatsapp-hover);
+          color: #ffffff;
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 10px 32px rgba(37, 211, 102, 0.55);
+        }
+
+        .btn-glass-action {
+          background: rgba(255, 255, 255, 0.08);
+          color: #ffffff;
+          border: 1.5px solid rgba(255, 255, 255, 0.22);
+          backdrop-filter: blur(12px);
+          padding: 15px 28px;
+          border-radius: 12px;
+          font-size: 15px;
+          font-weight: 600;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          transition: all 0.3s ease;
+        }
+
+        .btn-glass-action:hover {
+          background: rgba(255, 255, 255, 0.16);
+          border-color: var(--color-cyan);
+          color: var(--color-cyan);
+          transform: translateY(-3px);
+          box-shadow: 0 8px 24px rgba(0, 212, 255, 0.25);
+        }
+
+        /* ==========================================================
+           TRUST TICKER BAR
+        =========================================================== */
+        .hero-trust-bar {
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 18px;
-          border: 1px solid var(--border-subtle);
-          flex-shrink: 0;
-          transition: all 0.25s ease;
+          gap: 34px;
+          margin-top: 48px;
+          padding-top: 24px;
+          border-top: 1px solid rgba(255, 255, 255, 0.14);
+          flex-wrap: wrap;
+          animation: fadeInUp 1.1s ease-out forwards;
         }
 
-        .spec-item-box:hover .spec-icon-wrapper {
-          background-color: var(--color-cobalt);
-          color: #FFFFFF;
-          transform: rotate(6deg) scale(1.08);
-          box-shadow: 0 4px 12px rgba(0, 82, 255, 0.25);
-        }
-
-        /* GUARANTEE NOTICE BOX */
-        .guarantee-notice {
-          margin-top: 18px;
-          padding: 12px 14px;
-          background-color: var(--bg-badge-tint);
-          border-radius: 12px;
-          border: 1px dashed var(--color-cobalt);
-          display: flex;
+        .trust-item {
+          display: inline-flex;
           align-items: center;
-          gap: 10px;
-          font-size: 12px;
-          color: var(--text-title);
-          transition: all 0.25s ease;
+          gap: 8px;
+          font-size: 13.5px;
+          color: #cbd5e1;
+          font-weight: 500;
         }
 
-        .guarantee-notice:hover {
-          background-color: #FFFFFF;
-          box-shadow: 0 6px 20px rgba(0, 82, 255, 0.12);
-          transform: translateY(-2px);
+        .trust-item svg {
+          color: var(--color-cyan);
         }
 
-        @media (max-width: 992px) {
-          .hero-inner-container {
-            grid-template-columns: 1fr;
-            text-align: center;
+        @media (max-width: 768px) {
+          .hero-banner-section {
+            padding: 85px 18px 70px;
+            min-height: 70vh;
           }
-          .hero-body-text {
-            margin-left: auto;
-            margin-right: auto;
+          .hero-action-buttons {
+            flex-direction: column;
+            width: 100%;
           }
-          .hero-btn-group {
+          .btn-whatsapp-action, .btn-glass-action {
+            width: 100%;
             justify-content: center;
           }
-          .hero-stats-grid {
-            justify-content: center;
-          }
-          .surface-showcase-card {
-            animation: none;
+          .hero-trust-bar {
+            gap: 16px;
           }
         }
       `}</style>
 
       {/* ========================================================
-          HERO SECTION
+          HERO BANNER SECTION
       ========================================================= */}
-      <section className="hero-section-box">
-        <div className="hero-inner-container">
+      <section className="hero-banner-section">
+        <div className="hero-banner-bg" />
+        <div className="hero-ambient-glow" />
+
+        <div className="hero-content-wrapper">
           
-          {/* LEFT COLUMN: EDITORIAL & ACTIONS */}
-          <div>
-            <div className="hero-tag-badge">
-              <FaConciergeBell /> 5-Star Luxury & Resort Apparel
-            </div>
-
-            <h1 className="hero-main-title">
-              Distinguished Hospitality Uniforms for <span className="blue-accent">World-Class Guest Experiences</span>
-            </h1>
-
-            <p className="hero-body-text">
-              Direct factory manufacturing for luxury hotels, resorts, fine-dining restaurants,
-              and club lounges. Precision-stitched front-desk blazers, breathable executive chef coats,
-              and industrial-laundry certified housekeeping apparel.
-            </p>
-
-            <div className="hero-btn-group">
-              <Link to="/customization" className="btn-cobalt-fill">
-                Configure Hotel Bulk Order <FaArrowRight size={13} className="btn-arrow-icon" />
-              </Link>
-
-              <a href="#hotel-lookbook" className="btn-surface-outline">
-                <FaFileDownload size={14} color="#0052FF" /> Download Lookbook & Swatches
-              </a>
-            </div>
-
-            {/* INTERACTIVE STATS STRIP */}
-            <div className="hero-stats-grid">
-              <div className="stat-tile">
-                <h4 className="stat-figure">350+</h4>
-                <p className="stat-label">Hotels Clothed</p>
-              </div>
-              <div className="stat-tile">
-                <h4 className="stat-figure">100+</h4>
-                <p className="stat-label">Wash Durability</p>
-              </div>
-              <div className="stat-tile">
-                <h4 className="stat-figure">14 Days</h4>
-                <p className="stat-label">Express Batch Run</p>
-              </div>
-            </div>
+          {/* TAG BADGE */}
+          <div className="hero-pill-badge">
+            <FaConciergeBell /> Commercial & Hospitality Grade Apparel
           </div>
 
-          {/* RIGHT COLUMN: FLOATING SPECIFICATION CARD */}
-          <div>
-            <div className="surface-showcase-card">
-              <span className="card-top-pill">
-                <FaCheckCircle style={{ marginRight: 5 }} /> INDUSTRIAL LAUNDRY CERTIFIED
-              </span>
+          {/* MAIN HEADLINE WITH CYAN ACCENT */}
+          <h1 className="hero-center-headline">
+            Engineered for Elegance, Built for <br />
+            <span className="cyan-emphasis">Longevity</span>
+          </h1>
 
-              <h4 style={{ fontSize: "16px", fontWeight: 800, color: "var(--text-title)", marginBottom: "16px" }}>
-                Hotel & Resort Manufacturing Standards
-              </h4>
+          {/* NEW QUOTATION / SUBTITLE */}
+          <p className="hero-sub-quotation">
+            “Your uniform is your brand’s first and lasting impression.” Discover premium 
+            hotel, culinary, resort, and front-desk apparel tailored with stain-resistant, 
+            high-tensile fabrics ready for retail or direct factory bulk supply.
+          </p>
 
-              {/* Spec Tile 1: Front Office */}
-              <div className="spec-item-box">
-                <div className="spec-icon-wrapper">
-                  <FaConciergeBell />
-                </div>
-                <div>
-                  <h6 style={{ margin: "0 0 2px", fontWeight: 700, color: "var(--text-title)", fontSize: "14px" }}>
-                    Front-Desk & Concierge Suiting
-                  </h6>
-                  <p style={{ margin: 0, fontSize: "12px", color: "var(--text-body)" }}>
-                    Poly-viscose wool-touch blazers and stain-resistant formal waistcoats.
-                  </p>
-                </div>
-              </div>
+          {/* BUTTONS WITH WHATSAPP LINK */}
+          <div className="hero-action-buttons">
+            <a 
+              href={whatsappUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="btn-whatsapp-action"
+            >
+              <FaWhatsapp size={19} /> Order Bulk on WhatsApp
+            </a>
 
-              {/* Spec Tile 2: Culinary & Kitchen */}
-              <div className="spec-item-box">
-                <div className="spec-icon-wrapper">
-                  <FaUtensils />
-                </div>
-                <div>
-                  <h6 style={{ margin: "0 0 2px", fontWeight: 700, color: "var(--text-title)", fontSize: "14px" }}>
-                    Executive Chef Coats & Aprons
-                  </h6>
-                  <p style={{ margin: 0, fontSize: "12px", color: "var(--text-body)" }}>
-                    Breathable heat-deflecting poly-cotton twill with underarm moisture vents.
-                  </p>
-                </div>
-              </div>
+            <a href="#hotel-lookbook" className="btn-glass-action">
+              <FaFileDownload size={14} /> Download Lookbook
+            </a>
+          </div>
 
-              {/* Spec Tile 3: Housekeeping & Facilities */}
-              <div className="spec-item-box">
-                <div className="spec-icon-wrapper">
-                  <FaBed />
-                </div>
-                <div>
-                  <h6 style={{ margin: "0 0 2px", fontWeight: 700, color: "var(--text-title)", fontSize: "14px" }}>
-                    Ergonomic Housekeeping Tunics
-                  </h6>
-                  <p style={{ margin: 0, fontSize: "12px", color: "var(--text-body)" }}>
-                    Tear-resistant flexible weaves with reinforced double-stitched pockets.
-                  </p>
-                </div>
-              </div>
-
-              {/* Guarantee Box */}
-              <div className="guarantee-notice">
-                <FaShieldAlt color="#0052FF" size={18} />
-                <span>
-                  <b>Color-Lock Guarantee:</b> Reactive-vat dyed to withstand high-temperature commercial washing.
-                </span>
-              </div>
+          {/* TRUST PILLARS */}
+          <div className="hero-trust-bar">
+            <div className="trust-item">
+              <FaCheckCircle size={14} /> Direct Factory Wholesale Rates
+            </div>
+            <div className="trust-item">
+              <FaShieldAlt size={14} /> Industrial Laundry Tested
+            </div>
+            <div className="trust-item">
+              <FaCheckCircle size={14} /> Custom Crest & Monogram Stitched
             </div>
           </div>
 

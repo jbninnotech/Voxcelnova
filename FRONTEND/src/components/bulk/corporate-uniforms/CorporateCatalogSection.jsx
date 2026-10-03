@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import {
   FaCheck,
   FaArrowRight,
@@ -11,103 +10,135 @@ import {
 } from "react-icons/fa";
 
 // ========================================================
-// 8 CORPORATE UNIFORM SAMPLES WITH REALISTIC IMAGERY
+// 8 CORPORATE UNIFORM SAMPLES WITH CLOUDINARY IMAGES
 // ========================================================
 const CORPORATE_SAMPLES = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=700&q=80",
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790837149/11.jpg",
     category: "Executive Leadership",
-    title: "Executive Royal Oxford Shirt",
-    fabric: "100% Giza Combed Cotton (80s Two-Ply)",
-    gsm: "145 GSM Wrinkle-Resistant",
-    idealFor: "Boardroom, C-Suite, Banking Executives",
-    features: ["Tape-fused non-pucker seams", "High-density left chest crest", "Breathable natural weave"],
-    badge: "Anti-Wrinkle Finish",
-    moq: "Min: 30 pcs"
-  },
-  {
-    id: 2,
-    image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=700&q=80",
-    category: "Formal Representation",
-    title: "Poly-Viscose Tailored Corporate Blazer",
-    fabric: "70% Viscose / 30% Polyester Fine Wool Feel",
-    gsm: "260 GSM Premium Structured",
-    idealFor: "Client Facing, Legal, Hospitality Management",
-    features: ["Stain-resistant teflon shield", "Custom-engraved horn buttons", "Branded jacquard inner lining"],
-    badge: "Crease-Proof",
+    title: "Executive Structured Boardroom Blazer",
+    fabric: "Poly-Viscose Wool-Touch with Stain-Shield",
+    gsm: "260 GSM Premium Suiting",
+    idealFor: "Boardroom, C-Suite, Banking & Legal Partners",
+    features: [
+      "Stain-resistant Teflon™ nano-barrier shield",
+      "Hand-finished pick-stitched lapels & chest cresting",
+      "Breathable jacquard anti-static inner silk lining"
+    ],
+    badge: "Stain-Shield",
     moq: "Min: 25 pcs"
   },
   {
+    id: 2,
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790837149/5.jpg",
+    category: "Formal Representation",
+    title: "Executive Royal Giza Oxford Shirt",
+    fabric: "100% Giza Long-Staple Cotton (80s Two-Ply)",
+    gsm: "145 GSM Wrinkle-Resistant",
+    idealFor: "C-Suite, Client Facing, Senior Associates",
+    features: [
+      "Tape-fused non-pucker collar & shoulder seams",
+      "High-density left chest corporate embroidery",
+      "Breathable natural cotton fiber for 12hr office wear"
+    ],
+    badge: "Anti-Wrinkle",
+    moq: "Min: 30 pcs"
+  },
+  {
     id: 3,
-    image: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&w=700&q=80",
-    category: "Tech & Hybrid Office",
-    title: "Performance Corporate Piqué Polo",
-    fabric: "60% Cotton / 40% Micro-Poly Dry-Breeze",
-    gsm: "220 GSM Honeycomb Weave",
-    idealFor: "Tech Startups, IT Staff, Casual Business",
-    features: ["Anti-curling rib collar", "Underarm ventilation eyelets", "Fade-proof reactive dyeing"],
-    badge: "Quick-Dry",
-    moq: "Min: 50 pcs"
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790837149/11.jpg",
+    category: "Formal Representation",
+    title: "Navy Blue Tailored Corporate Suiting Set",
+    fabric: "70% Viscose / 30% Polyester Fine Wool Feel",
+    gsm: "250 GSM Crease-Free Drape",
+    idealFor: "Corporate Administration, Front-Desk, Sales",
+    features: [
+      "Crease-recovery fabric maintains crisp contour all day",
+      "Reinforced welt pocket designed for security ID cards",
+      "Permanent press crease on matching trousers"
+    ],
+    badge: "Crease-Proof",
+    moq: "Min: 20 sets"
   },
   {
     id: 4,
-    image: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=700&q=80",
-    category: "Daily Formal Bottoms",
-    title: "Flat-Front Precision Trousers",
-    fabric: "Poly-Viscose Stretch Twill (Crease Retentive)",
-    gsm: "240 GSM Heavy-Duty",
-    idealFor: "Corporate Administration, Front-Desk, Sales",
-    features: ["Hidden stretch comfort waistband", "Double-stitched pocket corners", "Permanent front crease"],
-    badge: "Machine Washable",
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790837149/12.jpg",
+    category: "Tech & Hybrid Office",
+    title: "Performance Corporate Piqué Polo",
+    fabric: "60% Combed Cotton / 40% Micro-Poly Dry-Breeze",
+    gsm: "220 GSM Honeycomb Weave",
+    idealFor: "Tech Startups, IT Teams, Creative Agencies",
+    features: [
+      "Anti-curling reinforced ribbed collar with tipping",
+      "Underarm laser-cut ventilation eyelets",
+      "Fade-proof reactive dyeing survives 100+ washes"
+    ],
+    badge: "Quick-Dry",
     moq: "Min: 40 pcs"
   },
   {
     id: 5,
-    image: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=700&q=80",
-    category: "Modern Smart-Casual",
-    title: "Engineered Stretch Cotton Chinos",
-    fabric: "97% Combed Cotton / 3% Spandex Twill",
-    gsm: "250 GSM Enzyme Washed",
-    idealFor: "Creative Agencies, Field Engineers, Site Managers",
-    features: ["4-way ergonomic flex", "YKK antique brass auto-lock zippers", "Reinforced bar-tacking"],
-    badge: "Flexible Movement",
-    moq: "Min: 40 pcs"
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790837149/10.jpg",
+    category: "Daily Formal Bottoms",
+    title: "Flat-Front Precision Corporate Trousers",
+    fabric: "Poly-Viscose Stretch Twill (Crease Retentive)",
+    gsm: "240 GSM Heavy-Duty",
+    idealFor: "Executive Staff, Operations, Management",
+    features: [
+      "Hidden comfort-flex waistband for sitting comfort",
+      "Double-stitched pocket corners & YKK auto-lock zip",
+      "Permanent sharp front crease that stays after washing"
+    ],
+    badge: "Machine Washable",
+    moq: "Min: 35 pcs"
   },
   {
     id: 6,
-    image: "https://images.unsplash.com/photo-1548883354-7622d03aca27?auto=format&fit=crop&w=700&q=80",
-    category: "Corporate Outerwear",
-    title: "Executive Softshell Bonded Jacket",
-    fabric: "3-Layer Micro-Fleece Weather-Shield",
-    gsm: "300 GSM Water-Repellent",
-    idealFor: "Corporate Winterwear, Aviation, Commuters",
-    features: ["Thermal lock breathable membrane", "Laser-cut chest utility pocket", "Wind-stopper storm cuffs"],
-    badge: "Weather-Shield",
-    moq: "Min: 30 pcs"
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790837148/3.jpg",
+    category: "Modern Smart-Casual",
+    title: "Engineered Smart-Casual Chinos & Knit Set",
+    fabric: "97% Combed Cotton / 3% Spandex Flex Twill",
+    gsm: "250 GSM Enzyme Washed",
+    idealFor: "Site Supervisors, Field Executives, Consultants",
+    features: [
+      "4-way active ergonomic stretch for mobile workdays",
+      "Reinforced bar-tacking on stress pocket corners",
+      "Soft peach-finish feel with high colorfastness"
+    ],
+    badge: "4-Way Flex",
+    moq: "Min: 30 sets"
   },
   {
     id: 7,
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=700&q=80",
-    category: "Front-Office & Reception",
-    title: "Corporate Pencil Skirt & Formal Blouse",
-    fabric: "Milano Stretch Poly-Spun with Chiffon Blend",
-    gsm: "210 GSM Elegance Drape",
-    idealFor: "Airline Ground Staff, Luxury Hotel Concierge",
-    features: ["Non-transparent modesty inner lining", "Back kick-pleat for natural walking", "Anti-static treatment"],
-    badge: "Ultra Comfort",
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790837148/4.jpg",
+    category: "Corporate Outerwear",
+    title: "Executive Softshell Bonded Weather Jacket",
+    fabric: "3-Layer Micro-Fleece Weather-Shield Membrane",
+    gsm: "300 GSM Water-Repellent",
+    idealFor: "Corporate Commuters, Airport Staff, Winterwear",
+    features: [
+      "Thermal lock breathable wind-resistant membrane",
+      "Concealed waterproof chest utility zipper pocket",
+      "Wind-stopper internal storm cuffs & chin guard"
+    ],
+    badge: "Weather-Shield",
     moq: "Min: 25 pcs"
   },
   {
     id: 8,
-    image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=700&q=80",
-    category: "Cultural & Ceremonial",
-    title: "Executive Bandhgala / Mandarin Suit",
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790837148/1.jpg",
+    category: "Formal & Ceremonial",
+    title: "Executive Mandarin / Bandhgala Formal Blazer",
     fabric: "Fine Poly-Wool Suiting Blend with Satin Trims",
-    gsm: "280 GSM Formal Structured",
-    idealFor: "Corporate Banquets, Annual Galas, High Delegations",
-    features: ["Rigid handcrafted band collar", "Gold-tone crest metal buttons", "Shoulder pad silhouette retention"],
-    badge: "Handcrafted Fit",
+    gsm: "280 GSM Structured Weave",
+    idealFor: "Corporate Galas, Annual Conferences, Delegations",
+    features: [
+      "Handcrafted rigid stand collar that never sags",
+      "Embossed metal heraldic crest buttons",
+      "Structured shoulder pads for an authoritative posture"
+    ],
+    badge: "Ceremonial Fit",
     moq: "Min: 20 pcs"
   }
 ];
@@ -133,35 +164,53 @@ export default function CorporateCatalogSection() {
             s.title.toLowerCase().includes(activeFilter.toLowerCase())
         );
 
+  // Smooth scroll down to your existing form/table
+  const handleScrollDown = () => {
+    const target =
+      document.querySelector("form") ||
+      document.querySelector("table") ||
+      document.getElementById("customization-form") ||
+      document.getElementById("corporate-quote-form") ||
+      document.getElementById("quote-form");
+
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      // Smooth scroll down a little bit (~550px)
+      window.scrollBy({ top: 550, behavior: "smooth" });
+    }
+  };
+
   return (
     <section className="corporate-samples-section">
       <style>{`
         /* ==========================================================
-           CLEAN LIGHT THEME COLOR PROFILE
+           COLOR PALETTE & INTERACTION TOKENS
         =========================================================== */
         :root {
-          --bg-main:         #F4F8FE; /* Ultra-clean ice porcelain canvas */
-          --bg-surface:      #FFFFFF; /* Pure white card surface */
-          --bg-badge-tint:   #E8F5FE; /* Soft light-cyan badge & chip background */
+          --bg-main:         #F4F8FE;
+          --bg-surface:      #FFFFFF;
+          --bg-badge-tint:   #E8F5FE;
           
-          --color-cobalt:    #0052FF; /* Primary buttons, links, active icons */
-          --color-cobalt-hover: #003ECC; /* Darker cobalt for hover states */
-          --color-cyan:      #00D4FF; /* Swoosh highlights, secondary icons, glows */
+          --color-cobalt:    #0052FF;
+          --color-cobalt-hover: #003ECC;
+          --color-cyan:      #00D4FF;
           
-          --text-title:      #071838; /* Crisp, high-contrast dark navy for headings */
-          --text-body:       #495E7C; /* Soft slate navy for paragraphs */
-          --text-muted:      #6B82A0; /* Light slate for captions and small labels */
+          --text-title:      #071838;
+          --text-body:       #495E7C;
+          --text-muted:      #6B82A0;
 
-          --border-subtle:   rgba(0, 82, 255, 0.14);  /* Clean card borders */
-          --border-hover:    rgba(0, 212, 255, 0.60); /* Cyan glowing border on hover */
+          --border-subtle:   rgba(0, 82, 255, 0.14);
+          --border-hover:    rgba(0, 212, 255, 0.70);
           
           --shadow-card:     0 12px 32px rgba(0, 48, 143, 0.06);
+          --shadow-hover:    0 20px 42px rgba(0, 82, 255, 0.14);
           --shadow-glow:     0 8px 25px rgba(0, 82, 255, 0.32);
         }
 
         .corporate-samples-section {
           background-color: var(--bg-main);
-          padding: 80px 24px;
+          padding: 85px 24px;
           border-top: 1.5px solid var(--border-subtle);
         }
 
@@ -226,11 +275,13 @@ export default function CorporateCatalogSection() {
           display: flex;
           align-items: flex-start;
           gap: 14px;
-          transition: border-color 0.25s ease;
+          transition: all 0.28s ease;
         }
 
         .pillar-card:hover {
           border-color: var(--border-hover);
+          transform: translateY(-3px);
+          box-shadow: var(--shadow-hover);
         }
 
         .pillar-icon {
@@ -265,12 +316,13 @@ export default function CorporateCatalogSection() {
           font-size: 13px;
           font-weight: 700;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.22s ease;
         }
 
         .filter-btn:hover {
           border-color: var(--color-cobalt);
           color: var(--color-cobalt);
+          transform: translateY(-1px);
         }
 
         .filter-btn.active {
@@ -280,7 +332,7 @@ export default function CorporateCatalogSection() {
           box-shadow: var(--shadow-glow);
         }
 
-        /* 3. SAMPLES GRID WITH IMAGES */
+        /* 3. SAMPLES GRID WITH HOVER EFFECTS */
         .samples-card-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -295,19 +347,22 @@ export default function CorporateCatalogSection() {
           box-shadow: var(--shadow-card);
           display: flex;
           flex-direction: column;
-          transition: all 0.25s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
         }
 
+        /* Card Hover Lift & Glow Border */
         .uniform-sample-card:hover {
           border-color: var(--border-hover);
-          transform: translateY(-4px);
+          transform: translateY(-6px);
+          box-shadow: var(--shadow-hover);
         }
 
-        /* IMAGE CONTAINER */
+        /* IMAGE CONTAINER WITH ADAPTIVE CROPPING */
         .card-image-box {
           position: relative;
           width: 100%;
-          height: 220px;
+          height: 270px; /* Increased height to frame full model torso & neckline */
           overflow: hidden;
           background-color: #E2E8F0;
         }
@@ -316,25 +371,28 @@ export default function CorporateCatalogSection() {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: transform 0.4s ease;
+          object-position: top center; /* Centers face and collar cleanly without chopping */
+          transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
+        /* Smooth Image Zoom on Card Hover */
         .uniform-sample-card:hover .sample-image {
-          transform: scale(1.06);
+          transform: scale(1.08);
         }
 
         .floating-image-badge {
           position: absolute;
           top: 12px;
           left: 12px;
-          background: rgba(7, 24, 56, 0.75);
-          backdrop-filter: blur(6px);
+          background: rgba(7, 24, 56, 0.82);
+          backdrop-filter: blur(8px);
           color: #FFFFFF;
           font-size: 11px;
           font-weight: 700;
-          padding: 4px 10px;
+          padding: 5px 11px;
           border-radius: 6px;
           letter-spacing: 0.5px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         .floating-moq-badge {
@@ -345,9 +403,9 @@ export default function CorporateCatalogSection() {
           color: var(--color-cobalt);
           font-size: 11px;
           font-weight: 800;
-          padding: 4px 10px;
+          padding: 5px 11px;
           border-radius: 6px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          box-shadow: 0 4px 14px rgba(0,0,0,0.12);
         }
 
         /* CARD BODY (UNDER MATTER) */
@@ -370,11 +428,12 @@ export default function CorporateCatalogSection() {
         }
 
         .sample-card-title {
-          font-size: 17px;
+          font-size: 16.5px;
           font-weight: 800;
           color: var(--text-title);
           margin: 0 0 12px;
-          line-height: 1.3;
+          line-height: 1.35;
+          min-height: 44px;
         }
 
         /* SPECS BLOCK */
@@ -404,39 +463,42 @@ export default function CorporateCatalogSection() {
           margin: 0 0 20px;
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 7px;
         }
 
         .sample-features-list li {
           font-size: 12px;
           color: var(--text-body);
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           gap: 8px;
+          line-height: 1.4;
         }
 
         .check-bullet {
           color: var(--color-cobalt);
           font-size: 11px;
           flex-shrink: 0;
+          margin-top: 3px;
         }
 
-        /* BUTTON */
+        /* INTERACTIVE BUTTON WITH HOVER ARROW SLIDE */
         .btn-card-quote {
           width: 100%;
           background-color: var(--bg-badge-tint);
           color: var(--color-cobalt);
           border: 1.5px solid var(--border-subtle);
-          padding: 11px 16px;
+          padding: 12px 16px;
           border-radius: 10px;
           font-weight: 700;
           font-size: 13px;
-          text-decoration: none;
+          cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 8px;
-          transition: all 0.2s ease;
+          transition: all 0.22s ease;
+          box-sizing: border-box;
         }
 
         .btn-card-quote:hover {
@@ -444,12 +506,21 @@ export default function CorporateCatalogSection() {
           color: #FFFFFF;
           border-color: var(--color-cobalt);
           box-shadow: var(--shadow-glow);
+          transform: translateY(-2px);
+        }
+
+        .btn-card-quote svg {
+          transition: transform 0.22s ease;
+        }
+
+        .btn-card-quote:hover svg {
+          transform: translateX(4px);
         }
       `}</style>
 
       <div className="section-inner">
         {/* ========================================================
-            PART 1: INTRO ABOUT VOXCEL NOVA
+            PART 1: INTRO SECTION
         ========================================================= */}
         <div className="intro-header-box">
           <div className="category-chip">
@@ -457,7 +528,7 @@ export default function CorporateCatalogSection() {
           </div>
 
           <h2 className="intro-title">
-            Tailored For Modern Boardrooms, Client Desks & Field Executives
+            Tailored For Modern Boardrooms, Client Desks &amp; Field Executives
           </h2>
 
           <p className="intro-description">
@@ -535,20 +606,24 @@ export default function CorporateCatalogSection() {
         </div>
 
         {/* ========================================================
-            PART 3: 8 CARDS WITH IMAGES & UNDER MATTER
+            PART 3: 8 SAMPLES WITH HOVER EFFECTS & PHOTO FRAMING
         ========================================================= */}
         <div className="samples-card-grid">
           {filteredSamples.map((item) => (
             <div key={item.id} className="uniform-sample-card">
               
-              {/* IMAGE HEADER */}
+              {/* IMAGE HEADER WITH ADJUSTED FRAMING */}
               <div className="card-image-box">
-                <img src={item.image} alt={item.title} className="sample-image" />
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="sample-image"
+                />
                 <span className="floating-image-badge">{item.badge}</span>
                 <span className="floating-moq-badge">{item.moq}</span>
               </div>
 
-              {/* MATTER UNDER THE IMAGE */}
+              {/* MATTER UNDER IMAGE */}
               <div className="card-body-matter">
                 <div>
                   <span className="sample-category-tag">{item.category}</span>
@@ -578,10 +653,14 @@ export default function CorporateCatalogSection() {
                   </ul>
                 </div>
 
-                {/* BOTTOM BUTTON */}
-                <Link to="/customization" className="btn-card-quote">
+                {/* CLICK TO SCROLL DOWN TO FORM */}
+                <button
+                  type="button"
+                  onClick={handleScrollDown}
+                  className="btn-card-quote"
+                >
                   Configure Bulk Specs <FaArrowRight size={11} />
-                </Link>
+                </button>
               </div>
 
             </div>
@@ -589,7 +668,7 @@ export default function CorporateCatalogSection() {
         </div>
 
         {/* ========================================================
-            BOTTOM BANNER
+            BOTTOM BANNER WITH SCROLL TRIGGER
         ========================================================= */}
         <div
           style={{
@@ -614,24 +693,29 @@ export default function CorporateCatalogSection() {
               We formulate bespoke pantone dye-batches, anti-static weaves, and flame-retardant safety shirts.
             </p>
           </div>
-          <Link
-            to="/customization"
+          <button
+            type="button"
+            onClick={handleScrollDown}
             style={{
               background: "var(--color-cobalt)",
               color: "#FFFFFF",
+              border: "none",
               padding: "13px 26px",
               borderRadius: "12px",
               fontWeight: 700,
               fontSize: "14px",
-              textDecoration: "none",
+              cursor: "pointer",
               boxShadow: "var(--shadow-glow)",
               display: "inline-flex",
               alignItems: "center",
-              gap: "9px"
+              gap: "9px",
+              transition: "all 0.22s ease"
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
           >
             Start Factory Order <FaArrowRight size={12} />
-          </Link>
+          </button>
         </div>
 
       </div>

@@ -44,7 +44,6 @@ export const createOrder = async (req, res) => {
       const product = await Product.findById(productId);
 
       if (product) {
-        // Decrease stock if stock exists
         if (typeof product.stock === "number" && product.stock >= item.quantity) {
           product.stock -= item.quantity;
           await product.save();
@@ -68,6 +67,11 @@ export const createOrder = async (req, res) => {
     const isCod = paymentMethod === "Cash on Delivery" || paymentMethod === "COD";
     const initialPaymentStatus = isCod ? "Pending" : "Paid";
 
+    const initialHistory = [
+      { status: "Pending", timestamp: new Date(), note: "Order placed successfully" },
+      { status: "Confirmed", timestamp: new Date(), note: "Order confirmed by system" }
+    ];
+
     const order = await Order.create({
       user: req.user._id,
       items: processedItems,
@@ -90,6 +94,7 @@ export const createOrder = async (req, res) => {
       paymentMethod,
       paymentStatus: initialPaymentStatus,
       orderStatus: "Confirmed",
+      statusHistory: initialHistory,
     });
 
     return res.status(201).json({
@@ -111,7 +116,10 @@ export const createOrder = async (req, res) => {
 // =========================================================
 export const getUserOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 });
+    const orders = await Order.find({
+      user: req.user._id,
+      isDeletedByUser: { $ne: true },
+    }).sort({ createdAt: -1 });
 
     return res.status(200).json({
       success: true,
@@ -141,7 +149,6 @@ export const getOrderById = async (req, res) => {
       });
     }
 
-    // Check ownership or admin role
     const isOwner = order.user._id.toString() === req.user._id.toString();
     const isAdmin = ["ADMIN", "CEO", "MANAGER"].includes(req.user.role);
 
@@ -161,6 +168,98 @@ export const getOrderById = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Failed to fetch order details.",
+    });
+  }
+};
+
+// =========================================================
+// CANCEL ORDER (USER)
+// =========================================================
+export const cancelUserOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found.",
+      });
+    }
+
+    if (order.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to cancel this order.",
+      });
+    }
+
+    const cancellableStatuses = ["Pending", "Confirmed"];
+    if (!cancellableStatuses.includes(order.orderStatus)) {
+      return res.status(400).json({
+        success: false,
+        message: `Orders with status '${order.orderStatus}' cannot be cancelled.`,
+      });
+    }
+
+    order.orderStatus = "Cancelled";
+    if (!order.statusHistory) order.statusHistory = [];
+    order.statusHistory.push({
+      status: "Cancelled",
+      timestamp: new Date(),
+      note: "Cancelled by customer",
+    });
+
+    await order.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Order cancelled successfully.",
+      order,
+    });
+  } catch (error) {
+    console.error("Cancel order error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to cancel order.",
+    });
+  }
+};
+
+// =========================================================
+// SOFT DELETE ORDER (USER HISTORY HIDE)
+// =========================================================
+export const softDeleteUserOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found.",
+      });
+    }
+
+    if (order.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized.",
+      });
+    }
+
+    order.isDeletedByUser = true;
+    await order.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Order removed from your history.",
+    });
+  } catch (error) {
+    console.error("Soft delete order error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to remove order from history.",
     });
   }
 };
@@ -222,12 +321,9 @@ export const updateOrderStatus = async (req, res) => {
       });
     }
 
-    // Security rule: Admin must NOT be able to manually mark an online payment as verified
-    // without proper backend authorization or verification logic.
     const isOnlinePayment = !["Cash on Delivery", "COD"].includes(order.paymentMethod);
 
     if (paymentStatus && paymentStatus === "Paid" && order.paymentStatus !== "Paid" && isOnlinePayment) {
-      // Require verification authorization token or gateway transaction proof
       if (!paymentVerificationToken || paymentVerificationToken !== "SYSTEM_VERIFIED_TRANSACTION_KEY") {
         return res.status(400).json({
           success: false,
@@ -243,6 +339,7 @@ export const updateOrderStatus = async (req, res) => {
         "Processing",
         "Shipped",
         "OutForDelivery",
+        "Out for Delivery",
         "Delivered",
         "Cancelled",
       ];
@@ -252,7 +349,18 @@ export const updateOrderStatus = async (req, res) => {
           message: "Invalid order status.",
         });
       }
+
       order.orderStatus = orderStatus;
+
+      if (!order.statusHistory) order.statusHistory = [];
+      const lastStatus = order.statusHistory[order.statusHistory.length - 1]?.status;
+      if (lastStatus !== orderStatus) {
+        order.statusHistory.push({
+          status: orderStatus,
+          timestamp: new Date(),
+          note: `Status updated to ${orderStatus} by Admin`,
+        });
+      }
     }
 
     if (paymentStatus) {

@@ -115,6 +115,17 @@ const orderSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    isDeletedByUser: {
+      type: Boolean,
+      default: false,
+    },
+    statusHistory: [
+      {
+        status: { type: String, required: true },
+        timestamp: { type: Date, default: Date.now },
+        note: { type: String, default: "" },
+      },
+    ],
   },
   {
     timestamps: true,

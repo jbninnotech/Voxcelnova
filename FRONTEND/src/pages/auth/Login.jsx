@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { loginUser } from "../../services/authService";
+import authStorage from "../../utils/authStorage";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -28,17 +29,13 @@ export default function Login() {
   };
 
   const clearSession = () => {
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("user");
-    sessionStorage.removeItem("role");
+    authStorage.clear();
   };
 
   const saveSession = (token, user, role) => {
-    sessionStorage.setItem("token", token);
-    localStorage.setItem("token", token);
-    sessionStorage.setItem("user", JSON.stringify(user));
-    localStorage.setItem("user", JSON.stringify(user));
-    sessionStorage.setItem("role", role);
+    authStorage.setToken(token);
+    authStorage.setUser(user);
+    authStorage.setRole(role);
   };
 
   const redirectByRole = (role) => {

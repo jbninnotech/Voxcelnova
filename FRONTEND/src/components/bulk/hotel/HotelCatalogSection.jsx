@@ -5,203 +5,198 @@ import {
   FaArrowRight,
   FaShieldAlt,
   FaConciergeBell,
+  FaHospital,
   FaUtensils,
-  FaBed,
   FaGem,
-  FaTshirt,
-  FaWineGlassAlt,
-  FaSpa,
-  FaCocktail,
-  FaTools
+  FaTshirt
 } from "react-icons/fa";
 
 // ========================================================
-// 8 HOSPITALITY UNIFORM SAMPLES WITH IMAGES & TECHNICAL SPECS
+// 8 SAMPLES: 4 HOSPITALS (HEALTHCARE) + 4 HOTELS (HOSPITALITY)
 // ========================================================
-const HOTEL_SAMPLES = [
+const INSTITUTIONAL_SAMPLES = [
+  // --- 4 HOSPITAL SAMPLES ---
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=800&q=80",
-    category: "Culinary & Kitchen",
-    title: "Executive Master Chef Jacket",
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790835470/shankar_wife.jpg",
+    category: "Hospital & Clinical",
+    title: "Consultant Physician & Specialist Doctor Lab Coat",
+    fabric: "100% Combed Compact Twill with Teflon™ Bio-Barrier",
+    gsm: "240 GSM Crisp White",
+    idealFor: "Chief Medical Officers, Physicians & Specialists",
+    features: [
+      "Stain-release shield repels fluid & chemical stains",
+      "Reinforced tablet, notepad & stethoscope welt pockets",
+      "Breathable wrinkle-free drape for full OPD rotations"
+    ],
+    badge: "Bio-Shield",
+    moq: "Min: 20 pcs"
+  },
+  {
+    id: 2,
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790835469/abhilash_wife.jpg",
+    category: "Hospital & Clinical",
+    title: "Executive Head Nurse & In-Charge Scrub Suit (Wine)",
+    fabric: "Silvadur™ Antimicrobial Poly-Viscose Flex Twill",
+    gsm: "205 GSM Structured Stretch",
+    idealFor: "Ward In-Charges, Nursing Superintendents, Matrons",
+    features: [
+      "Silver-ion antimicrobial wash prevents odor & bacteria",
+      "Dual deep front cargo pockets for mobile medical tools",
+      "Autoclave & commercial high-temp wash resistant dyes"
+    ],
+    badge: "Antimicrobial",
+    moq: "Min: 25 sets"
+  },
+  {
+    id: 3,
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790836306/doctor.jpg",
+    category: "Hospital & Clinical",
+    title: "Ergonomic 4-Way Stretch Surgeon & ICU Scrub Suit",
+    fabric: "Spandex-Poly Athletic Micro-Weave (Fluid-Repellent)",
+    gsm: "185 GSM Whisper-Light",
+    idealFor: "Surgeons, Anesthetists, Emergency & ICU Teams",
+    features: [
+      "4-way active stretch allows unrestricted bending & reach",
+      "Moisture-wicking mesh keeps surgeons dry during long OTs",
+      "Wrinkle-resistant & lint-free for cleanroom sterility"
+    ],
+    badge: "4-Way Flex",
+    moq: "Min: 30 sets"
+  },
+  {
+    id: 4,
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790836305/cleaner_4.jpg",
+    category: "Hospital & Clinical",
+    title: "Patient Caregiver & Environmental Services Set",
+    fabric: "Heavy Duty Poly-Cotton Ripstop Weave with Piping",
+    gsm: "220 GSM Tear-Resistant",
+    idealFor: "Ward Attendants, Sanitization & Housekeeping Staff",
+    features: [
+      "Impervious to strong hospital-grade disinfectant bleaches",
+      "Clean contrast edge piping for department identification",
+      "Triple-needle reinforced seams on high-friction zones"
+    ],
+    badge: "Bleach-Safe",
+    moq: "Min: 40 sets"
+  },
+
+  // --- 4 HOTEL SAMPLES ---
+  {
+    id: 5,
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790835468/shankar_wife_2.jpg",
+    category: "Hotel & Resort",
+    title: "5-Star Front Desk & Guest Relations Blazer Suit",
+    fabric: "Poly-Viscose Wool-Touch with Stain-Shield Nano Coat",
+    gsm: "260 GSM Structured Suiting",
+    idealFor: "Front Office Executives, Concierge, Guest Relations",
+    features: [
+      "Stain-resistant Teflon nano-shield coating",
+      "Branded gold/silver bullion crest embroidery",
+      "Internal tailored pocket for hotel RFID master cards"
+    ],
+    badge: "Stain-Resistant",
+    moq: "Min: 20 pcs"
+  },
+  {
+    id: 6,
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790835467/hotel.jpg",
+    category: "Hotel & Resort",
+    title: "Executive Master Chef Kitchen Jacket",
     fabric: "65% Poly / 35% Combed Cotton Heat-Deflect Twill",
     gsm: "220 GSM Breathable Twill",
     idealFor: "Executive Chefs, Sous Chefs & Pastry Masters",
     features: [
       "Underarm Cool-Vent™ micro-mesh airflow panels",
-      "Cloth-knot buttons resistant to high kitchen oven heat",
+      "Cloth-knot buttons resistant to high oven heat",
       "Dual sleeve pocket for tasting spoons & thermometers"
     ],
     badge: "Heat-Deflective",
     moq: "Min: 25 pcs"
   },
   {
-    id: 2,
-    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
-    category: "Front Desk & Concierge",
-    title: "5-Star Front-Office Tailored Blazer",
-    fabric: "Poly-Viscose Wool-Touch with Stain-Shield",
-    gsm: "260 GSM Structured Suiting",
-    idealFor: "Hotel Receptionists, Concierge, Guest Relations",
-    features: [
-      "Stain-resistant Teflon nano-shield coating",
-      "Branded gold/silver bullion crest left chest cresting",
-      "Internal pocket tailored for hotel master keycards"
-    ],
-    badge: "Stain-Resistant",
-    moq: "Min: 20 pcs"
-  },
-  {
-    id: 3,
-    image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
-    category: "F&B & Banquet Service",
-    title: "Formal Banquet Vest & Wing-Collar Shirt",
+    id: 7,
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790835915/hotel_1.jpg",
+    category: "Hotel & Resort",
+    title: "Fine Dining Banquet Vest & Wing-Collar Set",
     fabric: "Micro-Poly Matte Twill with Stretch Poplin Shirt",
     gsm: "200 GSM Crease-Free Drape",
-    idealFor: "Fine Dining Stewards, Sommeliers, Banquet Staff",
+    idealFor: "Banquet Captains, Sommeliers, Stewards",
     features: [
-      "Anti-wrinkle stretch shirt allows tray balancing",
+      "Anti-wrinkle stretch fabric allows balanced tray carrying",
       "Adjustable back buckle for precision waist silhouette",
-      "Reinforced pocket welt designed for corkscrews"
+      "Reinforced pocket welt tailored for corkscrews"
     ],
     badge: "Spill-Repellent",
     moq: "Min: 35 pcs"
   },
   {
-    id: 4,
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
-    category: "Housekeeping & Facilities",
-    title: "Ergonomic Housekeeping Tunic & Pant Set",
+    id: 8,
+    image: "https://res.cloudinary.com/d4oald11/image/upload/v1790835915/hotel_5.jpg",
+    category: "Hotel & Resort",
+    title: "Resort Housekeeping & Hospitality Attendant Set",
     fabric: "Durable Stretch Poly-Cotton Twill Weave",
-    gsm: "210 GSM Tear-Proof",
-    idealFor: "Room Attendants, Turn-Down Staff, Environmental Services",
+    gsm: "210 GSM Ergonomic Flex",
+    idealFor: "Room Attendants, Turn-Down Staff, Hospitality Crew",
     features: [
       "Bi-stretch back pleats for bending and bed-making comfort",
-      "Double-layered deep pockets for master keys & amenities",
+      "Double-layered deep pockets for master keys & guest amenities",
       "Vat-dyed to endure 100+ commercial wash cycles"
     ],
-    badge: "Flex-Stretch Weave",
+    badge: "Flex-Comfort",
     moq: "Min: 40 sets"
-  },
-  {
-    id: 5,
-    image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
-    category: "Spa & Wellness Resorts",
-    title: "Zen Luxury Spa Therapist Tunic",
-    fabric: "Viscose-Linen Bamboo Touch Fabric",
-    gsm: "190 GSM Whisper-Soft",
-    idealFor: "Ayurvedic Centers, Resort Spas, Wellness Retreats",
-    features: [
-      "Essential oil-resistant anti-stain wash",
-      "Mandarin crossover collar with silent fabric drape",
-      "Side slits for effortless cross-legged and floor movements"
-    ],
-    badge: "Oil-Resistant",
-    moq: "Min: 25 pcs"
-  },
-  {
-    id: 6,
-    image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=800&q=80",
-    category: "Valet & Doorman",
-    title: "Ceremonial Bellhop & Porter Jacket",
-    fabric: "Heavy Structured Poly-Wool with Braid Epaulettes",
-    gsm: "300 GSM Heritage Suiting",
-    idealFor: "Hotel Entrance Doormen, Porters, Valet Parking",
-    features: [
-      "Braided gold cord epaulettes and collar frogging",
-      "Embossed metal heraldic buttons on double front placket",
-      "Weather-resistant water-repellent exterior treatment"
-    ],
-    badge: "Gold Epaulettes",
-    moq: "Min: 15 pcs"
-  },
-  {
-    id: 7,
-    image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=800&q=80",
-    category: "Bar & Lounge Service",
-    title: "Artisan Mixologist Cross-Back Apron",
-    fabric: "12 oz Heavyweight Washed Cotton Canvas",
-    gsm: "340 GSM Rugged Luxury",
-    idealFor: "Cocktail Lounges, Rooftop Bars, Hotel Baristas",
-    features: [
-      "Removable vegetable-tanned genuine leather harness",
-      "Antique brass rivets on high-tension pockets",
-      "Towel loop and custom laser-engraved leather brand patch"
-    ],
-    badge: "Full-Grain Leather",
-    moq: "Min: 30 pcs"
-  },
-  {
-    id: 8,
-    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
-    category: "Engineering & Maintenance",
-    title: "Facility Engineering Workwear Coverall / Set",
-    fabric: "Poly-Cotton Heavy Twill with High-Tenacity Thread",
-    gsm: "250 GSM Anti-Abrasion",
-    idealFor: "Hotel Maintenance, HVAC Technicians, Plant Engineers",
-    features: [
-      "High-visibility 3M Scotchlite™ reflective trim",
-      "Multi-utility tool loop and radio pocket",
-      "Non-conductive concealed snaps to protect hotel equipment"
-    ],
-    badge: "Anti-Abrasion",
-    moq: "Min: 25 pcs"
   }
 ];
 
-export default function HotelCatalogSection() {
+export default function InstitutionalCatalogSection() {
   const [activeFilter, setActiveFilter] = useState("All");
 
-  const categories = [
-    "All",
-    "Culinary & Kitchen",
-    "Front Desk & Concierge",
-    "F&B & Banquet Service",
-    "Housekeeping & Facilities",
-    "Spa & Wellness Resorts"
-  ];
+  const categories = ["All", "Hospital & Clinical", "Hotel & Resort"];
 
   const filteredSamples =
     activeFilter === "All"
-      ? HOTEL_SAMPLES
-      : HOTEL_SAMPLES.filter(
-          (s) =>
-            s.category.toLowerCase().includes(activeFilter.toLowerCase()) ||
-            s.title.toLowerCase().includes(activeFilter.toLowerCase())
+      ? INSTITUTIONAL_SAMPLES
+      : INSTITUTIONAL_SAMPLES.filter(
+          (s) => s.category.toLowerCase() === activeFilter.toLowerCase()
         );
 
-  return (
-    <section className="hotel-catalog-wrapper">
-      <style>{`
-        /* ==========================================================
-           CLEAN LIGHT THEME COLOR PROFILE
-        =========================================================== */
-        :root {
-          /* Canvas & Backgrounds */
-          --bg-main:         #F4F8FE; /* Ultra-clean ice porcelain canvas */
-          --bg-surface:      #FFFFFF; /* Pure white card surface */
-          --bg-badge-tint:   #E8F5FE; /* Soft light-cyan badge & chip background */
-          
-          /* Logo Accent Blue & Cyan */
-          --color-cobalt:    #0052FF; /* Primary buttons, links, active icons */
-          --color-cobalt-hover: #003ECC; /* Darker cobalt for hover states */
-          --color-cyan:      #00D4FF; /* Swoosh highlights, secondary icons, glows */
-          
-          /* Typography */
-          --text-title:      #071838; /* Crisp, high-contrast dark navy for headings */
-          --text-body:       #495E7C; /* Soft slate navy for paragraphs */
-          --text-muted:      #6B82A0; /* Light slate for captions and small labels */
+  // Smooth scroll down to your existing form / table component
+  const handleScrollDown = () => {
+    // 1. First tries to find your existing table or form element by common tags/IDs
+    const existingElement =
+      document.querySelector("form") ||
+      document.querySelector("table") ||
+      document.getElementById("customization-form") ||
+      document.getElementById("quote-form");
 
-          /* Borders & Dividers */
-          --border-subtle:   rgba(0, 82, 255, 0.14);  /* Clean card borders */
-          --border-hover:    rgba(0, 212, 255, 0.60); /* Cyan glowing border on hover */
-          
-          /* Shadows & Glows */
+    if (existingElement) {
+      existingElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      // 2. Otherwise smoothly scrolls down a little bit (~550px)
+      window.scrollBy({ top: 550, behavior: "smooth" });
+    }
+  };
+
+  return (
+    <section className="institutional-catalog-wrapper">
+      <style>{`
+        :root {
+          --bg-main:         #F4F8FE;
+          --bg-surface:      #FFFFFF;
+          --bg-badge-tint:   #E8F5FE;
+          --color-cobalt:    #0052FF;
+          --color-cobalt-hover: #003ECC;
+          --color-cyan:      #00D4FF;
+          --text-title:      #071838;
+          --text-body:       #495E7C;
+          --text-muted:      #6B82A0;
+          --border-subtle:   rgba(0, 82, 255, 0.14);
+          --border-hover:    rgba(0, 212, 255, 0.60);
           --shadow-card:     0 12px 32px rgba(0, 48, 143, 0.06);
           --shadow-glow:     0 8px 25px rgba(0, 82, 255, 0.32);
         }
 
-        .hotel-catalog-wrapper {
+        .institutional-catalog-wrapper {
           background-color: var(--bg-main);
           padding: 85px 24px;
           border-top: 1.5px solid var(--border-subtle);
@@ -212,7 +207,6 @@ export default function HotelCatalogSection() {
           margin: 0 auto;
         }
 
-        /* 1. INTRODUCTION HEADER BLOCK */
         .intro-header-box {
           text-align: center;
           max-width: 820px;
@@ -251,7 +245,6 @@ export default function HotelCatalogSection() {
           margin: 0 auto 32px;
         }
 
-        /* PILLARS 4-COL STRIP */
         .pillars-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -290,7 +283,6 @@ export default function HotelCatalogSection() {
           border: 1px solid var(--border-subtle);
         }
 
-        /* 2. FILTER TABS */
         .catalog-filter-bar {
           display: flex;
           justify-content: center;
@@ -303,7 +295,7 @@ export default function HotelCatalogSection() {
           background-color: var(--bg-surface);
           color: var(--text-body);
           border: 1.5px solid var(--border-subtle);
-          padding: 8px 18px;
+          padding: 8px 22px;
           border-radius: 50px;
           font-size: 13px;
           font-weight: 700;
@@ -323,7 +315,6 @@ export default function HotelCatalogSection() {
           box-shadow: var(--shadow-glow);
         }
 
-        /* 3. SAMPLES GRID WITH IMAGES */
         .samples-card-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -347,11 +338,10 @@ export default function HotelCatalogSection() {
           box-shadow: 0 18px 40px rgba(0, 82, 255, 0.10);
         }
 
-        /* IMAGE HEADER BOX */
         .card-image-box {
           position: relative;
           width: 100%;
-          height: 220px;
+          height: 275px;
           overflow: hidden;
           background-color: #E2E8F0;
         }
@@ -360,25 +350,27 @@ export default function HotelCatalogSection() {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          object-position: top center;
           transition: transform 0.45s ease;
         }
 
         .uniform-sample-card:hover .sample-image {
-          transform: scale(1.08);
+          transform: scale(1.06);
         }
 
         .floating-image-badge {
           position: absolute;
           top: 12px;
           left: 12px;
-          background: rgba(7, 24, 56, 0.78);
-          backdrop-filter: blur(6px);
+          background: rgba(7, 24, 56, 0.85);
+          backdrop-filter: blur(8px);
           color: #FFFFFF;
           font-size: 11px;
           font-weight: 700;
-          padding: 4px 10px;
+          padding: 5px 11px;
           border-radius: 6px;
           letter-spacing: 0.5px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         .floating-moq-badge {
@@ -389,12 +381,11 @@ export default function HotelCatalogSection() {
           color: var(--color-cobalt);
           font-size: 11px;
           font-weight: 800;
-          padding: 4px 10px;
+          padding: 5px 11px;
           border-radius: 6px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+          box-shadow: 0 4px 14px rgba(0,0,0,0.14);
         }
 
-        /* CARD BODY (MATTER UNDER IMAGE) */
         .card-body-matter {
           padding: 22px;
           display: flex;
@@ -414,14 +405,14 @@ export default function HotelCatalogSection() {
         }
 
         .sample-card-title {
-          font-size: 17px;
+          font-size: 16px;
           font-weight: 800;
           color: var(--text-title);
           margin: 0 0 12px;
-          line-height: 1.3;
+          line-height: 1.35;
+          min-height: 44px;
         }
 
-        /* SPECS BLOCK */
         .sample-spec-block {
           background-color: var(--bg-main);
           border: 1px solid var(--border-subtle);
@@ -441,46 +432,46 @@ export default function HotelCatalogSection() {
           font-weight: 600;
         }
 
-        /* FEATURES LIST */
         .sample-features-list {
           list-style: none;
           padding: 0;
           margin: 0 0 20px;
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 7px;
         }
 
         .sample-features-list li {
           font-size: 12px;
           color: var(--text-body);
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           gap: 8px;
+          line-height: 1.4;
         }
 
         .check-bullet {
           color: var(--color-cobalt);
           font-size: 11px;
           flex-shrink: 0;
+          margin-top: 3px;
         }
 
-        /* ACTION BUTTON */
+        /* SCROLL TRIGGER BUTTON */
         .btn-card-quote {
           width: 100%;
           background-color: var(--bg-badge-tint);
           color: var(--color-cobalt);
           border: 1.5px solid var(--border-subtle);
-          padding: 11px 16px;
+          padding: 12px 16px;
           border-radius: 10px;
           font-weight: 700;
           font-size: 13px;
-          text-decoration: none;
+          cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 8px;
-          box-sizing: border-box;
           transition: all 0.22s ease;
         }
 
@@ -489,39 +480,38 @@ export default function HotelCatalogSection() {
           color: #FFFFFF;
           border-color: var(--color-cobalt);
           box-shadow: var(--shadow-glow);
+          transform: translateY(-1px);
         }
       `}</style>
 
       <div className="catalog-inner">
-        {/* ========================================================
-            PART 1: INTRO ABOUT VOXCEL NOVA HOTEL MANUFACTURING
-        ========================================================= */}
+        {/* ================= HEADER SECTION ================= */}
         <div className="intro-header-box">
           <div className="category-chip">
-            <FaConciergeBell /> 5-Star Hospitality Apparel Specialists
+            <FaHospital /> Clinical Healthcare &amp; <FaConciergeBell /> 5-Star Hospitality Apparel
           </div>
 
           <h2 className="intro-title">
-            Engineered For 5-Star Elegance, Culinary Heat & High-Turnover Rigor
+            Tailored For Clinical Sterility, Guest Elegance &amp; Industrial Rigor
           </h2>
 
           <p className="intro-description">
-            At <b>Voxcel Nova</b>, hotel uniform manufacturing is designed around every touchpoint of the guest experience. 
-            From stain-resistant front-desk suiting to breathable, heat-deflecting chef jackets and industrial-wash 
-            housekeeping sets, our garments maintain pristine crispness under relentless daily hospitality shifts.
+            <b>Voxcel Nova</b> manufactures high-performance institutional apparel for leading hospitals, medical centers, 
+            and 5-star hotels. Engineered with hospital-grade antimicrobial finishes, fluid-repellent barriers, and 
+            stain-resistant suiting fabrics designed to withstand demanding shifts and 100+ commercial wash cycles.
           </p>
         </div>
 
-        {/* 4 MANUFACTURING PILLARS */}
+        {/* ================= PILLARS ================= */}
         <div className="pillars-grid">
           <div className="pillar-card">
             <div className="pillar-icon"><FaShieldAlt /></div>
             <div>
               <h5 style={{ margin: "0 0 4px", fontSize: "14px", fontWeight: 800, color: "var(--text-title)" }}>
-                Industrial Laundry Proof
+                Hospital Bio-Safety
               </h5>
               <p style={{ margin: 0, fontSize: "12px", color: "var(--text-body)" }}>
-                Vat-dyed fabrics survive 100+ commercial high-temperature chlorine and steam washings.
+                Silver-ion antimicrobial finishes and blood-borne pathogen fluid barriers.
               </p>
             </div>
           </div>
@@ -533,7 +523,7 @@ export default function HotelCatalogSection() {
                 Heat-Deflect Kitchen Tech
               </h5>
               <p style={{ margin: 0, fontSize: "12px", color: "var(--text-body)" }}>
-                Cool-Vent™ mesh linings prevent thermal exhaustion during peak restaurant dinner service.
+                Cool-Vent™ mesh linings prevent thermal exhaustion during high-output dinner service.
               </p>
             </div>
           </div>
@@ -545,7 +535,7 @@ export default function HotelCatalogSection() {
                 Teflon™ Stain Resistance
               </h5>
               <p style={{ margin: 0, fontSize: "12px", color: "var(--text-body)" }}>
-                Nano-liquid repellent treatments cause wine, coffee, and grease spills to bead off surfaces.
+                Liquid-repellent nano treatments cause coffee, oils, and chemical spills to bead right off.
               </p>
             </div>
           </div>
@@ -554,18 +544,16 @@ export default function HotelCatalogSection() {
             <div className="pillar-icon"><FaTshirt /></div>
             <div>
               <h5 style={{ margin: "0 0 4px", fontSize: "14px", fontWeight: 800, color: "var(--text-title)" }}>
-                Department Color-Coding
+                Department Sorting
               </h5>
               <p style={{ margin: 0, fontSize: "12px", color: "var(--text-body)" }}>
-                Pre-sorted and labeled bags by property department (F&B, Front Office, Housekeeping).
+                Pre-packaged by department with custom size tagging and hospital/hotel embroidery.
               </p>
             </div>
           </div>
         </div>
 
-        {/* ========================================================
-            PART 2: DEPARTMENT FILTER TABS
-        ========================================================= */}
+        {/* ================= FILTER TABS ================= */}
         <div className="catalog-filter-bar">
           {categories.map((cat) => (
             <button
@@ -578,27 +566,25 @@ export default function HotelCatalogSection() {
           ))}
         </div>
 
-        {/* ========================================================
-            PART 3: 8 SAMPLES WITH HIGH-RES PHOTOS & MATTER UNDER
-        ========================================================= */}
+        {/* ================= SAMPLES GRID ================= */}
         <div className="samples-card-grid">
           {filteredSamples.map((item) => (
             <div key={item.id} className="uniform-sample-card">
               
-              {/* IMAGE HEADER WITH PHOTO ZOOM */}
+              {/* IMAGE HEADER WITH ADJUSTED FRAMING */}
               <div className="card-image-box">
                 <img src={item.image} alt={item.title} className="sample-image" />
                 <span className="floating-image-badge">{item.badge}</span>
                 <span className="floating-moq-badge">{item.moq}</span>
               </div>
 
-              {/* MATTER UNDER IMAGE */}
+              {/* CARD DETAILS */}
               <div className="card-body-matter">
                 <div>
                   <span className="sample-category-tag">{item.category}</span>
                   <h4 className="sample-card-title">{item.title}</h4>
 
-                  {/* SPECS BLOCK */}
+                  {/* SPECS */}
                   <div className="sample-spec-block">
                     <div className="spec-line">
                       <span>Fabric:</span> {item.fabric}
@@ -611,7 +597,7 @@ export default function HotelCatalogSection() {
                     </div>
                   </div>
 
-                  {/* BULLET FEATURES */}
+                  {/* FEATURES */}
                   <ul className="sample-features-list">
                     {item.features.map((feat, idx) => (
                       <li key={idx}>
@@ -622,19 +608,21 @@ export default function HotelCatalogSection() {
                   </ul>
                 </div>
 
-                {/* CONFIGURE ACTION */}
-                <Link to="/customization" className="btn-card-quote">
-                  Configure Hotel Bulk Specs <FaArrowRight size={11} />
-                </Link>
+                {/* ================= CLICK TO SCROLL DOWN ================= */}
+                <button
+                  type="button"
+                  onClick={handleScrollDown}
+                  className="btn-card-quote"
+                >
+                  Configure Institutional Specs <FaArrowRight size={11} />
+                </button>
               </div>
 
             </div>
           ))}
         </div>
 
-        {/* ========================================================
-            BOTTOM HOSPITALITY TENDER BANNER
-        ========================================================= */}
+        {/* ================= BOTTOM INQUIRY BANNER ================= */}
         <div
           style={{
             marginTop: "60px",
@@ -652,30 +640,32 @@ export default function HotelCatalogSection() {
         >
           <div>
             <h3 style={{ margin: "0 0 6px", fontSize: "20px", fontWeight: 800, color: "var(--text-title)" }}>
-              Managing a Luxury Resort Opening or Chain Re-Branding?
+              Procuring Uniforms for a Hospital Network or Hotel Chain?
             </h3>
             <p style={{ margin: 0, fontSize: "14px", color: "var(--text-body)" }}>
-              We manufacture complete multi-property hotel uniform rosters with custom dyes and logo cresting.
+              We manufacture bulk institutional orders with fabric testing certificates, custom PMS dyes, and rapid doorstep rollout.
             </p>
           </div>
-          <Link
-            to="/customization"
+          <button
+            type="button"
+            onClick={handleScrollDown}
             style={{
               background: "var(--color-cobalt)",
               color: "#FFFFFF",
+              border: "none",
               padding: "13px 26px",
               borderRadius: "12px",
               fontWeight: 700,
               fontSize: "14px",
-              textDecoration: "none",
+              cursor: "pointer",
               boxShadow: "var(--shadow-glow)",
               display: "inline-flex",
               alignItems: "center",
               gap: "9px"
             }}
           >
-            Request Hospitality Quote <FaArrowRight size={12} />
-          </Link>
+            Request Institutional Tender Quote <FaArrowRight size={12} />
+          </button>
         </div>
 
       </div>

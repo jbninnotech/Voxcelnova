@@ -1,13 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Link,
-  NavLink,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
-
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
-
 import {
   FaShoppingCart,
   FaHeart,
@@ -23,76 +16,49 @@ import {
   FaHotel,
   FaArrowRight,
   FaBriefcase,
+  FaUsers,
 } from "react-icons/fa";
 
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 
 export default function Navbar() {
-  /* =========================================================
-     CONTEXTS
-  ========================================================= */
-
   const cartContext = useCart() || {};
   const wishlistContext = useWishlist?.() || {};
 
   const cartTotal =
     cartContext.cartCount ??
     (cartContext.cartItems
-      ? cartContext.cartItems.reduce(
-          (sum, item) => sum + (item.quantity || 1),
-          0
-        )
+      ? cartContext.cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0)
       : 0);
 
-  /* =========================================================
-     WISHLIST COUNT
-  ========================================================= */
+  const wishlistTotal =
+    wishlistContext.wishlistCount ??
+    (wishlistContext.wishlistItems ? wishlistContext.wishlistItems.length : 0);
 
   const [localWishlistCount, setLocalWishlistCount] = useState(0);
 
   useEffect(() => {
     const updateWishCount = () => {
       try {
-        const saved = localStorage.getItem("voxcel_wishlist");
-
-        if (saved) {
-          setLocalWishlistCount(JSON.parse(saved).length);
-        } else {
-          setLocalWishlistCount(0);
-        }
+        const saved = sessionStorage.getItem("voxcel_nova_wishlist");
+        setLocalWishlistCount(saved ? JSON.parse(saved).length : wishlistTotal);
       } catch {
-        setLocalWishlistCount(0);
+        setLocalWishlistCount(wishlistTotal);
       }
     };
-
     updateWishCount();
+  }, [wishlistTotal]);
 
-    window.addEventListener("storage", updateWishCount);
-
-    return () =>
-      window.removeEventListener("storage", updateWishCount);
-  }, []);
-
-  const totalWishlist =
-    wishlistContext.wishlistCount ?? localWishlistCount;
-
-  /* =========================================================
-     STATES
-  ========================================================= */
+  const totalWishlist = wishlistContext.wishlistCount ?? localWishlistCount;
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [bulkOpen, setBulkOpen] = useState(false);
-  const [mobileBulkOpen, setMobileBulkOpen] =
-    useState(false);
+  const [mobileBulkOpen, setMobileBulkOpen] = useState(false);
   const [logoError, setLogoError] = useState(false);
-
-  /* =========================================================
-     ROUTING
-  ========================================================= */
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -101,26 +67,12 @@ export default function Navbar() {
   const searchContainerRef = useRef(null);
   const searchInputRef = useRef(null);
 
-  /* =========================================================
-     SCROLL
-  ========================================================= */
-
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 15);
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 15);
     handleScroll();
-
     window.addEventListener("scroll", handleScroll);
-
-    return () =>
-      window.removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  /* =========================================================
-     ROUTE CLEANUP
-  ========================================================= */
 
   useEffect(() => {
     setMobileOpen(false);
@@ -129,19 +81,11 @@ export default function Navbar() {
     setMobileBulkOpen(false);
   }, [location.pathname]);
 
-  /* =========================================================
-     OUTSIDE CLICK
-  ========================================================= */
-
   useEffect(() => {
     const handleOutsideClick = (e) => {
-      if (
-        bulkDropdownRef.current &&
-        !bulkDropdownRef.current.contains(e.target)
-      ) {
+      if (bulkDropdownRef.current && !bulkDropdownRef.current.contains(e.target)) {
         setBulkOpen(false);
       }
-
       if (
         searchContainerRef.current &&
         !searchContainerRef.current.contains(e.target) &&
@@ -150,141 +94,80 @@ export default function Navbar() {
         setSearchOpen(false);
       }
     };
-
-    document.addEventListener(
-      "mousedown",
-      handleOutsideClick
-    );
-
-    return () =>
-      document.removeEventListener(
-        "mousedown",
-        handleOutsideClick
-      );
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [searchQuery]);
 
-  /* =========================================================
-     SEARCH FOCUS
-  ========================================================= */
-
   useEffect(() => {
-    if (
-      searchOpen &&
-      searchInputRef.current
-    ) {
+    if (searchOpen && searchInputRef.current) {
       searchInputRef.current.focus();
     }
   }, [searchOpen]);
 
-  /* =========================================================
-     SEARCH
-  ========================================================= */
-
   const handleSearchSubmit = (e) => {
     if (e) e.preventDefault();
-
     const query = searchQuery.trim();
-
     if (query) {
-      navigate(
-        `/products?search=${encodeURIComponent(query)}`
-      );
-
+      navigate(`/products?search=${encodeURIComponent(query)}`);
       setSearchOpen(false);
       setSearchQuery("");
     }
   };
 
-  /* =========================================================
-     NAVIGATION
-  ========================================================= */
-
+  /* NAVIGATION ITEMS WITH CLIENTS PAGE */
   const navItems = [
-    {
-      name: "Home",
-      path: "/",
-    },
-    {
-      name: "Products",
-      path: "/products",
-    },
-    {
-      name: "About",
-      path: "/about",
-    },
-    {
-      name: "Careers",
-      path: "/careers",
-    },
-    {
-      name: "Contact",
-      path: "/contact",
-    },
+    { name: "Home", path: "/" },
+    { name: "Products", path: "/products" },
+    { name: "Clients", path: "/clients" },
+    { name: "About", path: "/about" },
+    { name: "Careers", path: "/careers" },
+    { name: "Contact", path: "/contact" },
   ];
-
-  /* =========================================================
-     BULK CATEGORIES
-  ========================================================= */
 
   const bulkCategories = [
     {
       name: "School Uniforms",
       path: "/bulk-orders/school-uniforms",
       icon: <FaSchool />,
-      description:
-        "Durable and breathable textiles for everyday wear.",
+      description: "Durable and breathable textiles for everyday wear.",
       badge: "K-12 READY",
     },
     {
       name: "College Uniforms",
       path: "/bulk-orders/college-uniforms",
       icon: <FaGraduationCap />,
-      description:
-        "Blazers, lab coats, and institutional campus attire.",
+      description: "Blazers, lab coats, and institutional campus attire.",
       badge: "HIGHER ED",
     },
     {
       name: "Corporate Uniforms",
       path: "/bulk-orders/corporate-uniforms",
       icon: <FaBuilding />,
-      description:
-        "Executive shirting, workwear, and team apparel.",
+      description: "Executive shirting, workwear, and team apparel.",
       badge: "BESTSELLER",
     },
     {
       name: "Hotel & Hospitality",
       path: "/bulk/hotel-uniforms",
       icon: <FaHotel />,
-      description:
-        "Chef coats, service staff, and luxury hotel styling.",
+      description: "Chef coats, service staff, and luxury hotel styling.",
       badge: "PREMIUM",
     },
   ];
 
   return (
     <>
-      <nav
-        className={`vx-navbar-root ${
-          scrolled ? "scrolled" : ""
-        }`}
-      >
+      <nav className={`vx-navbar-root ${scrolled ? "scrolled" : ""}`}>
         <div className="vx-container">
-
           {/* LOGO */}
-
-          <Link
-            to="/"
-            className="vx-brand-anchor"
-          >
+          <Link to="/" className="vx-brand-anchor">
             <div className="vx-logo-box">
               {!logoError ? (
                 <img
                   src={logo}
                   alt="Voxcel Nova"
                   className="vx-logo-img"
-                  onError={() =>
-                    setLogoError(true)
-                  }
+                  onError={() => setLogoError(true)}
                 />
               ) : (
                 <div className="vx-logo-fallback">
@@ -292,263 +175,136 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-
             <div className="vx-brand-text">
-              <span className="brand-title">
-                VOXCEL NOVA
-              </span>
-
+              <span className="brand-title">VOXCEL NOVA</span>
               <span className="brand-subtitle">
-                CLOTHING{" "}
-                <span className="sub-accent">
-                  &
-                </span>{" "}
-                UNIFORMS
+                CLOTHING <span className="sub-accent">&</span> UNIFORMS
               </span>
             </div>
           </Link>
 
           {/* DESKTOP MENU */}
-
           <div className="vx-desktop-menu">
             <ul className="vx-nav-list">
+              {/* Home & Products */}
+              {navItems.slice(0, 2).map((item) => (
+                <li key={item.name}>
+                  <NavLink
+                    to={item.path}
+                    className={({ isActive }) =>
+                      `vx-nav-link ${isActive ? "active" : ""}`
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
+                </li>
+              ))}
 
-              {navItems.slice(0, 2).map(
-                (item) => (
-                  <li key={item.name}>
-                    <NavLink
-                      to={item.path}
-                      className={({ isActive }) =>
-                        `vx-nav-link ${
-                          isActive
-                            ? "active"
-                            : ""
-                        }`
-                      }
-                    >
-                      {item.name}
-                    </NavLink>
-                  </li>
-                )
-              )}
-
-              {/* BULK */}
-
-              <li
-                className="position-relative"
-                ref={bulkDropdownRef}
-              >
+              {/* Bulk Orders Dropdown */}
+              <li className="position-relative" ref={bulkDropdownRef}>
                 <button
                   type="button"
                   className={`vx-nav-link vx-bulk-btn ${
-                    bulkOpen ||
-                    location.pathname.includes(
-                      "/bulk"
-                    )
-                      ? "active"
-                      : ""
+                    bulkOpen || location.pathname.includes("/bulk") ? "active" : ""
                   }`}
-                  onClick={() =>
-                    setBulkOpen(
-                      (prev) => !prev
-                    )
-                  }
+                  onClick={() => setBulkOpen((prev) => !prev)}
                 >
                   <span>Bulk Orders</span>
-
-                  <FaChevronDown
-                    className={`vx-chevron ${
-                      bulkOpen
-                        ? "rotate"
-                        : ""
-                    }`}
-                  />
+                  <FaChevronDown className={`vx-chevron ${bulkOpen ? "rotate" : ""}`} />
                 </button>
 
-                <div
-                  className={`vx-mega-dropdown ${
-                    bulkOpen
-                      ? "open"
-                      : ""
-                  }`}
-                >
+                <div className={`vx-mega-dropdown ${bulkOpen ? "open" : ""}`}>
                   <div className="dropdown-header">
                     <div>
-                      <h4>
-                        Bulk Manufacturing
-                      </h4>
-
-                      <p>
-                        Direct industrial supply
-                        with custom branding
-                      </p>
+                      <h4>Bulk Manufacturing</h4>
+                      <p>Direct industrial supply with custom branding</p>
                     </div>
-
                     <Link
                       to="/bulk-orders"
                       className="view-all-pill"
-                      onClick={() =>
-                        setBulkOpen(false)
-                      }
+                      onClick={() => setBulkOpen(false)}
                     >
-                      <span>
-                        Explore Catalog
-                      </span>
-
-                      <FaArrowRight
-                        size={10}
-                      />
+                      <span>Explore Catalog</span>
+                      <FaArrowRight size={10} />
                     </Link>
                   </div>
 
                   <div className="dropdown-grid">
-                    {bulkCategories.map(
-                      (category) => (
-                        <Link
-                          key={
-                            category.name
-                          }
-                          to={
-                            category.path
-                          }
-                          className="category-card"
-                          onClick={() =>
-                            setBulkOpen(
-                              false
-                            )
-                          }
-                        >
-                          <div className="category-icon-box">
-                            {
-                              category.icon
-                            }
+                    {bulkCategories.map((category) => (
+                      <Link
+                        key={category.name}
+                        to={category.path}
+                        className="category-card"
+                        onClick={() => setBulkOpen(false)}
+                      >
+                        <div className="category-icon-box">{category.icon}</div>
+                        <div className="category-info">
+                          <div className="category-title-row">
+                            <span className="category-name">{category.name}</span>
+                            <span className="category-badge">{category.badge}</span>
                           </div>
-
-                          <div className="category-info">
-                            <div className="category-title-row">
-                              <span className="category-name">
-                                {
-                                  category.name
-                                }
-                              </span>
-
-                              <span className="category-badge">
-                                {
-                                  category.badge
-                                }
-                              </span>
-                            </div>
-
-                            <p className="category-description">
-                              {
-                                category.description
-                              }
-                            </p>
-                          </div>
-                        </Link>
-                      )
-                    )}
+                          <p className="category-description">
+                            {category.description}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
                   </div>
                 </div>
               </li>
 
-              {/* ABOUT / CAREERS / CONTACT */}
-
-              {navItems.slice(2).map(
-                (item) => (
-                  <li key={item.name}>
-                    <NavLink
-                      to={item.path}
-                      className={({ isActive }) =>
-                        `vx-nav-link ${
-                          isActive
-                            ? "active"
-                            : ""
-                        }`
-                      }
-                    >
-                      {item.name ===
-                        "Careers" && (
-                        <FaBriefcase
-                          size={12}
-                          style={{
-                            marginRight: 6,
-                          }}
-                        />
-                      )}
-
-                      {item.name}
-                    </NavLink>
-                  </li>
-                )
-              )}
+              {/* Clients, About, Careers, Contact */}
+              {navItems.slice(2).map((item) => (
+                <li key={item.name}>
+                  <NavLink
+                    to={item.path}
+                    className={({ isActive }) =>
+                      `vx-nav-link ${isActive ? "active" : ""}`
+                    }
+                  >
+                    {item.name === "Careers" && (
+                      <FaBriefcase size={12} style={{ marginRight: 6 }} />
+                    )}
+                    {item.name}
+                  </NavLink>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* ACTIONS */}
-
           <div className="vx-action-group">
-
-            {/* SEARCH */}
-
+            {/* Search */}
             <form
               ref={searchContainerRef}
               className="vx-search-form"
-              onSubmit={
-                handleSearchSubmit
-              }
+              onSubmit={handleSearchSubmit}
             >
               <input
                 ref={searchInputRef}
                 type="text"
                 placeholder="Search collection..."
-                className={`vx-search-field ${
-                  searchOpen
-                    ? "open"
-                    : ""
-                }`}
+                className={`vx-search-field ${searchOpen ? "open" : ""}`}
                 value={searchQuery}
-                onChange={(e) =>
-                  setSearchQuery(
-                    e.target.value
-                  )
-                }
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
-
-              {searchOpen &&
-                searchQuery && (
-                  <button
-                    type="button"
-                    className="search-clear-btn"
-                    onClick={() =>
-                      setSearchQuery(
-                        ""
-                      )
-                    }
-                  >
-                    <FaTimes
-                      size={11}
-                    />
-                  </button>
-                )}
-
+              {searchOpen && searchQuery && (
+                <button
+                  type="button"
+                  className="search-clear-btn"
+                  onClick={() => setSearchQuery("")}
+                >
+                  <FaTimes size={11} />
+                </button>
+              )}
               <button
                 type="button"
-                className={`vx-icon-btn ${
-                  searchOpen
-                    ? "search-active"
-                    : ""
-                }`}
+                className={`vx-icon-btn ${searchOpen ? "search-active" : ""}`}
                 onClick={() => {
-                  if (
-                    searchOpen &&
-                    searchQuery.trim()
-                  ) {
+                  if (searchOpen && searchQuery.trim()) {
                     handleSearchSubmit();
                   } else {
-                    setSearchOpen(
-                      (prev) => !prev
-                    );
+                    setSearchOpen((prev) => !prev);
                   }
                 }}
               >
@@ -556,230 +312,113 @@ export default function Navbar() {
               </button>
             </form>
 
-            {/* ACCOUNT */}
-
-            <Link
-              to="/login"
-              className="vx-icon-btn d-none-sm"
-              title="Account"
-            >
+            {/* Account */}
+            <Link to="/login" className="vx-icon-btn d-none-sm" title="Account">
               <FaUser size={14} />
             </Link>
 
-            {/* WISHLIST */}
-
-            <Link
-              to="/wishlist"
-              className="vx-icon-btn"
-              title="Wishlist"
-            >
+            {/* Wishlist */}
+            <Link to="/wishlist" className="vx-icon-btn" title="Wishlist">
               <FaHeart size={14} />
-
               {totalWishlist > 0 && (
                 <span className="vx-badge badge-rose">
-                  {totalWishlist > 99
-                    ? "99+"
-                    : totalWishlist}
+                  {totalWishlist > 99 ? "99+" : totalWishlist}
                 </span>
               )}
             </Link>
 
-            {/* CART */}
-
-            <Link
-              to="/cart"
-              className="vx-icon-btn cart-btn"
-              title="Shopping Bag"
-            >
-              <FaShoppingCart
-                size={14}
-              />
-
+            {/* Cart */}
+            <Link to="/cart" className="vx-icon-btn cart-btn" title="Shopping Bag">
+              <FaShoppingCart size={14} />
               {cartTotal > 0 && (
                 <span className="vx-badge badge-cobalt">
-                  {cartTotal > 99
-                    ? "99+"
-                    : cartTotal}
+                  {cartTotal > 99 ? "99+" : cartTotal}
                 </span>
               )}
             </Link>
 
-            {/* MOBILE */}
-
+            {/* Mobile Toggle */}
             <button
               type="button"
-              className={`vx-icon-btn d-mobile-only ${
-                mobileOpen
-                  ? "menu-open"
-                  : ""
-              }`}
-              onClick={() =>
-                setMobileOpen(
-                  (prev) => !prev
-                )
-              }
+              className={`vx-icon-btn d-mobile-only ${mobileOpen ? "menu-open" : ""}`}
+              onClick={() => setMobileOpen((prev) => !prev)}
             >
-              {mobileOpen ? (
-                <FaTimes size={16} />
-              ) : (
-                <FaBars size={16} />
-              )}
+              {mobileOpen ? <FaTimes size={16} /> : <FaBars size={16} />}
             </button>
           </div>
         </div>
 
         {/* MOBILE DRAWER */}
-
-        <div
-          className={`vx-mobile-drawer ${
-            mobileOpen
-              ? "open"
-              : ""
-          }`}
-        >
+        <div className={`vx-mobile-drawer ${mobileOpen ? "open" : ""}`}>
           <div className="mobile-inner">
             <ul className="mobile-nav-list">
+              {navItems.slice(0, 2).map((item) => (
+                <li key={item.name}>
+                  <NavLink
+                    to={item.path}
+                    className="mobile-link"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {item.name}
+                  </NavLink>
+                </li>
+              ))}
 
-              {navItems.slice(0, 2).map(
-                (item) => (
-                  <li key={item.name}>
-                    <NavLink
-                      to={item.path}
-                      className="mobile-link"
-                      onClick={() =>
-                        setMobileOpen(
-                          false
-                        )
-                      }
-                    >
-                      {item.name}
-                    </NavLink>
-                  </li>
-                )
-              )}
-
-              {/* MOBILE BULK */}
-
+              {/* Mobile Bulk Accordion */}
               <li>
                 <button
                   type="button"
                   className="mobile-link mobile-accordion-trigger"
-                  onClick={() =>
-                    setMobileBulkOpen(
-                      (prev) => !prev
-                    )
-                  }
+                  onClick={() => setMobileBulkOpen((prev) => !prev)}
                 >
-                  <span>
-                    Bulk Uniforms
-                  </span>
-
+                  <span>Bulk Uniforms</span>
                   <FaChevronDown
-                    className={`vx-chevron ${
-                      mobileBulkOpen
-                        ? "rotate"
-                        : ""
-                    }`}
+                    className={`vx-chevron ${mobileBulkOpen ? "rotate" : ""}`}
                   />
                 </button>
-
                 {mobileBulkOpen && (
                   <div className="mobile-sub-menu">
-                    {bulkCategories.map(
-                      (category) => (
-                        <Link
-                          key={
-                            category.name
-                          }
-                          to={
-                            category.path
-                          }
-                          className="mobile-sub-item"
-                          onClick={() =>
-                            setMobileOpen(
-                              false
-                            )
-                          }
-                        >
-                          <div className="sub-icon">
-                            {
-                              category.icon
-                            }
-                          </div>
-
-                          <div>
-                            <span className="sub-title">
-                              {
-                                category.name
-                              }
-                            </span>
-
-                            <span className="sub-badge">
-                              {
-                                category.badge
-                              }
-                            </span>
-                          </div>
-                        </Link>
-                      )
-                    )}
+                    {bulkCategories.map((category) => (
+                      <Link
+                        key={category.name}
+                        to={category.path}
+                        className="mobile-sub-item"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <div className="sub-icon">{category.icon}</div>
+                        <div>
+                          <span className="sub-title">{category.name}</span>
+                          <span className="sub-badge">{category.badge}</span>
+                        </div>
+                      </Link>
+                    ))}
                   </div>
                 )}
               </li>
 
-              {navItems.slice(2).map(
-                (item) => (
-                  <li key={item.name}>
-                    <NavLink
-                      to={item.path}
-                      className="mobile-link"
-                      onClick={() =>
-                        setMobileOpen(
-                          false
-                        )
-                      }
-                    >
-                      <span
-                        style={{
-                          display:
-                            "flex",
-                          alignItems:
-                            "center",
-                          gap: 8,
-                        }}
-                      >
-                        {item.name ===
-                          "Careers" && (
-                          <FaBriefcase
-                            size={13}
-                          />
-                        )}
-
-                        {item.name}
-                      </span>
-                    </NavLink>
-                  </li>
-                )
-              )}
+              {navItems.slice(2).map((item) => (
+                <li key={item.name}>
+                  <NavLink
+                    to={item.path}
+                    className="mobile-link"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      {item.name === "Careers" && <FaBriefcase size={13} />}
+                      {item.name === "Clients" && <FaUsers size={13} />}
+                      {item.name}
+                    </span>
+                  </NavLink>
+                </li>
+              ))}
 
               <li>
                 <Link
                   to="/login"
                   className="mobile-link"
-                  onClick={() =>
-                    setMobileOpen(
-                      false
-                    )
-                  }
+                  onClick={() => setMobileOpen(false)}
                 >
-                  <span
-                    style={{
-                      display: "flex",
-                      alignItems:
-                        "center",
-                      gap: 10,
-                    }}
-                  >
+                  <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <FaUser size={13} />
                     My Account
                   </span>
@@ -850,11 +489,7 @@ export default function Navbar() {
           width: 38px;
           height: 38px;
           border-radius: 10px;
-          background: linear-gradient(
-            135deg,
-            var(--color-cobalt),
-            var(--color-cyan)
-          );
+          background: linear-gradient(135deg, var(--color-cobalt), var(--color-cyan));
           color: white;
           display: flex;
           align-items: center;
@@ -1008,11 +643,7 @@ export default function Navbar() {
           width: 38px;
           height: 38px;
           border-radius: 10px;
-          background: linear-gradient(
-            135deg,
-            var(--color-cobalt),
-            #2872ff
-          );
+          background: linear-gradient(135deg, var(--color-cobalt), #2872ff);
           color: white;
           display: flex;
           align-items: center;
@@ -1213,7 +844,6 @@ export default function Navbar() {
           .vx-desktop-menu {
             display: none;
           }
-
           .d-mobile-only {
             display: flex;
           }
@@ -1223,19 +853,15 @@ export default function Navbar() {
           .d-none-sm {
             display: none;
           }
-
           .brand-subtitle {
             display: none;
           }
-
           .vx-search-field.open {
             width: 130px;
           }
-
           .vx-container {
             padding: 0 16px;
           }
-
           .brand-title {
             font-size: 1.05rem;
           }

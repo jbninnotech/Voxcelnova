@@ -5,6 +5,8 @@ import {
   getOrderById,
   getAllOrders,
   updateOrderStatus,
+  cancelUserOrder,
+  softDeleteUserOrder,
   validateCoupon,
 } from "../controllers/orderController.js";
 import { protect, adminOnly } from "../middleware/authMiddleware.js";
@@ -17,6 +19,9 @@ router.post("/validate-coupon", validateCoupon);
 // User Order routes
 router.post("/", protect, createOrder);
 router.get("/my-orders", protect, getUserOrders);
+router.post("/:id/cancel", protect, cancelUserOrder);
+router.delete("/:id", protect, softDeleteUserOrder);
+router.patch("/:id/user-delete", protect, softDeleteUserOrder);
 router.get("/:id", protect, getOrderById);
 
 // Admin Order routes

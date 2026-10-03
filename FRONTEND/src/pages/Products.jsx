@@ -83,7 +83,7 @@ const Products = () => {
     addToWishlist,
     removeFromWishlist,
     isInWishlist,
-  } = useWishlist();
+  } = useWishlist() || {};
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -145,10 +145,10 @@ const Products = () => {
       return;
     }
 
-    if (isInWishlist(productId)) {
+    if (isInWishlist && isInWishlist(productId)) {
       removeFromWishlist(productId);
       showToast("Removed from wishlist");
-    } else {
+    } else if (addToWishlist) {
       addToWishlist({
         ...product,
         _id: productId,
@@ -158,7 +158,7 @@ const Products = () => {
   };
 
   /* =========================================================
-     ADD TO CART
+     ADD TO CART (MATCHING ProductDetails.jsx EXACT SIGNATURE)
   ========================================================= */
   const handleAddToCart = async (product, e) => {
     if (e) {
@@ -166,54 +166,54 @@ const Products = () => {
       e.stopPropagation();
     }
 
-    const productId = product._id || product.id || String(Date.now());
-
-    const finalPrice =
-      product.salePrice && Number(product.salePrice) > 0
-        ? Number(product.salePrice)
-        : Number(product.price || 0);
-
-    const imageUrl =
-      product.image ||
-      product.images?.[0]?.url ||
-      (typeof product.images?.[0] === "string" ? product.images[0] : "") ||
-      "https://via.placeholder.com/600x750?text=VOXCEL";
-
-    const defaultSize =
-      Array.isArray(product.sizes) && product.sizes.length > 0
-        ? product.sizes[0]
-        : "M";
-
-    const cartPayload = {
-      ...product,
-      _id: productId,
-      id: productId,
-      productId: productId,
-      cartItemId: `${productId}-${defaultSize}`,
-      name: product.name || "Apparel Item",
-      price: finalPrice,
-      originalPrice: product.price || finalPrice,
-      image: imageUrl,
-      quantity: 1,
-      size: defaultSize,
-      selectedSize: defaultSize,
-    };
+    const productId = product._id || product.id;
+    if (!productId) {
+      showToast("Unable to identify product.");
+      return;
+    }
 
     if (typeof addToCart !== "function") {
       showToast("Cart function unavailable right now.");
       return;
     }
 
+    const defaultSize =
+      product.selectedSize ||
+      (Array.isArray(product.sizes) && product.sizes.length > 0
+        ? typeof product.sizes[0] === "string"
+          ? product.sizes[0]
+          : product.sizes[0]?.size || "M"
+        : "M");
+
+    const defaultColor =
+      product.selectedColor ||
+      (Array.isArray(product.colors) && product.colors.length > 0
+        ? typeof product.colors[0] === "string"
+          ? product.colors[0]
+          : product.colors[0]?.name || product.colors[0]?.color || ""
+        : "");
+
     try {
-      await addToCart(cartPayload, 1, defaultSize);
+      // 1. Exact object wrapper used in ProductDetails.jsx:
+      await addToCart({
+        product: product,
+        size: defaultSize,
+        color: defaultColor,
+        quantity: 1,
+      });
+
       showToast(`Added "${product.name || "Product"}" to Cart! 🛍️`);
     } catch (err) {
+      // 2. Direct payload fallback:
       try {
-        await addToCart(cartPayload);
+        await addToCart(product, 1, defaultSize);
         showToast(`Added "${product.name || "Product"}" to Cart! 🛍️`);
       } catch (innerErr) {
+        console.error("Add to cart error:", innerErr);
         showToast(
-          innerErr?.response?.data?.message || "Failed to add to cart. Try again."
+          innerErr?.response?.data?.message ||
+            innerErr?.message ||
+            "Failed to add to cart. Try again."
         );
       }
     }
@@ -482,7 +482,7 @@ const Products = () => {
               <ProductCard
                 key={product._id || product.id}
                 product={product}
-                isWishlisted={isInWishlist(product._id || product.id)}
+                isWishlisted={isInWishlist ? isInWishlist(product._id || product.id) : false}
                 onToggleWishlist={(e) => toggleWishlist(product, e)}
                 onAddToCart={(e) => handleAddToCart(product, e)}
               />
@@ -491,9 +491,7 @@ const Products = () => {
         )}
       </section>
 
-      {/* ==========================================================
-          CLEAN LIGHT THEME STYLES
-      =========================================================== */}
+      {/* CLEAN STYLES */}
       <style>{`
         .catalog-wrapper {
           --bg-main:         #F4F8FE;

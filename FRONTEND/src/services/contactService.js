@@ -6,19 +6,13 @@ import axios from "axios";
 const API_URL =
   import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
+import authStorage from "../utils/authStorage";
+
 // =========================================================
-// GET AUTH TOKEN (Checks all storage locations and keys)
+// GET AUTH TOKEN
 // =========================================================
 const getToken = () => {
-  return (
-    localStorage.getItem("token") ||
-    localStorage.getItem("accessToken") ||
-    localStorage.getItem("adminToken") ||
-    sessionStorage.getItem("token") ||
-    sessionStorage.getItem("accessToken") ||
-    sessionStorage.getItem("adminToken") ||
-    ""
-  );
+  return authStorage.getToken() || "";
 };
 
 // =========================================================

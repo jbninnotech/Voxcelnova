@@ -1,0 +1,49 @@
+/* Global Utilities for Voxcel Nova Light Theme */
+
+.bg-voxcel-main {
+  background-color: var(--bg-main) !important;
+}
+
+.bg-voxcel-surface {
+  background-color: var(--bg-surface) !important;
+}
+
+.bg-voxcel-tint {
+  background-color: var(--bg-badge-tint) !important;
+}
+
+.text-voxcel-title {
+  color: var(--text-title) !important;
+}
+
+.text-voxcel-body {
+  color: var(--text-body) !important;
+}
+
+.text-voxcel-muted {
+  color: var(--text-muted) !important;
+}
+
+.text-voxcel-cobalt {
+  color: var(--color-cobalt) !important;
+}
+
+.btn-voxcel-primary {
+  background-color: var(--color-cobalt) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: var(--shadow-glow);
+  transition: all 0.25s ease;
+}
+
+.btn-voxcel-primary:hover {
+  background-color: var(--color-cobalt-hover) !important;
+  transform: translateY(-1px);
+}
+
+.card-voxcel {
+  background-color: var(--bg-surface) !important;
+  border: 1px solid var(--border-subtle) !important;
+  box-shadow: var(--shadow-card) !important;
+  border-radius: 16px;
+}

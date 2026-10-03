@@ -317,87 +317,12 @@ export default function SchoolUniforms() {
             </div>
 
             {/* STATS STRIP */}
-            <div className="hero-stats-grid">
-              <div>
-                <h4 className="stat-figure">600+</h4>
-                <p className="stat-label">Institutions Clothed</p>
-              </div>
-              <div>
-                <h4 className="stat-figure">300k+</h4>
-                <p className="stat-label">Students Clothed Annually</p>
-              </div>
-              <div>
-                <h4 className="stat-figure">100%</h4>
-                <p className="stat-label">Non-Shrink Guaranteed</p>
-              </div>
-            </div>
+            
+  
           </div>
 
           {/* RIGHT: INSTITUTIONAL SPECIFICATION CARD */}
-          <div>
-            <div className="surface-showcase-card">
-              <span className="card-top-pill">
-                <FaCheckCircle style={{ marginRight: 5 }} /> OEKO-TEX® CHILD SAFE
-              </span>
-
-              <h4 style={{ fontSize: "16px", fontWeight: 800, color: "var(--text-title)", marginBottom: "16px" }}>
-                Academic Manufacturing Standards
-              </h4>
-
-              {/* Spec 1: Regular Uniform */}
-              <div className="spec-item-box">
-                <div className="spec-icon-wrapper">
-                  <FaSchool />
-                </div>
-                <div>
-                  <h6 style={{ margin: "0 0 2px", fontWeight: 700, color: "var(--text-title)", fontSize: "14px" }}>
-                    Sanforized Cotton-Rich Shirting
-                  </h6>
-                  <p style={{ margin: 0, fontSize: "12px", color: "var(--text-body)" }}>
-                    Pre-shrunk 65/35 poly-cotton blend resistant to daily playground wear & tears.
-                  </p>
-                </div>
-              </div>
-
-              {/* Spec 2: Sports & House Uniforms */}
-              <div className="spec-item-box">
-                <div className="spec-icon-wrapper">
-                  <FaRunning />
-                </div>
-                <div>
-                  <h6 style={{ margin: "0 0 2px", fontWeight: 700, color: "var(--text-title)", fontSize: "14px" }}>
-                    Micro-Poly Sports & House T-Shirts
-                  </h6>
-                  <p style={{ margin: 0, fontSize: "12px", color: "var(--text-body)" }}>
-                    Breathable honeycomb dry-fit fabric in standard school house color combinations.
-                  </p>
-                </div>
-              </div>
-
-              {/* Spec 3: Crest & Logo Precision */}
-              <div className="spec-item-box">
-                <div className="spec-icon-wrapper">
-                  <FaAward />
-                </div>
-                <div>
-                  <h6 style={{ margin: "0 0 2px", fontWeight: 700, color: "var(--text-title)", fontSize: "14px" }}>
-                    Tajima Computerized School Crests
-                  </h6>
-                  <p style={{ margin: 0, fontSize: "12px", color: "var(--text-body)" }}>
-                    Color-fast Madeira embroidery threads guaranteed never to fray or bleed into fabrics.
-                  </p>
-                </div>
-              </div>
-
-              {/* Guarantee Notice */}
-              <div className="guarantee-notice">
-                <FaShieldAlt color="#0052FF" size={18} />
-                <span>
-                  <b>Campus Rollout Guarantee:</b> Individually poly-packed with student name & size stickers.
-                </span>
-              </div>
-            </div>
-          </div>
+         
 
         </div>
       </section>

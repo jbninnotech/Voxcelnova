@@ -236,10 +236,10 @@ export default function Footer() {
                     fontSize: "1.1rem",
                   }}
                 >
-                  VOXCEL WEAR
+                  VOXELNOVA
                 </h5>
                 <span style={{ fontSize: "0.68rem", letterSpacing: "1px", color: "var(--text-muted)", textTransform: "uppercase" }}>
-                  Institutional &amp; Fleet Apparel
+                  Innovation &amp; Custom Apparel
                 </span>
               </div>
             </div>
@@ -293,7 +293,6 @@ export default function Footer() {
                 >
                   <FaWhatsapp size={15} />
                 </a>
-               
               </div>
             </div>
           </div>
@@ -329,14 +328,14 @@ export default function Footer() {
               </div>
               <div>
                 <span className="d-block text-uppercase" style={{ fontSize: "0.68rem", letterSpacing: "1px", color: "var(--text-muted)" }}>
-                  Corporate Support
+                  Direct Support
                 </span>
                 <a
-                  href="tel:+918374771149"
+                  href="tel:+918143324349"
                   className="fw-bold text-decoration-none"
                   style={{ fontSize: "1rem", color: "#FFFFFF" }}
                 >
-                  +91 83747 71149
+                  +91 81433 24349
                 </a>
                 <div style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
                   Mon – Sat &nbsp; 9:00 AM – 8:00 PM
@@ -354,11 +353,11 @@ export default function Footer() {
                   Support Email
                 </span>
                 <a
-                  href="mailto:orders@voxcelwear.com"
+                  href="mailto:contact@voxelnovainnovation.com"
                   className="text-decoration-none"
                   style={{ fontSize: "0.82rem", color: "#E2E8F0", wordBreak: "break-all" }}
                 >
-                  orders@voxcelwear.com
+                  contact@voxelnovainnovation.com
                 </a>
               </div>
             </div>
@@ -425,7 +424,7 @@ export default function Footer() {
 
             {/* Directions Button */}
             <a
-              href="https://maps.google.com/?q=Chaitanyapuri,Hyderabad,Telangana"
+              href="https://maps.app.goo.gl/wPJEAQL6SW8g7BDj9"
               target="_blank"
               rel="noreferrer"
               className="btn-store-direction w-100"
@@ -447,7 +446,7 @@ export default function Footer() {
       >
         <div className="container py-3 d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start">
           <span style={{ color: "var(--text-muted)", fontSize: "0.80rem" }}>
-            &copy; {new Date().getFullYear()} VOXCEL WEAR. All Rights Reserved. Engineered for precision &amp; comfort.
+            &copy; {new Date().getFullYear()} VOXELNOVA INNOVATION. All Rights Reserved. Engineered for precision &amp; comfort.
           </span>
 
           <div className="d-flex gap-3 mt-2 mt-md-0" style={{ fontSize: "0.78rem" }}>

@@ -4,102 +4,72 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import authStorage from "../utils/authStorage";
+import * as wishlistApi from "../services/wishlistService";
 
 const WishlistContext = createContext(null);
-
 const WISHLIST_STORAGE_KEY = "voxcel_nova_wishlist";
-const OLD_WISHLIST_STORAGE_KEY = "voxcel_wishlist";
 
 export const WishlistProvider = ({ children }) => {
   const [wishlistItems, setWishlistItems] = useState(() => {
     try {
-      // First try the new wishlist key
-      const newWishlist = localStorage.getItem(
-        WISHLIST_STORAGE_KEY
-      );
-
-      if (newWishlist) {
-        const parsed = JSON.parse(newWishlist);
-
-        if (Array.isArray(parsed)) {
-          return parsed;
-        }
-      }
-
-      // If new key is empty, check old key
-      const oldWishlist = localStorage.getItem(
-        OLD_WISHLIST_STORAGE_KEY
-      );
-
-      if (oldWishlist) {
-        const parsed = JSON.parse(oldWishlist);
-
-        if (Array.isArray(parsed)) {
-          return parsed;
-        }
-      }
-
-      return [];
+      const saved = sessionStorage.getItem(WISHLIST_STORAGE_KEY) || localStorage.getItem(WISHLIST_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : [];
     } catch (error) {
-      console.error(
-        "Failed to load wishlist:",
-        error
-      );
-
       return [];
     }
   });
 
-  /* =====================================================
-     SAVE WISHLIST
-  ===================================================== */
+  // If user is authenticated, sync with backend database
+  useEffect(() => {
+    const token = authStorage.getToken();
+    if (token) {
+      wishlistApi
+        .getWishlist()
+        .then((res) => {
+          if (res.success && Array.isArray(res.wishlist)) {
+            setWishlistItems(res.wishlist);
+          }
+        })
+        .catch((err) => {
+          console.warn("Backend wishlist fetch warning:", err.message);
+        });
+    }
+  }, []);
 
+  // Save to sessionStorage whenever wishlistItems change
   useEffect(() => {
     try {
-      localStorage.setItem(
+      sessionStorage.setItem(
         WISHLIST_STORAGE_KEY,
         JSON.stringify(wishlistItems)
       );
-
-      // Keep old key synchronized for compatibility
-      localStorage.setItem(
-        OLD_WISHLIST_STORAGE_KEY,
-        JSON.stringify(wishlistItems)
-      );
-    } catch (error) {
-      console.error(
-        "Failed to save wishlist:",
-        error
-      );
-    }
+      localStorage.removeItem(WISHLIST_STORAGE_KEY);
+    } catch (error) {}
   }, [wishlistItems]);
 
   /* =====================================================
      ADD TO WISHLIST
   ===================================================== */
-
-  const addToWishlist = (product) => {
+  const addToWishlist = async (product) => {
     if (!product?._id) {
-      return {
-        success: false,
-        message: "Invalid product",
-      };
+      return { success: false, message: "Invalid product" };
     }
 
     setWishlistItems((previousItems) => {
-      const exists = previousItems.some(
-        (item) => item._id === product._id
-      );
-
-      if (exists) {
-        return previousItems;
-      }
-
-      return [
-        ...previousItems,
-        product,
-      ];
+      const exists = previousItems.some((item) => item._id === product._id);
+      if (exists) return previousItems;
+      return [...previousItems, product];
     });
+
+    const token = authStorage.getToken();
+    if (token) {
+      try {
+        await wishlistApi.addToWishlist(product._id);
+      } catch (err) {
+        console.warn("Backend add to wishlist failed:", err.message);
+      }
+    }
 
     return {
       success: true,
@@ -110,64 +80,53 @@ export const WishlistProvider = ({ children }) => {
   /* =====================================================
      REMOVE FROM WISHLIST
   ===================================================== */
-
-  const removeFromWishlist = (productId) => {
+  const removeFromWishlist = async (productId) => {
     setWishlistItems((previousItems) =>
-      previousItems.filter(
-        (item) => item._id !== productId
-      )
+      previousItems.filter((item) => item._id !== productId)
     );
+
+    const token = authStorage.getToken();
+    if (token) {
+      try {
+        await wishlistApi.removeFromWishlist(productId);
+      } catch (err) {
+        console.warn("Backend remove from wishlist failed:", err.message);
+      }
+    }
   };
 
   /* =====================================================
      TOGGLE WISHLIST
   ===================================================== */
-
   const toggleWishlist = (product) => {
-    if (!product?._id) {
-      return false;
-    }
+    if (!product?._id) return false;
 
-    const exists = wishlistItems.some(
-      (item) => item._id === product._id
-    );
-
+    const exists = wishlistItems.some((item) => item._id === product._id);
     if (exists) {
       removeFromWishlist(product._id);
       return false;
+    } else {
+      addToWishlist(product);
+      return true;
     }
-
-    addToWishlist(product);
-    return true;
   };
 
   /* =====================================================
      CHECK WISHLIST
   ===================================================== */
-
   const isInWishlist = (productId) => {
-    return wishlistItems.some(
-      (item) => item._id === productId
-    );
+    return wishlistItems.some((item) => item._id === productId);
   };
 
   /* =====================================================
      CLEAR WISHLIST
   ===================================================== */
-
   const clearWishlist = () => {
     setWishlistItems([]);
+    sessionStorage.removeItem(WISHLIST_STORAGE_KEY);
   };
 
-  /* =====================================================
-     COUNT
-  ===================================================== */
-
   const wishlistCount = wishlistItems.length;
-
-  /* =====================================================
-     CONTEXT VALUE
-  ===================================================== */
 
   const value = {
     wishlistItems,
@@ -186,19 +145,11 @@ export const WishlistProvider = ({ children }) => {
   );
 };
 
-/* =====================================================
-   HOOK
-===================================================== */
-
 export const useWishlist = () => {
   const context = useContext(WishlistContext);
-
   if (!context) {
-    throw new Error(
-      "useWishlist must be used inside WishlistProvider"
-    );
+    throw new Error("useWishlist must be used inside WishlistProvider");
   }
-
   return context;
 };
 

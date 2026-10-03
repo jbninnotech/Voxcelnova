@@ -1,268 +1,332 @@
-import React, { useState } from 'react';
-import CollegeUniformCategories from "../../components/bulk/CollegeUniformCategories"
-import CustomUniforms from "../../components/bulk/CustomUniforms" 
-import OurProcess from "../../components/bulk/OurProcess"
-import Customizations from "../../components/bulk/Customization"
-
-// Include Bootstrap CSS in your index.js / App.js:
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import React from 'react';
+import { FaGraduationCap, FaWhatsapp, FaBookOpen, FaCheckCircle, FaShieldAlt } from 'react-icons/fa';
+import CollegeUniformCategories from "../../components/bulk/CollegeUniformCategories";
+import CustomUniforms from "../../components/bulk/CustomUniforms"; 
+import OurProcess from "../../components/bulk/OurProcess";
+import Customizations from "../../components/bulk/Customization";
 
 const CollegeUniformsHero = () => {
-  // Theme Color Profile
-  const theme = {
-    bgMain: '#F4F8FE',
-    bgSurface: '#FFFFFF',
-    bgBadgeTint: '#E8F5FE',
-    colorCobalt: '#0052FF',
-    colorCobaltHover: '#003ECC',
-    colorCyan: '#00D4FF',
-    textTitle: '#071838',
-    textBody: '#495E7C',
-    textMuted: '#6B82A0',
-    borderSubtle: 'rgba(0, 82, 255, 0.14)',
-    borderHover: 'rgba(0, 212, 255, 0.60)',
-    shadowCard: '0 12px 32px rgba(0, 48, 143, 0.06)',
-    shadowGlow: '0 8px 25px rgba(0, 82, 255, 0.32)',
-  };
-
-  // Hover states for interactive elements
-  const [isPrimaryHovered, setIsPrimaryHovered] = useState(false);
-  const [isSecondaryHovered, setIsSecondaryHovered] = useState(false);
+  // Update with your real WhatsApp Business phone number (country code + number)
+  const WHATSAPP_PHONE_NUMBER = "919876543210"; 
+  const defaultMessage = encodeURIComponent(
+    "Hello! We are looking for custom college & campus uniforms in bulk. Please share your catalog, fabric samples, and pricing quotation."
+  );
+  const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${defaultMessage}`;
 
   return (
     <>
-    <section  
-      className="d-flex align-items-center position-relative overflow-hidden"
-      style={{
-        backgroundColor: theme.bgMain,
-        minHeight: '100vh',
-        padding: '80px 0',
-      }}
-    >
-      {/* Background Glow Accents */}
-      <div
-        className="position-absolute rounded-circle"
-        style={{
-          width: '500px',
-          height: '500px',
-          background: `radial-gradient(circle, rgba(0, 212, 255, 0.18) 0%, rgba(244, 248, 254, 0) 70%)`,
-          top: '-10%',
-          right: '-5%',
-          pointerEvents: 'none',
-        }}
-      />
-      <div
-        className="position-absolute rounded-circle"
-        style={{
-          width: '450px',
-          height: '450px',
-          background: `radial-gradient(circle, rgba(0, 82, 255, 0.12) 0%, rgba(244, 248, 254, 0) 70%)`,
-          bottom: '-10%',
-          left: '-5%',
-          pointerEvents: 'none',
-        }}
-      />
+      <style>{`
+        /* ==========================================================
+           COLLEGE HERO COMPONENT STYLES
+        =========================================================== */
+        .college-hero-section {
+          position: relative;
+          min-height: 85vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          padding: 110px 24px 95px;
+          overflow: hidden;
+          background-color: #060b18;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
 
-      <div className="container position-relative" style={{ zIndex: 2 }}>
-        <div className="row align-items-center gy-5">
-          {/* Left Column: Text & CTA */}
-          <div className="col-12 col-lg-7 text-center text-lg-start">
-            {/* Badge */}
-           
+        /* High-Definition Apparel Rack Backdrop with cinematic dark overlay */
+        .college-hero-bg {
+          position: absolute;
+          inset: 0;
+          background-image: 
+            linear-gradient(180deg, rgba(6, 12, 24, 0.86) 0%, rgba(3, 8, 18, 0.94) 100%),
+            url('https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=2000&q=85');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          transform: scale(1.03);
+          animation: subtleZoom 14s infinite alternate ease-in-out;
+          z-index: 1;
+        }
 
-            {/* Headline */}
-            <h1
-              className="fw-bold mb-3"
-              style={{
-                fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-                lineHeight: 1.15,
-                color: theme.textTitle,
-                letterSpacing: '-0.03em',
-              }}
-            >
-              Custom &amp; Bulk <br />
-              <span
-                style={{
-                  background: `linear-gradient(90deg, ${theme.colorCobalt} 0%, ${theme.colorCyan} 100%)`,
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
-                Uniform Solutions
-              </span>
-            </h1>
+        /* Ambient Cyan Center Glow */
+        .college-ambient-glow {
+          position: absolute;
+          width: 580px;
+          height: 380px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(0, 212, 255, 0.22) 0%, transparent 70%);
+          top: 45%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          filter: blur(65px);
+          pointer-events: none;
+          z-index: 2;
+          animation: floatGlow 7s infinite alternate ease-in-out;
+        }
 
-            {/* Description */}
-            <p
-              className="mb-4 mx-auto mx-lg-0"
-              style={{
-                color: theme.textBody,
-                fontSize: '1.15rem',
-                lineHeight: 1.7,
-                maxWidth: '560px',
-              }}
-            >
-              Engineered for durability, comfort, and campus pride. We design, manufacture,
-              and supply institutional-grade apparel tailored directly to your college identity.
-            </p>
+        .college-content-wrapper {
+          position: relative;
+          z-index: 3;
+          max-width: 980px;
+          margin: 0 auto;
+        }
 
-            {/* Buttons */}
-            <div className="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start align-items-center mb-4">
-              <button
-                type="button"
-                onMouseEnter={() => setIsPrimaryHovered(true)}
-                onMouseLeave={() => setIsPrimaryHovered(false)}
-                className="btn d-inline-flex align-items-center px-4 py-3 text-white fw-semibold rounded-3 border-0"
-                style={{
-                  backgroundColor: isPrimaryHovered ? theme.colorCobaltHover : theme.colorCobalt,
-                  boxShadow: theme.shadowGlow,
-                  transform: isPrimaryHovered ? 'translateY(-2px)' : 'none',
-                  transition: 'all 0.25s ease',
-                  fontSize: '1rem',
-                }}
-              >
-                Request a Quote
-                <svg
-                  className="ms-2"
-                  width="18"
-                  height="18"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </button>
+        /* KEYFRAME ANIMATIONS */
+        @keyframes subtleZoom {
+          0% { transform: scale(1.0); }
+          100% { transform: scale(1.06); }
+        }
 
-              <button
-                type="button"
-                onMouseEnter={() => setIsSecondaryHovered(true)}
-                onMouseLeave={() => setIsSecondaryHovered(false)}
-                className="btn d-inline-flex align-items-center px-4 py-3 fw-semibold rounded-3"
-                style={{
-                  backgroundColor: theme.bgSurface,
-                  color: theme.textTitle,
-                  border: `1.5px solid ${isSecondaryHovered ? theme.borderHover : theme.borderSubtle}`,
-                  boxShadow: theme.shadowCard,
-                  transform: isSecondaryHovered ? 'translateY(-2px)' : 'none',
-                  transition: 'all 0.25s ease',
-                  fontSize: '1rem',
-                }}
-              >
-                Explore Fabric Catalog
-              </button>
-            </div>
+        @keyframes fadeInDown {
+          from {
+            opacity: 0;
+            transform: translateY(-22px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
 
-            {/* Feature Bullets */}
-          
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(28px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes floatGlow {
+          0% {
+            transform: translate(-50%, -50%) scale(0.9);
+            opacity: 0.6;
+          }
+          100% {
+            transform: translate(-50%, -46%) scale(1.2);
+            opacity: 1;
+          }
+        }
+
+        /* BADGE */
+        .college-pill-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 9px;
+          background: rgba(0, 212, 255, 0.12);
+          color: #00d4ff;
+          border: 1px solid rgba(0, 212, 255, 0.38);
+          backdrop-filter: blur(10px);
+          padding: 8px 22px;
+          border-radius: 50px;
+          font-size: 13px;
+          font-weight: 700;
+          letter-spacing: 0.8px;
+          text-transform: uppercase;
+          margin-bottom: 22px;
+          animation: fadeInDown 0.7s ease-out forwards;
+        }
+
+        /* HEADLINE */
+        .college-center-headline {
+          color: #ffffff;
+          font-size: clamp(2.4rem, 5.2vw, 4.3rem);
+          font-weight: 800;
+          line-height: 1.15;
+          letter-spacing: -1px;
+          margin: 0 auto 20px;
+          animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* REFERENCE-STYLE CYAN EMPHASIS */
+        .cyan-emphasis {
+          color: #00d4ff;
+          position: relative;
+          display: inline-block;
+          text-shadow: 0 0 25px rgba(0, 212, 255, 0.45);
+          transition: transform 0.3s ease;
+        }
+
+        .cyan-emphasis:hover {
+          transform: scale(1.03);
+        }
+
+        /* QUOTATION / PARAGRAPH */
+        .college-sub-quotation {
+          color: #e2e8f0;
+          font-size: clamp(1.02rem, 1.4vw, 1.22rem);
+          line-height: 1.7;
+          max-width: 820px;
+          margin: 0 auto 36px;
+          font-weight: 400;
+          animation: fadeInUp 0.9s ease-out forwards;
+        }
+
+        /* ACTION BUTTONS */
+        .college-action-buttons {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 16px;
+          flex-wrap: wrap;
+          animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .btn-whatsapp-action {
+          background-color: #25d366;
+          color: #ffffff;
+          padding: 15px 32px;
+          border-radius: 12px;
+          font-size: 15px;
+          font-weight: 700;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          gap: 11px;
+          border: none;
+          box-shadow: 0 6px 24px rgba(37, 211, 102, 0.35);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-whatsapp-action:hover {
+          background-color: #1ebe5d;
+          color: #ffffff;
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 10px 32px rgba(37, 211, 102, 0.55);
+        }
+
+        .btn-glass-action {
+          background: rgba(255, 255, 255, 0.08);
+          color: #ffffff;
+          border: 1.5px solid rgba(255, 255, 255, 0.22);
+          backdrop-filter: blur(12px);
+          padding: 15px 28px;
+          border-radius: 12px;
+          font-size: 15px;
+          font-weight: 600;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          transition: all 0.3s ease;
+        }
+
+        .btn-glass-action:hover {
+          background: rgba(255, 255, 255, 0.16);
+          border-color: #00d4ff;
+          color: #00d4ff;
+          transform: translateY(-3px);
+          box-shadow: 0 8px 24px rgba(0, 212, 255, 0.25);
+        }
+
+        /* TRUST PILLARS */
+        .college-trust-bar {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 34px;
+          margin-top: 48px;
+          padding-top: 24px;
+          border-top: 1px solid rgba(255, 255, 255, 0.14);
+          flex-wrap: wrap;
+          animation: fadeInUp 1.1s ease-out forwards;
+        }
+
+        .trust-item {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 13.5px;
+          color: #cbd5e1;
+          font-weight: 500;
+        }
+
+        .trust-item svg {
+          color: #00d4ff;
+        }
+
+        @media (max-width: 768px) {
+          .college-hero-section {
+            padding: 85px 18px 70px;
+            min-height: 70vh;
+          }
+          .college-action-buttons {
+            flex-direction: column;
+            width: 100%;
+          }
+          .btn-whatsapp-action, .btn-glass-action {
+            width: 100%;
+            justify-content: center;
+          }
+          .college-trust-bar {
+            gap: 16px;
+          }
+        }
+      `}</style>
+
+      {/* ========================================================
+          HERO BANNER SECTION
+      ========================================================= */}
+      <section className="college-hero-section">
+        <div className="college-hero-bg" />
+        <div className="college-ambient-glow" />
+
+        <div className="college-content-wrapper">
+          {/* TAG BADGE */}
+          <div className="college-pill-badge">
+            <FaGraduationCap size={16} /> Campus Identity & Academic Apparel
           </div>
 
-          {/* Right Column: Visual Showcase Card */}
-          <div className="col-12 col-lg-5">
-            <div className="position-relative mx-auto" style={{ maxWidth: '460px' }}>
-              
-              {/* Main Display Card */}
-              <div
-                className="p-4 p-md-5 rounded-4"
-                style={{
-                  backgroundColor: theme.bgSurface,
-                  border: `1px solid ${theme.borderSubtle}`,
-                  boxShadow: theme.shadowCard,
-                }}
-              >
-                {/* College Uniform Visual Placeholder / Header */}
-                <div
-                  className="rounded-3 p-4 mb-4 text-center d-flex flex-column align-items-center justify-content-center"
-                  style={{
-                    backgroundColor: theme.bgBadgeTint,
-                    border: `1px dashed ${theme.borderHover}`,
-                    minHeight: '220px',
-                  }}
-                >
-                  <svg
-                    width="60"
-                    height="60"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke={theme.colorCobalt}
-                    strokeWidth="1.5"
-                    className="mb-2"
-                  >
-                    <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.5a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.5a2 2 0 00-1.34-2.2z" />
-                  </svg>
-                  <span className="fw-bold" style={{ color: theme.textTitle }}>
-                    Blazers, Polos & Lab Coats
-                  </span>
-                  <span style={{ color: theme.textMuted, fontSize: '0.85rem' }}>
-                    Custom tailored for campuses nationwide
-                  </span>
-                </div>
+          {/* MAIN HEADLINE WITH CYAN ACCENT */}
+          <h1 className="college-center-headline">
+            Engineered for Campus Pride, Built for <br />
+            <span className="cyan-emphasis">Excellence</span>
+          </h1>
 
-                {/* Spec List */}
-                <div className="d-flex flex-column gap-3">
-                  <div className="d-flex justify-content-between pb-2 border-bottom">
-                    <span style={{ color: theme.textMuted, fontSize: '0.9rem' }}>Fabric Blend</span>
-                    <span className="fw-semibold" style={{ color: theme.textTitle, fontSize: '0.9rem' }}>
-                      Breathable Poly-Cotton / Twill
-                    </span>
-                  </div>
-                  <div className="d-flex justify-content-between pb-2 border-bottom">
-                    <span style={{ color: theme.textMuted, fontSize: '0.9rem' }}>Embroidery</span>
-                    <span className="fw-semibold" style={{ color: theme.textTitle, fontSize: '0.9rem' }}>
-                      HD Crest & Institutional Logos
-                    </span>
-                  </div>
-                  <div className="d-flex justify-content-between">
-                    <span style={{ color: theme.textMuted, fontSize: '0.9rem' }}>Delivery Scope</span>
-                    <span className="fw-semibold" style={{ color: theme.colorCobalt, fontSize: '0.9rem' }}>
-                      Bulk Pan-India / Export Ready
-                    </span>
-                  </div>
-                </div>
-              </div>
+          {/* NEW COLLEGE QUOTATION */}
+          <p className="college-sub-quotation">
+            “Unity, discipline, and identity begin with what your students wear.” Browse our
+            institutional uniform line crafted with breathable, fade-resistant fabrics designed 
+            for university campuses, colleges, lab work, and direct faculty bulk supply.
+          </p>
 
-              {/* Floating Stat Chip (Offset bottom-left) */}
-              <div
-                className="position-absolute d-flex align-items-center gap-3 p-3 rounded-3 shadow-lg"
-                style={{
-                  backgroundColor: theme.bgSurface,
-                  border: `1px solid ${theme.borderSubtle}`,
-                  bottom: '-24px',
-                  left: '-20px',
-                  minWidth: '220px',
-                }}
-              >
-                <div
-                  className="rounded-circle d-flex align-items-center justify-content-center"
-                  style={{
-                    width: '42px',
-                    height: '42px',
-                    backgroundColor: theme.bgBadgeTint,
-                    color: theme.colorCobalt,
-                  }}
-                >
-                  ★
-                </div>
-                <div>
-                  <div className="fw-bold" style={{ color: theme.textTitle, fontSize: '1.1rem', lineHeight: 1.2 }}>
-                    50,000+
-                  </div>
-                  <small style={{ color: theme.textMuted, fontSize: '0.8rem' }}>
-                    Uniforms Supplied Yearly
-                  </small>
-                </div>
-              </div>
+          {/* CTA BUTTONS WITH DIRECT WHATSAPP ORDER */}
+          <div className="college-action-buttons">
+            <a 
+              href={whatsappUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="btn-whatsapp-action"
+            >
+              <FaWhatsapp size={19} /> Order Bulk on WhatsApp
+            </a>
 
+            <a href="#college-catalog" className="btn-glass-action">
+              <FaBookOpen size={15} /> Explore Fabric Catalog
+            </a>
+          </div>
+
+          {/* TRUST PILLARS */}
+          <div className="college-trust-bar">
+            <div className="trust-item">
+              <FaCheckCircle size={14} /> Direct Institutional Pricing
+            </div>
+            <div className="trust-item">
+              <FaShieldAlt size={14} /> High Tear-Strength & Fade Resistant
+            </div>
+            <div className="trust-item">
+              <FaCheckCircle size={14} /> Custom College Crest Embroidery
             </div>
           </div>
         </div>
-      </div>
-    </section>
-    <CustomUniforms />
-    < CollegeUniformCategories />
-    <Customizations />
-    <OurProcess />
+      </section>
+
+      {/* OTHER SECTIONS */}
+      <CustomUniforms />
+      <CollegeUniformCategories />
+      <Customizations />
+      <OurProcess />
     </>
   );
 };

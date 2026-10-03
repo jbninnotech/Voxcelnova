@@ -3,17 +3,11 @@ import axios from "axios";
 const API_URL =
   import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-// Token getter supporting all dashboard storage conventions
+import authStorage from "../utils/authStorage";
+
+// Token getter
 const getToken = () => {
-  return (
-    localStorage.getItem("token") ||
-    localStorage.getItem("accessToken") ||
-    localStorage.getItem("adminToken") ||
-    sessionStorage.getItem("token") ||
-    sessionStorage.getItem("accessToken") ||
-    sessionStorage.getItem("adminToken") ||
-    ""
-  );
+  return authStorage.getToken() || "";
 };
 
 // Common Auth Config

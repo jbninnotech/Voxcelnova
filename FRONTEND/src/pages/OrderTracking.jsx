@@ -59,6 +59,22 @@ const OrderTracking = () => {
 
   const formatPrice = (val) => Number(val || 0).toLocaleString("en-IN");
 
+  const getHistoryTimestamp = (stepKey) => {
+    if (!order?.statusHistory || !Array.isArray(order.statusHistory)) return null;
+    const match = order.statusHistory.find(
+      (h) => String(h.status).toLowerCase().replace(/\s+/g, "") === stepKey.toLowerCase().replace(/\s+/g, "")
+    );
+    if (match?.timestamp) {
+      return new Date(match.timestamp).toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    }
+    return null;
+  };
+
   if (loading) {
     return (
       <div className="container py-5 text-center" style={{ minHeight: "70vh" }}>
@@ -94,24 +110,32 @@ const OrderTracking = () => {
   });
 
   return (
-    <div style={{ background: "#F8FAFC", minHeight: "100vh", padding: "40px 20px 80px" }}>
+    <div style={{ background: "var(--bg-main, #F4F8FE)", minHeight: "100vh", padding: "40px 20px 80px" }}>
       <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
         {/* BACK LINK */}
         <Link
           to="/profile"
           className="text-decoration-none text-secondary fw-semibold d-inline-flex align-items-center gap-2 mb-4"
         >
-          <FiArrowLeft /> Back to Orders
+          <FiArrowLeft /> Back to My Orders
         </Link>
 
         {/* HEADER CARD */}
-        <div className="bg-white border rounded-4 p-4 mb-4 shadow-sm">
+        <div className="bg-white border rounded-4 p-4 mb-4 shadow-sm" style={{ borderColor: "var(--border-subtle)" }}>
           <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 border-bottom pb-3">
             <div>
-              <span className="badge bg-primary text-uppercase px-3 py-2 mb-2" style={{ letterSpacing: "1px" }}>
+              <span
+                className="badge text-uppercase px-3 py-2 mb-2"
+                style={{
+                  backgroundColor: "var(--bg-badge-tint, #E8F5FE)",
+                  color: "var(--color-cobalt, #0052FF)",
+                  letterSpacing: "1px",
+                  border: "1px solid var(--border-subtle)",
+                }}
+              >
                 VOXCEL NOVA ORDER TRACKING
               </span>
-              <h2 className="fw-bold mb-1" style={{ color: "#071A2F" }}>
+              <h2 className="fw-bold mb-1" style={{ color: "var(--text-title, #071838)" }}>
                 Order #{order._id.substring(order._id.length - 8).toUpperCase()}
               </h2>
               <div className="text-secondary small">Placed on {formattedDate}</div>
@@ -122,11 +146,7 @@ const OrderTracking = () => {
                 Payment Status: <span className="fw-bold text-dark">{order.paymentStatus}</span> ({order.paymentMethod})
               </div>
               <div>
-                <span
-                  className={`badge px-3 py-2 fs-6 ${
-                    isCancelled ? "bg-danger" : "bg-success"
-                  }`}
-                >
+                <span className={`badge px-3 py-2 fs-6 ${isCancelled ? "bg-danger" : "bg-success"}`}>
                   {order.orderStatus}
                 </span>
               </div>
@@ -135,8 +155,8 @@ const OrderTracking = () => {
 
           {/* TIMELINE STEPPER */}
           <div className="pt-4 pb-2">
-            <h5 className="fw-bold mb-4" style={{ color: "#071A2F" }}>
-              Order Status Timeline
+            <h5 className="fw-bold mb-4" style={{ color: "var(--text-title, #071838)" }}>
+              Order Status History & Timeline
             </h5>
 
             {isCancelled ? (
@@ -150,7 +170,7 @@ const OrderTracking = () => {
                 <div className="d-none d-md-flex align-items-center justify-content-between position-relative">
                   {/* Progress Line */}
                   <div
-                    className="position-absolute bg-light-subtle"
+                    className="position-absolute"
                     style={{
                       top: "20px",
                       left: "30px",
@@ -161,13 +181,13 @@ const OrderTracking = () => {
                     }}
                   />
                   <div
-                    className="position-absolute bg-primary"
+                    className="position-absolute"
                     style={{
                       top: "20px",
                       left: "30px",
                       width: `${(currentStepIdx / (steps.length - 1)) * 90}%`,
                       height: "4px",
-                      backgroundColor: "#2563EB",
+                      backgroundColor: "var(--color-cobalt, #0052FF)",
                       zIndex: 2,
                       transition: "width 0.5s ease",
                     }}
@@ -176,13 +196,10 @@ const OrderTracking = () => {
                   {steps.map((step, idx) => {
                     const isPassed = idx <= currentStepIdx;
                     const isCurrent = idx === currentStepIdx;
+                    const stepTime = getHistoryTimestamp(step.key);
 
                     return (
-                      <div
-                        key={step.key}
-                        className="text-center position-relative"
-                        style={{ zIndex: 3, flex: 1 }}
-                      >
+                      <div key={step.key} className="text-center position-relative" style={{ zIndex: 3, flex: 1 }}>
                         <div
                           className={`mx-auto d-flex align-items-center justify-content-center rounded-circle fw-bold ${
                             isCurrent
@@ -200,9 +217,17 @@ const OrderTracking = () => {
                         >
                           {isPassed ? <FiCheckCircle size={18} /> : idx + 1}
                         </div>
-                        <div className="fw-bold mt-2 small" style={{ color: isCurrent ? "#2563EB" : "#071A2F" }}>
+                        <div
+                          className="fw-bold mt-2 small"
+                          style={{ color: isCurrent ? "var(--color-cobalt, #0052FF)" : "#071A2F" }}
+                        >
                           {step.label}
                         </div>
+                        {stepTime && (
+                          <div className="text-primary fw-semibold" style={{ fontSize: "10.5px" }}>
+                            {stepTime}
+                          </div>
+                        )}
                         <div className="text-secondary" style={{ fontSize: "11px" }}>
                           {step.desc}
                         </div>
@@ -216,6 +241,7 @@ const OrderTracking = () => {
                   {steps.map((step, idx) => {
                     const isPassed = idx <= currentStepIdx;
                     const isCurrent = idx === currentStepIdx;
+                    const stepTime = getHistoryTimestamp(step.key);
 
                     return (
                       <div key={step.key} className="d-flex align-items-center gap-3">
@@ -233,6 +259,7 @@ const OrderTracking = () => {
                         </div>
                         <div>
                           <div className="fw-bold small">{step.label}</div>
+                          {stepTime && <div className="text-primary fw-semibold" style={{ fontSize: "10.5px" }}>{stepTime}</div>}
                           <div className="text-muted" style={{ fontSize: "11px" }}>
                             {step.desc}
                           </div>
@@ -250,17 +277,14 @@ const OrderTracking = () => {
         <div className="row g-4">
           {/* ITEMS LIST */}
           <div className="col-12 col-md-7">
-            <div className="bg-white border rounded-4 p-4 shadow-sm">
-              <h5 className="fw-bold mb-3 border-bottom pb-3" style={{ color: "#071A2F" }}>
+            <div className="bg-white border rounded-4 p-4 shadow-sm" style={{ borderColor: "var(--border-subtle)" }}>
+              <h5 className="fw-bold mb-3 border-bottom pb-3" style={{ color: "var(--text-title, #071838)" }}>
                 Ordered Products
               </h5>
 
               <div className="d-flex flex-column gap-3">
                 {order.items.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="d-flex align-items-center justify-content-between gap-3 pb-3 border-bottom"
-                  >
+                  <div key={idx} className="d-flex align-items-center justify-content-between gap-3 pb-3 border-bottom">
                     <div className="d-flex align-items-center gap-3">
                       <img
                         src={item.image || "https://placehold.co/100x120?text=Apparel"}
@@ -284,9 +308,7 @@ const OrderTracking = () => {
                       </div>
                     </div>
 
-                    <div className="fw-bold text-dark fs-5">
-                      ₹{formatPrice(item.subtotal || item.price * item.quantity)}
-                    </div>
+                    <div className="fw-bold text-dark fs-5">₹{formatPrice(item.subtotal || item.price * item.quantity)}</div>
                   </div>
                 ))}
               </div>
@@ -296,9 +318,9 @@ const OrderTracking = () => {
           {/* SHIPPING & SUMMARY */}
           <div className="col-12 col-md-5">
             {/* SHIPPING ADDRESS */}
-            <div className="bg-white border rounded-4 p-4 mb-4 shadow-sm">
-              <h5 className="fw-bold mb-3 d-flex align-items-center gap-2" style={{ color: "#071A2F" }}>
-                <FiMapPin color="#2563EB" /> Shipping Address
+            <div className="bg-white border rounded-4 p-4 mb-4 shadow-sm" style={{ borderColor: "var(--border-subtle)" }}>
+              <h5 className="fw-bold mb-3 d-flex align-items-center gap-2" style={{ color: "var(--text-title, #071838)" }}>
+                <FiMapPin color="var(--color-cobalt, #0052FF)" /> Shipping Address
               </h5>
 
               <div className="fw-bold text-dark mb-1">{order.shippingAddress?.fullName}</div>
@@ -311,8 +333,8 @@ const OrderTracking = () => {
             </div>
 
             {/* PAYMENT SUMMARY */}
-            <div className="bg-white border rounded-4 p-4 shadow-sm">
-              <h5 className="fw-bold mb-3 border-bottom pb-3" style={{ color: "#071A2F" }}>
+            <div className="bg-white border rounded-4 p-4 shadow-sm" style={{ borderColor: "var(--border-subtle)" }}>
+              <h5 className="fw-bold mb-3 border-bottom pb-3" style={{ color: "var(--text-title, #071838)" }}>
                 Payment Summary
               </h5>
 
@@ -338,8 +360,10 @@ const OrderTracking = () => {
               <hr />
 
               <div className="d-flex justify-content-between align-items-center">
-                <span className="fw-bold fs-5" style={{ color: "#071A2F" }}>Total Paid</span>
-                <span className="fw-bold fs-4" style={{ color: "#071A2F" }}>
+                <span className="fw-bold fs-5" style={{ color: "var(--text-title, #071838)" }}>
+                  Total Paid
+                </span>
+                <span className="fw-bold fs-4" style={{ color: "var(--color-cobalt, #0052FF)" }}>
                   ₹{formatPrice(order.totalAmount)}
                 </span>
               </div>

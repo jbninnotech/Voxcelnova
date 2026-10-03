@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FiArrowRight,
   FiChevronLeft,
@@ -10,10 +10,12 @@ import {
   FiShoppingCart,
   FiCheck,
 } from "react-icons/fi";
-import { FaHeart } from "react-icons/fa";
+
+import { useCart } from "../../context/CartContext";
+import { useWishlist } from "../../context/WishlistContext";
 import { getTrendingProducts } from "../../services/productService";
 
-const TrendingProducts = ({ onAddToCart, onToggleWishlist }) => {
+const TrendingProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -28,7 +30,8 @@ const TrendingProducts = ({ onAddToCart, onToggleWishlist }) => {
         setError("");
         const response = await getTrendingProducts();
         if (isMounted) {
-          setProducts(response?.products || []);
+          const items = response?.products || response?.data || response || [];
+          setProducts(Array.isArray(items) ? items : []);
         }
       } catch (err) {
         console.error("Trending Products Error:", err);
@@ -250,6 +253,7 @@ const TrendingProducts = ({ onAddToCart, onToggleWishlist }) => {
           flex-direction: column;
           position: relative;
           height: 100%;
+          cursor: pointer;
         }
 
         .tp-card:hover {
@@ -295,6 +299,7 @@ const TrendingProducts = ({ onAddToCart, onToggleWishlist }) => {
           flex-direction: column;
           gap: 4px;
           z-index: 2;
+          pointer-events: none;
         }
 
         .tp-badge-trending {
@@ -325,7 +330,7 @@ const TrendingProducts = ({ onAddToCart, onToggleWishlist }) => {
           display: flex;
           flex-direction: column;
           gap: 6px;
-          z-index: 3;
+          z-index: 4;
           transition: all 0.25s ease;
         }
 
@@ -386,7 +391,7 @@ const TrendingProducts = ({ onAddToCart, onToggleWishlist }) => {
           justify-content: center;
           gap: 6px;
           cursor: pointer;
-          z-index: 2;
+          z-index: 4;
           box-shadow: 0 8px 20px rgba(0, 48, 143, 0.2);
           opacity: 0;
           transform: translateY(100%);
@@ -576,11 +581,7 @@ const TrendingProducts = ({ onAddToCart, onToggleWishlist }) => {
             <div className="tp-scroll-track" ref={scrollRef}>
               {products.map((product) => (
                 <div key={product._id || product.id} className="tp-card-item">
-                  <ProductCard
-                    product={product}
-                    onAddToCart={onAddToCart}
-                    onToggleWishlist={onToggleWishlist}
-                  />
+                  <ProductCard product={product} />
                 </div>
               ))}
             </div>
@@ -591,197 +592,304 @@ const TrendingProducts = ({ onAddToCart, onToggleWishlist }) => {
   );
 };
 
-/* ==========================================
-   PRODUCT CARD COMPONENT (FIXED LINK ROUTING)
-========================================== */
-const ProductCard = ({ product, onAddToCart, onToggleWishlist }) => {
-  const [isWishlisted, setIsWishlisted] = useState(false);
+/* =======================================================
+   PRODUCT CARD COMPONENT (FULLY CONNECTED WITH /cart & wishlist)
+======================================================= */
+const ProductCard = ({ product }) => {
+  const navigate = useNavigate();
+  const { addToCart } = useCart() || {};
+  const { isInWishlist, addToWishlist, removeFromWishlist, toggleWishlist } = useWishlist() || {};
+
   const [isAdded, setIsAdded] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Safe identifier fallback (checks _id, id, and slug)
-  const productIdentifier = product?._id || product?.id || product?.slug || "";
+  const productId = product?._id || product?.id || "";
+  // In your routes, individual product details are at: /products/product/:id
+  const productDetailPath = `/products/product/${productId}`;
 
-  // Set this route path to match your App.jsx (e.g. "/products/" or "/product/")
-  const productDetailPath = `/products/${productIdentifier}`;
-
+  // Image fallback
   const image =
-    product.thumbnail ||
-    product.images?.[0]?.url ||
-    product.images?.[0] ||
-    "";
+    product?.thumbnail ||
+    product?.image ||
+    product?.images?.[0]?.url ||
+    (typeof product?.images?.[0] === "string" ? product?.images[0] : "") ||
+    "https://via.placeholder.com/600x750?text=VOXCEL+NOVA";
 
-  const hasSale =
-    product.salePrice !== null &&
-    product.salePrice !== undefined &&
-    product.salePrice !== "" &&
-    Number(product.salePrice) < Number(product.price);
-
-  const finalPrice = hasSale ? product.salePrice : product.price;
+  // Price calculation matching Cart.jsx
+  const numPrice = Number(product?.price || 0);
+  const numSalePrice = Number(product?.salePrice || 0);
+  const hasSale = numSalePrice > 0 && numSalePrice < numPrice;
+  const finalPrice = hasSale ? numSalePrice : numPrice;
 
   const discountPercentage = hasSale
-    ? Math.round(
-        ((Number(product.price) - Number(product.salePrice)) / Number(product.price)) * 100
-      )
+    ? Math.round(((numPrice - numSalePrice) / numPrice) * 100)
     : 0;
 
-  const handleWishlist = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsWishlisted((prev) => !prev);
-    if (onToggleWishlist) onToggleWishlist(product);
+  // Resolve default size
+  const defaultSize =
+    product?.selectedSize ||
+    (Array.isArray(product?.sizes) && product.sizes.length > 0
+      ? typeof product.sizes[0] === "string"
+        ? product.sizes[0]
+        : product.sizes[0]?.size || "M"
+      : "M");
+
+  const defaultColor =
+    product?.selectedColor ||
+    (Array.isArray(product?.colors) && product.colors.length > 0
+      ? typeof product.colors[0] === "string"
+        ? product.colors[0]
+        : product.colors[0]?.name || product.colors[0]?.color || ""
+      : "");
+
+  // Wishlist check
+  const wishlisted = Boolean(
+    (isInWishlist && isInWishlist(productId)) ||
+    (() => {
+      try {
+        const saved = sessionStorage.getItem("voxcel_nova_wishlist");
+        if (!saved) return false;
+        const list = JSON.parse(saved);
+        return list.some((item) => (item._id || item.id) === productId);
+      } catch {
+        return false;
+      }
+    })()
+  );
+
+  // Card navigation handler (ignores button clicks)
+  const handleCardClick = (e) => {
+    if (e.target.closest("button")) return;
+    navigate(productDetailPath);
   };
 
-  const handleAddToCart = (e) => {
+  // Wishlist toggle handler
+  const handleWishlistToggle = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsAdded(true);
-    if (onAddToCart) onAddToCart(product);
 
+    if (typeof toggleWishlist === "function") {
+      toggleWishlist(product);
+    } else if (wishlisted && typeof removeFromWishlist === "function") {
+      removeFromWishlist(productId);
+    } else if (!wishlisted && typeof addToWishlist === "function") {
+      addToWishlist({ ...product, _id: productId });
+    } else {
+      // Local fallback sync
+      try {
+        const key = "voxcel_nova_wishlist";
+        const saved = sessionStorage.getItem(key);
+        let list = saved ? JSON.parse(saved) : [];
+        if (list.some((item) => (item._id || item.id) === productId)) {
+          list = list.filter((item) => (item._id || item.id) !== productId);
+        } else {
+          list.push(product);
+        }
+        sessionStorage.setItem(key, JSON.stringify(list));
+        window.dispatchEvent(new Event("storage"));
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+  // ADD TO CART (Exact object structure used in ProductDetails & Cart)
+  const handleAddToCart = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!productId || typeof addToCart !== "function") return;
+
+    // Normalizing cart item keys for Cart.jsx
+    const cartItemPayload = {
+      ...product,
+      _id: productId,
+      id: productId,
+      productId: productId,
+      cartItemId: `${productId}-${defaultSize}`,
+      name: product?.name || "Apparel Item",
+      price: finalPrice,
+      originalPrice: numPrice || finalPrice,
+      image: image,
+      quantity: 1,
+      size: defaultSize,
+      selectedSize: defaultSize,
+      color: defaultColor,
+      stock: Number(product?.stock ?? product?.countInStock ?? 999),
+      minimumOrderQuantity: Number(product?.minimumOrderQuantity || 1),
+      availableSizes: Array.isArray(product?.sizes) && product.sizes.length > 0
+        ? product.sizes.map((s) => (typeof s === "string" ? s : s.size || s.name))
+        : ["S", "M", "L", "XL", "XXL"],
+    };
+
+    try {
+      // ProductDetails.jsx method: { product, size, color, quantity }
+      await addToCart({
+        product: cartItemPayload,
+        size: defaultSize,
+        color: defaultColor,
+        quantity: 1,
+      });
+    } catch (err) {
+      // Products.jsx fallback method: addToCart(cartPayload, 1, defaultSize)
+      try {
+        await addToCart(cartItemPayload, 1, defaultSize);
+      } catch (innerErr) {
+        try {
+          await addToCart(cartItemPayload);
+        } catch (e3) {
+          console.error("Cart addition failed:", e3);
+        }
+      }
+    }
+
+    setIsAdded(true);
     setTimeout(() => {
       setIsAdded(false);
     }, 1800);
   };
 
+  // Share handler
   const handleShare = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    const productUrl = `${window.location.origin}${productDetailPath}`;
+    const fullUrl = `${window.location.origin}${productDetailPath}`;
 
     if (navigator.share) {
       try {
         await navigator.share({
           title: product.name,
-          text: `Check out this trending item: ${product.name}`,
-          url: productUrl,
+          url: fullUrl,
         });
         return;
       } catch (err) {}
     }
 
     try {
-      await navigator.clipboard.writeText(productUrl);
+      await navigator.clipboard.writeText(fullUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error("Clipboard copy failed", err);
+      console.error(err);
     }
   };
 
   return (
-    <div className="tp-card">
-      <Link
-        to={productDetailPath}
-        style={{
-          textDecoration: "none",
-          color: "inherit",
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-        }}
-      >
-        <div className="tp-img-container">
-          {image ? (
-            <img
-              src={image}
-              alt={product.name}
-              className="tp-image"
-              loading="lazy"
-            />
-          ) : (
-            <div className="tp-no-image">
-              <FiShoppingBag size={34} />
-            </div>
-          )}
-
-          <div className="tp-badge-box">
-            <span className="tp-badge-trending">TRENDING</span>
-            {hasSale && <span className="tp-badge-sale">-{discountPercentage}%</span>}
+    <article className="tp-card" onClick={handleCardClick}>
+      {/* IMAGE CONTAINER */}
+      <div className="tp-img-container">
+        {image ? (
+          <img
+            src={image}
+            alt={product.name || "Product"}
+            className="tp-image"
+            loading="lazy"
+            onError={(e) => {
+              e.currentTarget.src =
+                "https://via.placeholder.com/600x750?text=VOXCEL+NOVA";
+            }}
+          />
+        ) : (
+          <div className="tp-no-image">
+            <FiShoppingBag size={34} />
           </div>
+        )}
 
-          <div className="tp-action-tray">
-            <button
-              type="button"
-              className={`tp-action-btn ${isWishlisted ? "active-wish" : ""}`}
-              onClick={handleWishlist}
-              title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
-              aria-label="Wishlist"
-            >
-              {isWishlisted ? <FaHeart size={14} /> : <FiHeart size={14} />}
-            </button>
+        <div className="tp-badge-box">
+          <span className="tp-badge-trending">TRENDING</span>
+          {hasSale && <span className="tp-badge-sale">-{discountPercentage}%</span>}
+        </div>
 
-            <button
-              type="button"
-              className="tp-action-btn"
-              onClick={handleShare}
-              title="Share product"
-              aria-label="Share"
-              style={{ position: "relative" }}
-            >
-              {copied ? <FiCheck size={14} color="#10B981" /> : <FiShare2 size={14} />}
-            </button>
+        {/* FLOATING ACTION ICONS */}
+        <div className="tp-action-tray">
+          <button
+            type="button"
+            className={`tp-action-btn ${wishlisted ? "active-wish" : ""}`}
+            onClick={handleWishlistToggle}
+            title={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+            aria-label="Wishlist"
+          >
+            <FiHeart
+              size={14}
+              fill={wishlisted ? "#ef4444" : "none"}
+              color={wishlisted ? "#ef4444" : "currentColor"}
+            />
+          </button>
+
+          <button
+            type="button"
+            className="tp-action-btn"
+            onClick={handleShare}
+            title="Share product"
+            aria-label="Share"
+          >
+            {copied ? <FiCheck size={14} color="#10B981" /> : <FiShare2 size={14} />}
+          </button>
+        </div>
+
+        {/* QUICK ADD BUTTON */}
+        <button
+          type="button"
+          className="tp-desktop-quick-add"
+          style={{
+            background: isAdded ? "#10B981" : "var(--color-cobalt)",
+          }}
+          onClick={handleAddToCart}
+        >
+          {isAdded ? (
+            <>
+              <FiCheck size={15} />
+              <span>Added to Bag</span>
+            </>
+          ) : (
+            <>
+              <FiShoppingCart size={15} />
+              <span>Quick Add</span>
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* CONTENT */}
+      <div className="tp-card-content">
+        <span className="tp-cat-label">
+          {product.category || product.categorySlug || "Apparel"}
+        </span>
+
+        <h3 className="tp-prod-name" title={product.name}>
+          {product.name || "Product"}
+        </h3>
+
+        <div className="tp-price-row">
+          <div className="tp-price-group">
+            <span className="tp-current-price">
+              ₹{Number(finalPrice).toLocaleString("en-IN")}
+            </span>
+            {hasSale && (
+              <span className="tp-old-price">
+                ₹{Number(numPrice).toLocaleString("en-IN")}
+              </span>
+            )}
           </div>
 
           <button
             type="button"
-            className="tp-desktop-quick-add"
-            style={{
-              background: isAdded ? "#10B981" : "var(--color-cobalt)",
-            }}
+            className="tp-mobile-cart-btn"
             onClick={handleAddToCart}
+            title="Add to Cart"
+            aria-label="Add to Cart"
+            style={{
+              background: isAdded ? "#10B981" : "var(--bg-badge-tint)",
+              color: isAdded ? "#FFFFFF" : "var(--color-cobalt)",
+              borderColor: isAdded ? "#10B981" : "var(--border-subtle)",
+            }}
           >
-            {isAdded ? (
-              <>
-                <FiCheck size={15} />
-                <span>Added to Bag</span>
-              </>
-            ) : (
-              <>
-                <FiShoppingCart size={15} />
-                <span>Quick Add</span>
-              </>
-            )}
+            {isAdded ? <FiCheck size={14} /> : <FiShoppingCart size={14} />}
           </button>
         </div>
-
-        <div className="tp-card-content">
-          <span className="tp-cat-label">{product.category || "Apparel"}</span>
-
-          <h3 className="tp-prod-name" title={product.name}>
-            {product.name}
-          </h3>
-
-          <div className="tp-price-row">
-            <div className="tp-price-group">
-              <span className="tp-current-price">
-                ₹{Number(finalPrice).toLocaleString("en-IN")}
-              </span>
-              {hasSale && (
-                <span className="tp-old-price">
-                  ₹{Number(product.price).toLocaleString("en-IN")}
-                </span>
-              )}
-            </div>
-
-            <button
-              type="button"
-              className="tp-mobile-cart-btn"
-              onClick={handleAddToCart}
-              title="Add to Cart"
-              aria-label="Add to Cart"
-              style={{
-                background: isAdded ? "#10B981" : "var(--bg-badge-tint)",
-                color: isAdded ? "#FFFFFF" : "var(--color-cobalt)",
-                borderColor: isAdded ? "#10B981" : "var(--border-subtle)",
-              }}
-            >
-              {isAdded ? <FiCheck size={14} /> : <FiShoppingCart size={14} />}
-            </button>
-          </div>
-        </div>
-      </Link>
-    </div>
+      </div>
+    </article>
   );
 };
 

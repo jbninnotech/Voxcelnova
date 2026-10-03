@@ -14,6 +14,7 @@ import {
 import { getProductById } from "../services/productService";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
+import authStorage from "../utils/authStorage";
 
 // Product Details Sub-Components
 import ProductInfo from "../components/productDetails/ProductInfo";
@@ -282,8 +283,7 @@ const ProductDetails = () => {
 
     sessionStorage.setItem("buyNowCheckout", JSON.stringify(buyNowItem));
 
-    const token =
-      sessionStorage.getItem("token") || localStorage.getItem("token");
+    const token = authStorage.getToken();
 
     if (!token) {
       navigate("/login", { state: { fromBuyNow: true } });

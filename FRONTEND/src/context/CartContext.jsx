@@ -14,7 +14,7 @@ const COUPON_STORAGE_KEY = "voxcel_nova_coupon";
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
     try {
-      const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+      const savedCart = sessionStorage.getItem(CART_STORAGE_KEY) || localStorage.getItem(CART_STORAGE_KEY);
       return savedCart ? JSON.parse(savedCart) : [];
     } catch (error) {
       console.error("Failed to load cart:", error);
@@ -24,7 +24,7 @@ export const CartProvider = ({ children }) => {
 
   const [appliedCoupon, setAppliedCoupon] = useState(() => {
     try {
-      const savedCoupon = localStorage.getItem(COUPON_STORAGE_KEY);
+      const savedCoupon = sessionStorage.getItem(COUPON_STORAGE_KEY) || localStorage.getItem(COUPON_STORAGE_KEY);
       return savedCoupon ? JSON.parse(savedCoupon) : null;
     } catch (error) {
       return null;
@@ -32,23 +32,29 @@ export const CartProvider = ({ children }) => {
   });
 
   /* =====================================================
-     PERSISTENCE
+     PERSISTENCE (SESSIONSTORAGE)
   ===================================================== */
   useEffect(() => {
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+    try {
+      sessionStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+      // Clean old localStorage key if present
+      localStorage.removeItem(CART_STORAGE_KEY);
+    } catch (e) {}
   }, [cartItems]);
 
   useEffect(() => {
-    if (appliedCoupon) {
-      localStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify(appliedCoupon));
-    } else {
+    try {
+      if (appliedCoupon) {
+        sessionStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify(appliedCoupon));
+      } else {
+        sessionStorage.removeItem(COUPON_STORAGE_KEY);
+      }
       localStorage.removeItem(COUPON_STORAGE_KEY);
-    }
+    } catch (e) {}
   }, [appliedCoupon]);
 
   /* =====================================================
      ADD TO CART
-     Maintains distinct items for different sizes
   ===================================================== */
   const addToCart = ({
     product,
@@ -72,7 +78,6 @@ export const CartProvider = ({ children }) => {
     const availableStock = typeof product.stock === "number" ? product.stock : 999;
 
     setCartItems((previousItems) => {
-      // Find existing item with exact same productId, size and color
       const existingIndex = previousItems.findIndex(
         (item) =>
           item.productId === product._id &&
@@ -147,7 +152,6 @@ export const CartProvider = ({ children }) => {
       );
       if (!targetItem) return previousItems;
 
-      // Check if item with newSize already exists
       const existingMatch = previousItems.find(
         (item) =>
           item.productId === targetItem.productId &&
@@ -157,7 +161,6 @@ export const CartProvider = ({ children }) => {
       );
 
       if (existingMatch) {
-        // Merge quantities into existingMatch and remove targetItem
         return previousItems
           .filter((item) => item.cartItemId !== targetItem.cartItemId)
           .map((item) => {
@@ -175,7 +178,6 @@ export const CartProvider = ({ children }) => {
             return item;
           });
       } else {
-        // Just update size of targetItem
         return previousItems.map((item) => {
           if (item.cartItemId === cartItemId || item.productId === cartItemId) {
             return {
@@ -216,9 +218,6 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  /* =====================================================
-     INCREASE / DECREASE QUANTITY
-  ===================================================== */
   const increaseQuantity = (cartItemId) => {
     setCartItems((previousItems) =>
       previousItems.map((item) => {
@@ -273,17 +272,11 @@ export const CartProvider = ({ children }) => {
     setAppliedCoupon(null);
   };
 
-  /* =====================================================
-     CLEAR CART
-  ===================================================== */
   const clearCart = () => {
     setCartItems([]);
     setAppliedCoupon(null);
   };
 
-  /* =====================================================
-     CALCULATED TOTALS
-  ===================================================== */
   const cartCount = useMemo(() => {
     return cartItems.reduce((total, item) => total + Number(item.quantity || 0), 0);
   }, [cartItems]);

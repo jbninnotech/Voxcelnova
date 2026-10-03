@@ -1,14 +1,90 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const COLLECTIONS = [
-  { id: 1, title: 'Tara Peacock Paithani', price: '₹18,499', tag: 'Paithani', img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&q=80' },
-  { id: 2, title: 'Aaranya Emerald Kanjivaram', price: '₹22,999', tag: 'Kanjivaram', img: 'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=600&q=80' },
-  { id: 3, title: 'Kalyani Temple Silk', price: '₹14,899', tag: 'Temple Silk', img: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600&q=80' },
-  { id: 4, title: 'Saurabh Maroon Banarasi', price: '₹26,500', tag: 'Banarasi', img: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=600&q=80' },
-  { id: 5, title: 'Prerna Ethereal Silk', price: '₹19,200', tag: 'Raw Silk', img: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80' },
-  { id: 6, title: 'Lalita Crimson Zari', price: '₹28,000', tag: 'Heritage', img: 'https://images.unsplash.com/photo-1544441893-675973e31985?w=600&q=80' },
-  { id: 7, title: 'Mayura Royal Tissue', price: '₹16,750', tag: 'Tissue Silk', img: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=600&q=80' },
-  { id: 8, title: 'Ananya Gold Brocade', price: '₹31,500', tag: 'Brocade', img: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80' },
+  { 
+    id: 1, 
+    title: 'Aura Crimson Heritage', 
+    price: '₹19,499', 
+    tag: 'Paithani', 
+    img: 'https://res.cloudinary.com/d4oald11/image/upload/v1790834434/333.jpg' 
+  },
+  { 
+    id: 2, 
+    title: 'Zari Regal Opulence', 
+    price: '₹24,999', 
+    tag: 'Kanjivaram', 
+    img: 'https://res.cloudinary.com/d4oald11/image/upload/v1790834433/213.jpg' 
+  },
+  { 
+    id: 3, 
+    title: 'Celestial Temple Silk', 
+    price: '₹16,800', 
+    tag: 'Temple Silk', 
+    img: 'https://res.cloudinary.com/d4oald11/image/upload/v1790833748/shankar_gf.jpg' 
+  },
+  { 
+    id: 4, 
+    title: 'Varanasi Royal Brocade', 
+    price: '₹28,500', 
+    tag: 'Banarasi', 
+    img: 'https://res.cloudinary.com/d4oald11/image/upload/v1790834432/876.jpg' 
+  },
+  { 
+    id: 5, 
+    title: 'Ethereal Weave Elegance', 
+    price: '₹21,200', 
+    tag: 'Raw Silk', 
+    img: 'https://res.cloudinary.com/d4oald11/image/upload/v1790834432/543.jpg' 
+  },
+  { 
+    id: 6, 
+    title: 'Maroon Zari Tradition', 
+    price: '₹26,000', 
+    tag: 'Heritage', 
+    img: 'https://res.cloudinary.com/d4oald11/image/upload/v1790833745/shankar_gf_2.jpg' 
+  },
+  { 
+    id: 7, 
+    title: 'Lustrous Gold Tissue', 
+    price: '₹17,750', 
+    tag: 'Tissue Silk', 
+    img: 'https://res.cloudinary.com/d4oald11/image/upload/v1790833744/nithins_gf_4.jpg' 
+  },
+  { 
+    id: 8, 
+    title: 'Imperial Twilight Silk', 
+    price: '₹32,500', 
+    tag: 'Brocade', 
+    img: 'https://res.cloudinary.com/d4oald11/image/upload/v1790834436/111.png' 
+  },
+  { 
+    id: 9, 
+    title: 'Shankar Festive Ensemble I', 
+    price: '₹15,400', 
+    tag: 'Festive', 
+    img: 'https://res.cloudinary.com/d4oald11/image/upload/v1790834436/shankar_child_1.jpg' 
+  },
+  { 
+    id: 10, 
+    title: 'Shankar Festive Ensemble II', 
+    price: '₹15,900', 
+    tag: 'Festive', 
+    img: 'https://res.cloudinary.com/d4oald11/image/upload/v1790834436/shankar_child_2.jpg' 
+  },
+  { 
+    id: 11, 
+    title: 'Sovereign Royal Drape', 
+    price: '₹27,300', 
+    tag: 'Chanderi', 
+    img: 'https://res.cloudinary.com/d4oald11/image/upload/v1790834432/432.jpg' 
+  },
+  { 
+    id: 12, 
+    title: 'Tara Peacock Signature', 
+    price: '₹18,499', 
+    tag: 'Paithani', 
+    img: 'https://res.cloudinary.com/d4oald11/image/upload/v1790832198/2.jpg' 
+  },
 ];
 
 export default function ResponsiveCylindricalRibbon() {
@@ -62,7 +138,7 @@ export default function ResponsiveCylindricalRibbon() {
           scrollRef.current += velocityRef.current;
           velocityRef.current *= 0.93; // Inertial coasting friction
         } else if (!isHovered) {
-          // Speed: ~110px/s on desktop, scaled gently to ~90px/s on mobile
+          // Speed: ~115px/s on desktop, scaled gently to ~90px/s on mobile
           const speed = isMobile ? 90 : 115;
           scrollRef.current += speed * Math.min(delta, 0.1);
         }
@@ -105,7 +181,7 @@ export default function ResponsiveCylindricalRibbon() {
   return (
     <div
       style={{
-        backgroundColor: '#F4F8FE', // --bg-main
+        backgroundColor: '#F4F8FE',
         minHeight: isMobile ? 'auto' : '100vh',
         overflow: 'hidden',
         userSelect: 'none',
@@ -128,7 +204,7 @@ export default function ResponsiveCylindricalRibbon() {
               style={{
                 letterSpacing: isMobile ? '2px' : '3.5px',
                 fontSize: isMobile ? '9.5px' : '11px',
-                color: '#6B82A0', // --text-muted
+                color: '#6B82A0',
               }}
             >
               The Signature Silk Horizon
@@ -138,7 +214,7 @@ export default function ResponsiveCylindricalRibbon() {
                 fontSize: 'clamp(1.35rem, 4.2vw, 2.7rem)',
                 fontWeight: '400',
                 letterSpacing: '-0.5px',
-                color: '#071838', // --text-title
+                color: '#071838',
                 margin: 0,
                 lineHeight: 1.15,
               }}
@@ -158,9 +234,9 @@ export default function ResponsiveCylindricalRibbon() {
               style={{
                 width: isMobile ? '38px' : '46px',
                 height: isMobile ? '38px' : '46px',
-                backgroundColor: '#FFFFFF', // --bg-surface
-                color: '#0052FF', // --color-cobalt
-                border: '1px solid rgba(0, 82, 255, 0.14)', // --border-subtle
+                backgroundColor: '#FFFFFF',
+                color: '#0052FF',
+                border: '1px solid rgba(0, 82, 255, 0.14)',
                 boxShadow: '0 8px 24px rgba(0, 48, 143, 0.08)',
                 fontSize: isMobile ? '15px' : '18px',
                 transition: 'all 0.2s ease',
@@ -218,7 +294,7 @@ export default function ResponsiveCylindricalRibbon() {
           justifyContent: 'center',
           margin: isMobile ? '12px 0' : '20px 0',
           cursor: isInteracting ? 'grabbing' : 'grab',
-          touchAction: 'pan-y', // Keeps screen vertical scrolling fluid
+          touchAction: 'pan-y',
         }}
       >
         <div
@@ -264,8 +340,8 @@ export default function ResponsiveCylindricalRibbon() {
                     height: `${CARD_HEIGHT}px`,
                     borderRadius: isMobile ? '10px' : '14px',
                     overflow: 'hidden',
-                    backgroundColor: '#FFFFFF', // --bg-surface
-                    border: '1px solid rgba(0, 82, 255, 0.14)', // --border-subtle
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid rgba(0, 82, 255, 0.14)',
                     boxShadow: '0 10px 26px rgba(0, 48, 143, 0.08)',
                     transform: `translate3d(${posX}px, 0px, ${posZ}px) rotateY(${rotY}deg)`,
                     transformOrigin: '50% 50%',
@@ -321,8 +397,8 @@ export default function ResponsiveCylindricalRibbon() {
                       textTransform: 'uppercase',
                       padding: isMobile ? '3px 8px' : '4px 10px',
                       borderRadius: '16px',
-                      backgroundColor: '#E8F5FE', // --bg-badge-tint
-                      color: '#0052FF', // --color-cobalt
+                      backgroundColor: '#E8F5FE',
+                      color: '#0052FF',
                       border: '1px solid rgba(0, 82, 255, 0.16)',
                     }}
                   >
@@ -359,7 +435,7 @@ export default function ResponsiveCylindricalRibbon() {
                       style={{
                         fontSize: isMobile ? '11.5px' : '13px',
                         fontWeight: '700',
-                        color: '#00D4FF', // --color-cyan
+                        color: '#00D4FF',
                         letterSpacing: '0.4px',
                       }}
                     >
@@ -380,7 +456,7 @@ export default function ResponsiveCylindricalRibbon() {
             fontSize: isMobile ? '9.5px' : '11px',
             letterSpacing: isMobile ? '1.5px' : '2.5px',
             textTransform: 'uppercase',
-            color: '#6B82A0', // --text-muted
+            color: '#6B82A0',
             fontWeight: 500,
           }}
         >

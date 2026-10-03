@@ -1,35 +1,5 @@
-// src/services/authService.js
-import axios from "axios";
-
-// =========================================================
-// API URL CONFIGURATION
-// =========================================================
-const API_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-
-// =========================================================
-// AXIOS INSTANCE
-// =========================================================
-const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-// =========================================================
-// REQUEST INTERCEPTOR: ATTACH TOKEN
-// =========================================================
-api.interceptors.request.use(
-  (config) => {
-    const token = sessionStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+import api from "./api";
+import authStorage from "../utils/authStorage";
 
 // =========================================================
 // 1. LOGIN USER
@@ -40,10 +10,13 @@ export const loginUser = async (email, password) => {
       email: email.trim().toLowerCase(),
       password,
     });
+
     return response.data;
   } catch (error) {
+    console.error("Login Error:", error);
     const message =
-      error?.response?.data?.message || "Failed to login. Please try again.";
+      error?.response?.data?.message ||
+      "Failed to login. Please check your credentials.";
     throw new Error(message);
   }
 };
@@ -57,13 +30,14 @@ export const registerUser = async (userData) => {
     return response.data;
   } catch (error) {
     const message =
-      error?.response?.data?.message || "Registration failed.";
+      error?.response?.data?.message ||
+      "Registration failed.";
     throw new Error(message);
   }
 };
 
 // =========================================================
-// 3. GET CURRENT LOGGED-IN USER SESSION
+// 3. GET CURRENT LOGGED-IN USER
 // =========================================================
 export const getCurrentUser = async () => {
   try {
@@ -71,13 +45,14 @@ export const getCurrentUser = async () => {
     return response.data;
   } catch (error) {
     const message =
-      error?.response?.data?.message || "Could not retrieve user session.";
+      error?.response?.data?.message ||
+      "Could not retrieve user session.";
     throw new Error(message);
   }
 };
 
 // =========================================================
-// 4. CHANGE PASSWORD (AUTHENTICATED / IN-APP)
+// 4. CHANGE PASSWORD
 // =========================================================
 export const changePassword = async (currentPassword, newPassword) => {
   try {
@@ -95,7 +70,7 @@ export const changePassword = async (currentPassword, newPassword) => {
 };
 
 // =========================================================
-// 5. FORGOT PASSWORD (REQUEST RESET LINK VIA EMAIL)
+// 5. FORGOT PASSWORD
 // =========================================================
 export const forgotPassword = async (email) => {
   try {
@@ -105,13 +80,14 @@ export const forgotPassword = async (email) => {
     return response.data;
   } catch (error) {
     const message =
-      error?.response?.data?.message || "Failed to send reset link.";
+      error?.response?.data?.message ||
+      "Failed to send reset link.";
     throw new Error(message);
   }
 };
 
 // =========================================================
-// 6. RESET PASSWORD (SUBMIT NEW PASSWORD WITH TOKEN)
+// 6. RESET PASSWORD
 // =========================================================
 export const resetPassword = async (token, newPassword) => {
   try {
@@ -131,12 +107,7 @@ export const resetPassword = async (token, newPassword) => {
 // 7. LOGOUT USER
 // =========================================================
 export const logoutUser = () => {
-  sessionStorage.removeItem("token");
-  sessionStorage.removeItem("user");
-  sessionStorage.removeItem("role");
+  authStorage.clear();
 };
 
-// =========================================================
-// EXPORT DEFAULT AXIOS INSTANCE
-// =========================================================
 export default api;
