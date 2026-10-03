@@ -1,97 +1,136 @@
-import api from "./api";
+import express from "express";
+import {
+  getClientProjects,
+  getSingleClientProject,
+  getClientReviews,
+  getClientStats,
+  submitClientReview,
+  createClientProject,
+  updateClientProject,
+  deleteClientProject,
+  adminCreateClientReview,
+  toggleReviewApproval,
+  deleteClientReview,
+  getClientFeedbacks,
+  createClientFeedback,
+  toggleFeedbackPublication,
+  deleteClientFeedback,
+} from "../controllers/clientController.js";
+import { protect, adminOnly } from "../middleware/authMiddleware.js";
+import upload from "../middleware/upload.js";
 
-const clientService = {
-  // ================= STATS =================
-  getStats: async () => {
-    const res = await api.get("/clients/stats");
-    return res.data;
-  },
+const router = express.Router();
 
-  // ================= PROJECTS / DELIVERIES =================
-  getProjects: async (category = "All") => {
-    const query = category && category !== "All" ? `?category=${encodeURIComponent(category)}` : "";
-    const res = await api.get(`/clients/projects${query}`);
-    return res.data;
-  },
+const projectUploadFields = upload.fields([
+  { name: "image", maxCount: 1 },
+  { name: "clientLogo", maxCount: 1 },
+  { name: "gallery", maxCount: 6 },
+]);
 
-  // FIXED: Forces browser to set multipart/form-data boundary
-  createProject: async (formData) => {
-    const res = await api.post("/clients/projects", formData, {
-      headers: {
-        "Content-Type": undefined, // CRITICAL: Allows browser to attach boundary
-      },
-    });
-    return res.data;
-  },
+const reviewUploadFields = upload.fields([
+  { name: "avatar", maxCount: 1 },
+  { name: "companyLogo", maxCount: 1 },
+]);
 
-  updateProject: async (id, formData) => {
-    const res = await api.put(`/clients/projects/${id}`, formData, {
-      headers: {
-        "Content-Type": undefined,
-      },
-    });
-    return res.data;
-  },
+// ==========================================
+// 1. STATS (Must be above /:id)
+// ==========================================
+router.get("/test", (req, res) => {
+  res.json({ success: true, message: "Client API routes are working!" });
+});
+router.get(["/stats", "/client-stats"], getClientStats);
 
-  deleteProject: async (id) => {
-    const res = await api.delete(`/clients/projects/${id}`);
-    return res.data;
-  },
+// ==========================================
+// 2. CLIENT REVIEWS (Must be above /:id)
+// ==========================================
+router.get(["/reviews", "/client-reviews"], getClientReviews);
 
-  // ================= REVIEWS =================
-  getReviews: async (all = false) => {
-    const res = await api.get(`/clients/reviews?all=${all}`);
-    return res.data;
-  },
+router.post(
+  ["/reviews", "/client-reviews"],
+  upload.single("avatar"),
+  submitClientReview
+);
 
-  submitReview: async (reviewData) => {
-    const res = await api.post("/clients/reviews", reviewData);
-    return res.data;
-  },
+router.post(
+  ["/admin/reviews", "/reviews/admin", "/client-reviews/admin"],
+  protect,
+  adminOnly,
+  reviewUploadFields,
+  adminCreateClientReview
+);
 
-  adminCreateReview: async (formData) => {
-    const res = await api.post("/clients/admin/reviews", formData, {
-      headers: {
-        "Content-Type": undefined,
-      },
-    });
-    return res.data;
-  },
+router.patch(
+  ["/reviews/:id/approve", "/client-reviews/:id/approve"],
+  protect,
+  adminOnly,
+  toggleReviewApproval
+);
 
-  toggleReviewApproval: async (id) => {
-    const res = await api.patch(`/clients/reviews/${id}/approve`);
-    return res.data;
-  },
+router.delete(
+  ["/reviews/:id", "/client-reviews/:id"],
+  protect,
+  adminOnly,
+  deleteClientReview
+);
 
-  deleteReview: async (id) => {
-    const res = await api.delete(`/clients/reviews/${id}`);
-    return res.data;
-  },
+// ==========================================
+// 3. CLIENT FEEDBACKS (Must be above /:id)
+// ==========================================
+router.get(["/feedbacks", "/feedback", "/client-feedbacks", "/client-feedback"], getClientFeedbacks);
 
-  // ================= FEEDBACKS =================
-  getFeedbacks: async (all = false) => {
-    const res = await api.get(`/clients/feedbacks?all=${all}`);
-    return res.data;
-  },
+router.post(
+  ["/feedbacks", "/feedback", "/client-feedbacks", "/client-feedback"],
+  protect,
+  adminOnly,
+  upload.single("avatar"),
+  createClientFeedback
+);
 
-  createFeedback: async (formData) => {
-    const res = await api.post("/clients/feedbacks", formData, {
-      headers: {
-        "Content-Type": undefined,
-      },
-    });
-    return res.data;
-  },
+router.patch(
+  ["/feedbacks/:id/publish", "/feedback/:id/publish", "/client-feedbacks/:id/publish"],
+  protect,
+  adminOnly,
+  toggleFeedbackPublication
+);
 
-  toggleFeedbackPublication: async (id) => {
-    const res = await api.patch(`/clients/feedbacks/${id}/publish`);
-    return res.data;
-  },
+router.delete(
+  ["/feedbacks/:id", "/feedback/:id", "/client-feedbacks/:id"],
+  protect,
+  adminOnly,
+  deleteClientFeedback
+);
 
-  deleteFeedback: async (id) => {
-    const res = await api.delete(`/clients/feedbacks/${id}`);
-    return res.data;
-  },
-};
+// ==========================================
+// 4. CLIENT PROJECTS / DELIVERIES (LIST & CREATE)
+// ==========================================
+router.get(["/", "/projects", "/client-projects"], getClientProjects);
 
-export default clientService;
+router.post(
+  ["/", "/projects", "/client-projects"],
+  protect,
+  adminOnly,
+  projectUploadFields,
+  createClientProject
+);
+
+// ==========================================
+// 5. WILDCARD /:id ROUTES (MUST BE AT THE VERY BOTTOM!)
+// ==========================================
+router.get(["/projects/:id", "/project/:id", "/:id"], getSingleClientProject);
+
+router.put(
+  ["/projects/:id", "/client-projects/:id", "/:id"],
+  protect,
+  adminOnly,
+  projectUploadFields,
+  updateClientProject
+);
+
+router.delete(
+  ["/projects/:id", "/client-projects/:id", "/:id"],
+  protect,
+  adminOnly,
+  deleteClientProject
+);
+
+export default router;
