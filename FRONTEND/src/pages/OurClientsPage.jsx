@@ -16,6 +16,9 @@ import {
 import { FaQuoteLeft, FaStar } from "react-icons/fa";
 import clientService from "../services/clientService";
 
+// Hero Background Image Import
+import background from "../assets/images/client-banner.png";
+
 const CATEGORIES = [
   "All",
   "School Uniforms",
@@ -133,34 +136,48 @@ export default function Clients() {
           min-height: 100vh;
         }
 
+        /* ─── Hero Section (Pure Image Background, No Color Overlay) ─── */
         .hero-banner {
-          padding: 70px 20px 40px;
+          position: relative;
+          padding: 95px 20px 65px;
           text-align: center;
-          background: linear-gradient(180deg, rgba(0, 82, 255, 0.05) 0%, transparent 100%);
+          background-color: transparent !important;
+          background-size: cover;
+          background-position: center center;
+          background-repeat: no-repeat;
+          border-bottom: 1px solid var(--border-subtle);
         }
 
         .hero-eyebrow {
-          font-size: 11px;
+          display: inline-block;
+          font-size: 11.5px;
           letter-spacing: 2px;
           font-weight: 800;
           color: var(--color-cobalt);
           text-transform: uppercase;
+          background: rgba(255, 255, 255, 0.92);
+          backdrop-filter: blur(8px);
+          padding: 6px 14px;
+          border-radius: 99px;
+          border: 1px solid rgba(0, 82, 255, 0.15);
+          box-shadow: 0 4px 12px rgba(0, 48, 143, 0.06);
         }
 
         .hero-title {
-          font-size: clamp(30px, 4.5vw, 52px);
+          font-size: clamp(32px, 5vw, 54px);
           font-weight: 900;
           color: var(--text-title);
-          letter-spacing: -1px;
-          margin: 10px 0 16px;
+          letter-spacing: -1.2px;
+          margin: 14px 0 16px;
         }
 
         .hero-subtitle {
-          max-width: 650px;
-          margin: 0 auto 35px;
-          font-size: 16px;
-          line-height: 1.6;
-          color: var(--text-body);
+          max-width: 680px;
+          margin: 0 auto 38px;
+          font-size: 16.5px;
+          line-height: 1.65;
+          color: var(--text-title);
+          font-weight: 500;
         }
 
         .stats-grid {
@@ -172,15 +189,23 @@ export default function Clients() {
         }
 
         .stat-card {
-          background: var(--bg-surface);
-          border: 1px solid var(--border-subtle);
+          background: rgba(255, 255, 255, 0.92);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.95);
           border-radius: 18px;
-          padding: 22px;
-          box-shadow: var(--shadow-card);
+          padding: 22px 18px;
+          box-shadow: 0 12px 32px rgba(0, 48, 143, 0.08);
+          transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .stat-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 16px 36px rgba(0, 48, 143, 0.12);
         }
 
         .stat-val {
-          font-size: 32px;
+          font-size: 34px;
           font-weight: 900;
           color: var(--color-cobalt);
           letter-spacing: -1px;
@@ -275,7 +300,7 @@ export default function Clients() {
           position: absolute;
           bottom: 12px;
           right: 12px;
-          background: rgba(255, 255, 255, 0.9);
+          background: rgba(255, 255, 255, 0.92);
           backdrop-filter: blur(6px);
           color: var(--text-title);
           font-size: 11px;
@@ -286,7 +311,7 @@ export default function Clients() {
           display: flex;
           align-items: center;
           gap: 5px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
 
         .project-content {
@@ -334,31 +359,30 @@ export default function Clients() {
         }
       `}</style>
 
-      {/* 1. HERO SECTION & STATS */}
-      <section className="hero-banner">
-        <div className="container">
-          <span className="hero-eyebrow">Enterprise & Institutional Trust</span>
+      {/* 1. HERO SECTION (ONLY BACKGROUND IMAGE) */}
+      <section
+        className="hero-banner"
+        style={{
+          backgroundImage: `url("${background}")`,
+        }}
+      >
+        <div className="container position-relative" style={{ zIndex: 1 }}>
+        
           <h1 className="hero-title">Our Clients & Manufacturing Proof</h1>
           <p className="hero-subtitle">
             Supplying India’s prestigious schools, leading colleges, luxury hotel chains, and corporate enterprises with custom-manufactured institutional attire.
           </p>
 
-          <div className="stats-grid">
-            {(stats.length > 0
-              ? stats
-              : [
-                  { val: "2.5M+", label: "Uniform Units Produced" },
-                  { val: "99.8%", label: "On-Time Dispatch Rate" },
-                  { val: "180+", label: "Institutional Clients" },
-                  { val: "98.5%", label: "Client Retention Rate" },
-                ]
-            ).map((s, idx) => (
-              <div key={idx} className="stat-card">
-                <div className="stat-val">{s.val}</div>
-                <div className="stat-label">{s.label}</div>
-              </div>
-            ))}
-          </div>
+          {stats.length > 0 && (
+            <div className="stats-grid">
+              {stats.map((s, idx) => (
+                <div key={idx} className="stat-card">
+                  <div className="stat-val">{s.val}</div>
+                  <div className="stat-label">{s.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

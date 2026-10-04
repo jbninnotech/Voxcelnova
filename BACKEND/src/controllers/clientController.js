@@ -414,8 +414,8 @@ export const getClientStats = async (req, res) => {
     res.status(200).json({
       success: true,
       data: [
-        { val: "2.5M+", label: "Uniform Units Delivered" },
-        { val: "99.8%", label: "On-Time Dispatch Rate" },
+        // { val: "2.5M+", label: "Uniform Units Delivered" },
+        // { val: "99.8%", label: "On-Time Dispatch Rate" },
         { val: `${Math.max(totalProjects * 12, 180)}+`, label: "Institutional Clients" },
         { val: `${Math.min(95 + (totalReviews % 5), 99.4)}%`, label: "Client Retention Rate" },
       ],

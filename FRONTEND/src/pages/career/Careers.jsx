@@ -80,25 +80,7 @@ const Careers = () => {
           <div
             className="text-center"
           >
-            <div
-              style={{
-                display:
-                  "inline-block",
-                padding:
-                  "8px 16px",
-                borderRadius:
-                  "50px",
-                background:
-                  "rgba(255,255,255,0.1)",
-                border:
-                  "1px solid rgba(255,255,255,0.15)",
-                marginBottom:
-                  "20px",
-                fontSize: "14px",
-              }}
-            >
-              VOXCEL NOVA CAREERS
-            </div>
+          
 
             <h1
               style={{

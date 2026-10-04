@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Heroimages from "../../assets/about.png";
+import Heroimages from "../../assets/image.png";
 
 import {
   FaArrowRight,
@@ -42,12 +42,11 @@ export default function AboutHeroSection({ heroImage = Heroimages }) {
     <>
       <style>{`
         /* ==========================================
-           COLOR PROFILE (DARK CINEMATIC CYAN/COBALT)
+           COLOR PROFILE
         ========================================== */
         :root {
           --color-cobalt: #0052FF;
           --color-cyan: #00D4FF;
-          --color-navy-dark: #050B16;
           --border-glass: rgba(0, 212, 255, 0.22);
           --text-highlight: #00D4FF;
         }
@@ -60,35 +59,19 @@ export default function AboutHeroSection({ heroImage = Heroimages }) {
           align-items: center;
           justify-content: center;
           overflow: hidden;
-          background-color: var(--color-navy-dark);
+          background-color: transparent !important;
           font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
-        /* CINEMATIC BACKGROUND IMAGE + DARK DUAL-TONE GRADIENT */
+        /* PURE BACKGROUND IMAGE (ALL COLOR OVERLAYS & GRADIENTS REMOVED) */
         .about-hero-bg {
           position: absolute;
           inset: 0;
-          background-image: 
-            radial-gradient(ellipse at center, rgba(5, 11, 22, 0.6) 0%, rgba(5, 11, 22, 0.92) 100%),
-            linear-gradient(180deg, rgba(0, 82, 255, 0.22) 0%, rgba(5, 11, 22, 0.88) 85%),
-            url("${heroImage}");
+          background-image: url("${heroImage}");
           background-size: cover;
           background-position: center;
           background-repeat: no-repeat;
           z-index: 1;
-          transform: scale(1.03);
-        }
-
-        /* Subtle mesh glow effects */
-        .ambient-cyan-orb {
-          position: absolute;
-          width: clamp(300px, 40vw, 650px);
-          height: clamp(300px, 40vw, 650px);
-          border-radius: 50%;
-          background: radial-gradient(circle, rgba(0, 212, 255, 0.18) 0%, rgba(0, 82, 255, 0.08) 50%, transparent 70%);
-          filter: blur(80px);
-          pointer-events: none;
-          z-index: 2;
         }
 
         /* CONTAINER & TYPOGRAPHY */
@@ -104,24 +87,6 @@ export default function AboutHeroSection({ heroImage = Heroimages }) {
           text-align: center;
         }
 
-        .about-pill-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 6px 16px;
-          border-radius: 99px;
-          background: rgba(0, 212, 255, 0.08);
-          border: 1px solid var(--border-glass);
-          color: var(--color-cyan);
-          font-size: clamp(11px, 1.4vw, 12px);
-          font-weight: 700;
-          letter-spacing: 1.8px;
-          text-transform: uppercase;
-          margin-bottom: 22px;
-          backdrop-filter: blur(10px);
-          box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
-        }
-
         .about-hero-title {
           font-size: clamp(32px, 5.2vw, 64px);
           font-weight: 900;
@@ -130,7 +95,7 @@ export default function AboutHeroSection({ heroImage = Heroimages }) {
           color: #FFFFFF;
           margin: 0 0 20px;
           max-width: 900px;
-          text-shadow: 0 4px 24px rgba(0, 0, 0, 0.7);
+          text-shadow: 0 4px 20px rgba(0, 0, 0, 0.85);
         }
 
         .about-cyan-highlight {
@@ -143,12 +108,12 @@ export default function AboutHeroSection({ heroImage = Heroimages }) {
         }
 
         .about-hero-subtitle {
-          color: #B4C6EE;
+          color: #E2E8F0;
           font-size: clamp(14px, 1.8vw, 17px);
           line-height: 1.65;
           max-width: 680px;
           margin: 0 auto 36px;
-          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+          text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85);
         }
 
         /* BUTTONS */
@@ -187,7 +152,7 @@ export default function AboutHeroSection({ heroImage = Heroimages }) {
         }
 
         .btn-cyan-outline {
-          background: rgba(5, 15, 35, 0.65);
+          background: rgba(5, 15, 35, 0.7);
           color: #E2E8F0;
           font-weight: 700;
           font-size: 14px;
@@ -204,70 +169,14 @@ export default function AboutHeroSection({ heroImage = Heroimages }) {
         }
 
         .btn-cyan-outline:hover {
-          background: rgba(0, 212, 255, 0.12);
+          background: rgba(0, 212, 255, 0.15);
           border-color: var(--color-cyan);
           color: #FFFFFF;
           transform: translateY(-2px);
           box-shadow: 0 0 20px rgba(0, 212, 255, 0.25);
         }
 
-        /* METRICS COUNTER ROW */
-        .about-stats-grid {
-          width: 100%;
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 14px;
-        }
-
-        .about-stat-card {
-          background: rgba(9, 18, 38, 0.7);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border: 1px solid var(--border-glass);
-          border-radius: 16px;
-          padding: clamp(14px, 2.5vw, 20px);
-          text-align: center;
-          position: relative;
-          overflow: hidden;
-          transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .about-stat-card:hover {
-          transform: translateY(-4px);
-          border-color: rgba(0, 212, 255, 0.55);
-          box-shadow: 0 10px 30px rgba(0, 82, 255, 0.2);
-        }
-
-        .about-stat-number {
-          font-size: clamp(22px, 3.2vw, 34px);
-          font-weight: 900;
-          color: #FFFFFF;
-          line-height: 1;
-          margin-bottom: 6px;
-          font-feature-settings: "tnum";
-        }
-
-        .about-stat-number span {
-          color: var(--color-cyan);
-        }
-
-        .about-stat-label {
-          font-size: clamp(11px, 1.2vw, 13px);
-          color: #94A3B8;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.8px;
-          margin: 0;
-        }
-
         /* RESPONSIVE MEDIA QUERIES */
-        @media (max-width: 860px) {
-          .about-stats-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-          }
-        }
-
         @media (max-width: 480px) {
           .about-actions-group {
             flex-direction: column;
@@ -278,26 +187,16 @@ export default function AboutHeroSection({ heroImage = Heroimages }) {
             width: 100%;
             justify-content: center;
           }
-          .about-stat-card {
-            padding: 12px 10px;
-          }
         }
       `}</style>
 
       <section className="about-hero-section">
-        {/* Cinematic Background */}
+        {/* Pure Background Image with No Overlay Colors */}
         <div className="about-hero-bg" />
-
-        {/* Ambient Color Glows */}
-        <div className="ambient-cyan-orb" style={{ top: "-10%", left: "50%", transform: "translateX(-50%)" }} />
-        <div className="ambient-cyan-orb" style={{ bottom: "-15%", right: "-5%", opacity: 0.6 }} />
 
         {/* Hero Main Content */}
         <div className="about-content-container">
-          {/* Tagline / Eyebrow Pill */}
-         
-
-          {/* Heading with Cyan Highlight matching image reference */}
+          {/* Heading with Cyan Highlight */}
           <h1 className="about-hero-title">
             Engineered for Comfort, Built for{" "}
             <span className="about-cyan-highlight">Durability</span>
@@ -321,17 +220,6 @@ export default function AboutHeroSection({ heroImage = Heroimages }) {
               <FaBoxes size={15} />
               <span>Explore Catalog</span>
             </a>
-          </div>
-
-          {/* Live Telemetry / Social Proof Counters */}
-          <div className="about-stats-grid">
-            
-
-           
-
-            
-
-           
           </div>
         </div>
       </section>
