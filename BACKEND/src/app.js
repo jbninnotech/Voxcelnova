@@ -13,18 +13,14 @@ import wishlistRoutes from "./routes/wishlistRoutes.js";
 import passwordRoutes from "./routes/passwordRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 
-// Careers & Applications
 import careerRoutes from "./routes/careerRoutes.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
 
-// Contact & Customizations
 import contactRoutes from "./routes/contactRoutes.js";
 import customizationRoutes from "./routes/customizationRoutes.js";
 
-// Clients, Projects & Reviews
 import clientRoutes from "./routes/clientRoutes.js";
 
-// Reports & Dashboard
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 
 import errorMiddleware from "./middleware/errorMiddleware.js";
@@ -35,25 +31,49 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // =========================================================
-// CORS FIX
+// CORS
 // =========================================================
+
 const allowedOrigins = [
-  process.env.CLIENT_URL,                 // from .env if you set it
-  "http://localhost:5173",                // local dev
-  "http://localhost:3000",                // local dev
-  "https://voxelnovaininnovations.netlify.app" // ✅ your Netlify site
-].filter(Boolean);
+  "https://voxelnovainnovations.com",
+  "https://www.voxelnovainnovations.com",
+  "http://localhost:5173",
+  "http://localhost:3000",
+];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      if (process.env.CLIENT_URL === "*") return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error(`CORS blocked for origin: ${origin}`));
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      console.error("CORS blocked origin:", origin);
+
+      return callback(
+        new Error(`CORS blocked for origin: ${origin}`)
+      );
     },
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+
+    methods: [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS",
+    ],
+
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+    ],
+
     credentials: true,
   })
 );
@@ -61,25 +81,43 @@ app.use(
 // =========================================================
 // BODY PARSERS
 // =========================================================
+
 app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+app.use(
+  express.urlencoded({
+    extended: true,
+    limit: "10mb",
+  })
+);
 
 // =========================================================
 // STATIC UPLOADS
 // =========================================================
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "uploads"))
+);
 
 // =========================================================
-// ROOT & HEALTH CHECK
+// ROOT
 // =========================================================
+
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
-    message: "Voxcelnova Clothing Manufacturing Backend API is running",
+    message:
+      "Voxcelnova Clothing Manufacturing Backend API is running",
     version: "1.0.0",
-    environment: process.env.NODE_ENV || "development",
+    environment:
+      process.env.NODE_ENV || "development",
   });
 });
+
+// =========================================================
+// API HEALTH CHECK
+// =========================================================
 
 app.get("/api", (req, res) => {
   res.status(200).json({
@@ -90,8 +128,9 @@ app.get("/api", (req, res) => {
 });
 
 // =========================================================
-// API ROUTE REGISTRATIONS
+// API ROUTES
 // =========================================================
+
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
@@ -100,21 +139,22 @@ app.use("/api/addresses", addressRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/password", passwordRoutes);
 app.use("/api/orders", orderRoutes);
+
 app.use("/api/careers", careerRoutes);
 app.use("/api/applications", applicationRoutes);
+
 app.use("/api/customizations", customizationRoutes);
 app.use("/api/contact", contactRoutes);
 
-// CLIENTS, PROJECTS & REVIEWS
 app.use("/api/clients", clientRoutes);
 
-// REPORTS & DASHBOARD
 app.use("/api/reports", dashboardRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
 // =========================================================
-// 404 ROUTE
+// 404
 // =========================================================
+
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -126,6 +166,7 @@ app.use((req, res) => {
 // =========================================================
 // GLOBAL ERROR HANDLER
 // =========================================================
+
 app.use(errorMiddleware);
 
 export default app;
