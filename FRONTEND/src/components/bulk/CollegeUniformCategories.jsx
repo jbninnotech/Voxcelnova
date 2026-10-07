@@ -4,6 +4,13 @@ import React, { useState } from 'react';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 const CollegeUniformCategories = () => {
+  // WhatsApp Configuration
+  const WHATSAPP_PHONE = "918143324349";
+  const defaultMessage = encodeURIComponent(
+    "Hello! We are looking for custom college & campus uniforms in bulk. Please share your catalog, fabric samples, and pricing quotation."
+  );
+  const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${defaultMessage}`;
+
   // Exact Theme Color Profile
   const theme = {
     bgMain: '#F4F8FE',
@@ -25,51 +32,72 @@ const CollegeUniformCategories = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [btnHovered, setBtnHovered] = useState(false);
 
-  // 6 Uniform Categories
+  // 8 Bulk Order College Uniform Categories
   const categories = [
     {
       id: 1,
-      title: 'Institutional Shirts',
-      desc: 'Wrinkle-resistant pinpoint oxford & poplin shirts with reinforced seams and institutional monogramming.',
+      title: 'Institutional Shirts & Blouses',
+      desc: 'Wrinkle-resistant pinpoint oxford and poplin campus shirts engineered for daily student wear with optional crest embroidery.',
       badge: 'Poly-Cotton Blends',
-      image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=700&q=80',
+      image: 'https://res.cloudinary.com/d4oald11/image/upload/v1791098680/collage1.jpg',
     },
     {
       id: 2,
-      title: 'Formal Trousers',
-      desc: 'Durable flat-front and pleated trousers designed with stretch waistbands for all-day comfort and mobility.',
-      badge: 'Stain-Resistant',
-      image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=700&q=80',
+      title: 'Campus Blazers & Outerwear',
+      desc: 'Structured wool-blend blazers with customized brass buttons and institutional crest patches for academic ceremonies.',
+      badge: 'Custom Cresting',
+      image: 'https://res.cloudinary.com/d4oald11/image/upload/v1791098688/collage8.jpg',
     },
     {
       id: 3,
-      title: 'University Blazers',
-      desc: 'Premium structured wool-feel blazers customized with collegiate crest bullion patches and brass buttons.',
-      badge: 'Custom Cresting',
-      image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=700&q=80',
+      title: 'Formal Trousers & Chinos',
+      desc: 'Heavy-duty pleated and flat-front formal trousers built with reinforced seams and stain-resistant treatment.',
+      badge: 'Stain-Resistant Tech',
+      image: 'https://res.cloudinary.com/d4oald11/image/upload/v1791098686/collage7.avif',
     },
     {
       id: 4,
-      title: 'College Skirts',
-      desc: 'Pleated and straight-cut institutional skirts engineered with resilient colorfast dyes and easy-care fabrics.',
-      badge: 'Colorfast Tech',
-      image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?auto=format&fit=crop&w=700&q=80',
+      title: 'Institutional Skirts & Dresses',
+      desc: 'Colorfast pleated skirts and professional campus dresses crafted for breathable, flexible all-day comfort.',
+      badge: 'Anti-Fade Fabric',
+      image: 'https://res.cloudinary.com/d4oald11/image/upload/v1791098684/collage5.webp',
     },
     {
       id: 5,
-      title: 'Ties & Accessories',
-      desc: 'Custom woven jacquard ties, crest clips, and leather belts styled with college color stripes.',
-      badge: 'Woven Jacquard',
-      image: 'https://images.unsplash.com/photo-1589756823695-278bc923f962?auto=format&fit=crop&w=700&q=80',
+      title: 'Faculty & Administrative Wear',
+      desc: 'Refined corporate suits, waistcoats, and executive attire designed specifically for professors, deans, and staff.',
+      badge: 'Executive Tailoring',
+      image: 'https://res.cloudinary.com/d4oald11/image/upload/v1791098683/collage4.avif',
     },
     {
       id: 6,
-      title: 'Athletic & Sportswear',
-      desc: 'Breathable, moisture-wicking tracksuits, athletic jerseys, and sports kits customized for intramural teams.',
+      title: 'Varsity & Athletic Kits',
+      desc: 'Quick-dry, moisture-wicking jerseys, tracksuits, and sportswear tailored for college sports teams and physical education.',
       badge: 'Quick-Dry Fit',
-      image: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=700&q=80',
+      image: 'https://res.cloudinary.com/d4oald11/image/upload/v1791098682/collage3.jpg',
+    },
+    {
+      id: 7,
+      title: 'Lab Coats & Technical Attire',
+      desc: 'Chemical-resistant cotton lab coats, scrubs, and workshop aprons customized for medical, engineering, and science departments.',
+      badge: 'Industrial Grade',
+      image: 'https://res.cloudinary.com/d4oald11/image/upload/v1791098680/collage2.webp',
+    },
+    {
+      id: 8,
+      title: 'Ties, Belts & House Accessories',
+      desc: 'Woven jacquard neckties, brass-buckle leather belts, and house insignia scarves for complete institutional branding.',
+      badge: 'Custom Jacquard',
+      image: 'https://res.cloudinary.com/d4oald11/image/upload/v1791098680/collage1.jpg',
     },
   ];
+
+  const handleCardClick = (categoryTitle) => {
+    const cardMsg = encodeURIComponent(
+      `Hello! I am interested in placing a bulk order for "${categoryTitle}". Please share pricing, minimum order quantities, and fabric samples.`
+    );
+    window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${cardMsg}`, '_blank');
+  };
 
   return (
     <section
@@ -81,7 +109,7 @@ const CollegeUniformCategories = () => {
     >
       <div className="container py-4">
         {/* Section Header */}
-        <div className="text-center mx-auto mb-5" style={{ maxWidth: '640px' }}>
+        <div className="text-center mx-auto mb-5" style={{ maxWidth: '680px' }}>
           <div
             className="d-inline-flex align-items-center px-3 py-1 rounded-pill mb-3"
             style={{
@@ -94,7 +122,7 @@ const CollegeUniformCategories = () => {
               textTransform: 'uppercase',
             }}
           >
-            Institutional Apparel Portfolio
+            Bulk Institutional Manufacturing
           </div>
           <h2
             className="fw-bold mb-3"
@@ -104,7 +132,7 @@ const CollegeUniformCategories = () => {
               letterSpacing: '-0.02em',
             }}
           >
-            Our College Uniforms
+            College Uniform Categories
           </h2>
           <p
             className="mb-0"
@@ -114,19 +142,20 @@ const CollegeUniformCategories = () => {
               lineHeight: 1.65,
             }}
           >
-            Manufactured to the highest institutional standards. Every garment is crafted
-            for maximum durability, comfort, and precise campus color consistency.
+            Direct-from-factory bulk supply tailored for universities, technical institutes, and colleges. 
+            Select a category to request fabric samples, custom branding, and tier-priced bulk quotations.
           </p>
         </div>
 
-        {/* Categories Grid */}
+        {/* Categories Grid (8 Cards) */}
         <div className="row g-4 mb-5">
           {categories.map((cat, idx) => {
             const isHovered = hoveredCard === idx;
 
             return (
-              <div key={cat.id} className="col-12 col-md-6 col-lg-4">
+              <div key={`${cat.id}-${idx}`} className="col-12 col-md-6 col-lg-3">
                 <div
+                  onClick={() => handleCardClick(cat.title)}
                   onMouseEnter={() => setHoveredCard(idx)}
                   onMouseLeave={() => setHoveredCard(null)}
                   className="card h-100 rounded-4 overflow-hidden"
@@ -142,7 +171,7 @@ const CollegeUniformCategories = () => {
                   {/* Image Container */}
                   <div
                     className="position-relative overflow-hidden"
-                    style={{ height: '220px', backgroundColor: theme.bgMain }}
+                    style={{ height: '210px', backgroundColor: theme.bgMain }}
                   >
                     <img
                       src={cat.image}
@@ -162,7 +191,7 @@ const CollegeUniformCategories = () => {
                         backgroundColor: 'rgba(255, 255, 255, 0.94)',
                         backdropFilter: 'blur(6px)',
                         color: theme.colorCobalt,
-                        fontSize: '0.75rem',
+                        fontSize: '0.72rem',
                         border: `1px solid ${theme.borderSubtle}`,
                       }}
                     >
@@ -171,13 +200,14 @@ const CollegeUniformCategories = () => {
                   </div>
 
                   {/* Card Content */}
-                  <div className="card-body p-4 d-flex flex-column">
-                    <div className="d-flex align-items-center justify-content-between mb-2">
+                  <div className="card-body p-3 p-xl-4 d-flex flex-column">
+                    <div className="d-flex align-items-start justify-content-between mb-2">
                       <h3
-                        className="h5 mb-0 fw-bold"
+                        className="h6 mb-0 fw-bold"
                         style={{
                           color: isHovered ? theme.colorCobalt : theme.textTitle,
                           transition: 'color 0.25s ease',
+                          lineHeight: 1.35,
                         }}
                       >
                         {cat.title}
@@ -192,6 +222,7 @@ const CollegeUniformCategories = () => {
                         strokeWidth="2.5"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        className="flex-shrink-0 ms-2"
                         style={{
                           transform: isHovered ? 'translateX(3px)' : 'translateX(0)',
                           transition: 'all 0.25s ease',
@@ -206,8 +237,8 @@ const CollegeUniformCategories = () => {
                       className="card-text mb-3"
                       style={{
                         color: theme.textBody,
-                        fontSize: '0.925rem',
-                        lineHeight: 1.6,
+                        fontSize: '0.875rem',
+                        lineHeight: 1.55,
                       }}
                     >
                       {cat.desc}
@@ -217,12 +248,12 @@ const CollegeUniformCategories = () => {
                       <span
                         className="fw-semibold text-uppercase"
                         style={{
-                          fontSize: '0.78rem',
+                          fontSize: '0.75rem',
                           color: theme.colorCobalt,
                           letterSpacing: '0.04em',
                         }}
                       >
-                        Bulk Specs &amp; Fabrics →
+                        Request Bulk Quote →
                       </span>
                     </div>
                   </div>
@@ -232,13 +263,15 @@ const CollegeUniformCategories = () => {
           })}
         </div>
 
-        {/* Bottom CTA Button */}
+        {/* Bottom Bulk Order CTA Button targeting WhatsApp */}
         <div className="text-center pt-2">
-          <button
-            type="button"
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             onMouseEnter={() => setBtnHovered(true)}
             onMouseLeave={() => setBtnHovered(false)}
-            className="btn d-inline-flex align-items-center gap-2 px-4 py-3 fw-semibold rounded-3"
+            className="btn d-inline-flex align-items-center gap-2 px-4 py-3 fw-semibold rounded-3 text-decoration-none"
             style={{
               backgroundColor: btnHovered ? theme.colorCobaltHover : theme.colorCobalt,
               color: '#FFFFFF',
@@ -249,7 +282,7 @@ const CollegeUniformCategories = () => {
               fontSize: '0.95rem',
             }}
           >
-            <span>View All Uniforms</span>
+            <span>Request Bulk Quotation &amp; Fabric Catalog</span>
             <svg
               width="16"
               height="16"
@@ -260,7 +293,7 @@ const CollegeUniformCategories = () => {
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
-          </button>
+          </a>
         </div>
       </div>
     </section>

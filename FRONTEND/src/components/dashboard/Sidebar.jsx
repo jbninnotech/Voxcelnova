@@ -234,7 +234,7 @@ export default function DashboardSidebar() {
             className="fw-bold mt-1 mb-0"
             style={{ letterSpacing: "1px", color: "#FFFFFF", fontSize: "20px" }}
           >
-            VOXCEL NOVA
+            VOXEL NOVA
           </h3>
 
           {/* USER IDENTITY CHIP */}

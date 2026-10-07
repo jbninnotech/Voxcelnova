@@ -99,7 +99,7 @@ const Careers = () => {
                   color: "#60a5fa",
                 }}
               >
-                with Voxcel Nova.
+                with Voxcl Nova.
               </span>
             </h1>
 

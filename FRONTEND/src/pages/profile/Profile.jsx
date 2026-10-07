@@ -153,7 +153,7 @@ const Profile = () => {
                 border: "1px solid var(--border-subtle)",
               }}
             >
-              VOXCEL NOVA USER DASHBOARD
+              VOXCL NOVA USER DASHBOARD
             </span>
 
             <h2 className="fw-bold mb-1" style={{ color: "var(--text-title, #071838)" }}>

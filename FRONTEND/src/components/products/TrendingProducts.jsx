@@ -613,7 +613,7 @@ const ProductCard = ({ product }) => {
     product?.image ||
     product?.images?.[0]?.url ||
     (typeof product?.images?.[0] === "string" ? product?.images[0] : "") ||
-    "https://via.placeholder.com/600x750?text=VOXCEL+NOVA";
+    "https://via.placeholder.com/600x750?text=VOXEL+NOVA";
 
   // Price calculation matching Cart.jsx
   const numPrice = Number(product?.price || 0);
@@ -647,7 +647,7 @@ const ProductCard = ({ product }) => {
     (isInWishlist && isInWishlist(productId)) ||
     (() => {
       try {
-        const saved = sessionStorage.getItem("voxcel_nova_wishlist");
+        const saved = sessionStorage.getItem("voxel_nova_wishlist");
         if (!saved) return false;
         const list = JSON.parse(saved);
         return list.some((item) => (item._id || item.id) === productId);
@@ -677,7 +677,7 @@ const ProductCard = ({ product }) => {
     } else {
       // Local fallback sync
       try {
-        const key = "voxcel_nova_wishlist";
+        const key = "voxel_nova_wishlist";
         const saved = sessionStorage.getItem(key);
         let list = saved ? JSON.parse(saved) : [];
         if (list.some((item) => (item._id || item.id) === productId)) {
@@ -787,7 +787,7 @@ const ProductCard = ({ product }) => {
             loading="lazy"
             onError={(e) => {
               e.currentTarget.src =
-                "https://via.placeholder.com/600x750?text=VOXCEL+NOVA";
+                "https://via.placeholder.com/600x750?text=VOXEL+NOVA";
             }}
           />
         ) : (

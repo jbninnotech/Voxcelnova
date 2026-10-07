@@ -199,14 +199,14 @@ const ProductDetails = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     return () => {
-      window.clearTimeout(window.__voxcelProductToastTimer);
+      window.clearTimeout(window.__voxclProductToastTimer);
     };
   }, [id]);
 
   const showToast = (message) => {
     setToastMessage(message);
-    window.clearTimeout(window.__voxcelProductToastTimer);
-    window.__voxcelProductToastTimer = window.setTimeout(() => {
+    window.clearTimeout(window.__voxclProductToastTimer);
+    window.__voxclProductToastTimer = window.setTimeout(() => {
       setToastMessage("");
     }, 3500);
   };

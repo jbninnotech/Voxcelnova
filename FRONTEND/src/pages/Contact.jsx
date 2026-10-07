@@ -630,7 +630,7 @@ export default function Contact() {
                             color: "var(--logo-text-body)",
                           }}
                         >
-                          VOXCEL NOVA Apparel & Uniform Facility
+                          VOXEL NOVA Apparel & Uniform Facility
                           <br />
                           Chayanapuri, Hyderabad, Telangana – 500047
                         </p>
@@ -666,7 +666,7 @@ export default function Contact() {
 
                     <div className="vx-map-wrapper">
                       <iframe
-                        title="VOXCEL NOVA Hyderabad Plant"
+                        title="VOXEL NOVA Hyderabad Plant"
                         src="https://www.google.com/maps?q=Chayanapuri,Hyderabad,Telangana,India&output=embed"
                         loading="lazy"
                         allowFullScreen

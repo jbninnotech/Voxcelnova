@@ -133,7 +133,7 @@ const OrderTracking = () => {
                   border: "1px solid var(--border-subtle)",
                 }}
               >
-                VOXCEL NOVA ORDER TRACKING
+                VOXCL NOVA ORDER TRACKING
               </span>
               <h2 className="fw-bold mb-1" style={{ color: "var(--text-title, #071838)" }}>
                 Order #{order._id.substring(order._id.length - 8).toUpperCase()}

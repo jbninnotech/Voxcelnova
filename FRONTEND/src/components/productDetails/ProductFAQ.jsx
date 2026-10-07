@@ -18,7 +18,7 @@ const ProductFAQ = () => {
       category: "Ordering",
       question: "Can I order this product in bulk?",
       answer:
-        "Yes. VOXCEL NOVA supports bulk manufacturing for schools, colleges, corporates, hospitals, hotels, sports teams, and large events with tiered wholesale pricing.",
+        "Yes. VOXEL NOVA supports bulk manufacturing for schools, colleges, corporates, hospitals, hotels, sports teams, and large events with tiered wholesale pricing.",
     },
     {
       icon: <FiEdit />,
@@ -134,7 +134,7 @@ const ProductFAQ = () => {
           </h6>
         </div>
         <span className="small text-muted" style={{ fontSize: "11.5px" }}>
-          VOXCEL NOVA Bulk Support
+          VOXEL NOVA Bulk Support
         </span>
       </div>
 

@@ -47,7 +47,7 @@ const Cart = () => {
       if (typeof item.images[0] === "string") return item.images[0];
       if (item.images[0]?.url) return item.images[0].url;
     }
-    return "https://placehold.co/500x600?text=VOXCEL+NOVA";
+    return "https://placehold.co/500x600?text=VOXEL+NOVA";
   };
 
   const handleApplyCoupon = async (e) => {
@@ -194,7 +194,7 @@ const Cart = () => {
 
         {/* Main Layout */}
         <div
-          className="voxcel-cart-layout"
+          className="voxel-cart-layout"
           style={{
             display: "grid",
             gridTemplateColumns: "minmax(0, 1fr) 400px",

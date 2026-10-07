@@ -8,8 +8,8 @@ import React, {
 import { validateCouponApi } from "../services/orderService";
 
 const CartContext = createContext();
-const CART_STORAGE_KEY = "voxcel_nova_cart";
-const COUPON_STORAGE_KEY = "voxcel_nova_coupon";
+const CART_STORAGE_KEY = "voxel_nova_cart";
+const COUPON_STORAGE_KEY = "voxel_nova_coupon";
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {

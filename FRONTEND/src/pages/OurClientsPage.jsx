@@ -394,7 +394,7 @@ export default function Clients() {
               Manufactured Deliveries Showcase
             </h2>
             <p className="small mb-0 text-muted">
-              Real institutional batch productions delivered by Voxcel Nova
+              Real institutional batch productions delivered by Voxel Nova
             </p>
           </div>
 

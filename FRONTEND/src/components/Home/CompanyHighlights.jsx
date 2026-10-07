@@ -435,7 +435,7 @@ export default function CompanyHighlights() {
 
             {/* Description with Clean Slate Typography */}
             <p className="hl-description">
-              Voxcel Nova operates a modern, end-to-end clothing manufacturing ecosystem. 
+              Voxel Nova operates a modern, end-to-end clothing manufacturing ecosystem. 
               From fabric sourcing and technical pattern engineering to precision stitching and certified QC, 
               we manage the entire pipeline under one unified standard.
             </p>

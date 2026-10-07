@@ -330,7 +330,7 @@ const Products = () => {
                   loading="lazy"
                   onError={(e) => {
                     e.currentTarget.src =
-                      "https://via.placeholder.com/400x400?text=VOXCEL";
+                      "https://via.placeholder.com/400x400?text=VOXCL";
                   }}
                 />
                 <div className="cat-img-overlay">
@@ -1236,7 +1236,7 @@ const ProductCard = ({
   const image =
     product.images?.length > 0 && product.images[0]?.url
       ? product.images[0].url
-      : product.image || "https://via.placeholder.com/600x750?text=VOXCEL";
+      : product.image || "https://via.placeholder.com/600x750?text=VOXCL";
 
   const numPrice = Number(product.price || 0);
   const numSalePrice = Number(product.salePrice || 0);
@@ -1273,7 +1273,7 @@ const ProductCard = ({
           loading="lazy"
           onError={(e) => {
             e.currentTarget.src =
-              "https://via.placeholder.com/600x750?text=VOXCEL";
+              "https://via.placeholder.com/600x750?text=VOXCL";
           }}
         />
 

@@ -17,7 +17,7 @@ import Customizations from "../../components/bulk/Customization";
 // Configure your business WhatsApp number (with Country Code, no '+' or spaces)
 const WHATSAPP_PHONE = "919876543210"; // Replace with your company WhatsApp number
 const WHATSAPP_MESSAGE = encodeURIComponent(
-  "Hello Voxcel Nova! I would like to inquire about placing a Bulk Uniform Order for our organization. Please share your factory catalog, fabric swatches, and tiered pricing matrix."
+  "Hello Voxcl Nova! I would like to inquire about placing a Bulk Uniform Order for our organization. Please share your factory catalog, fabric swatches, and tiered pricing matrix."
 );
 
 export default function CorporateUniforms() {

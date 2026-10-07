@@ -361,7 +361,7 @@ export default function AdminUsers() {
           </h2>
 
           <p className="text-secondary mb-0">
-            Manage users who registered on the Voxcel Nova platform.
+            Manage users who registered on the Voxcl Nova platform.
           </p>
         </div>
 

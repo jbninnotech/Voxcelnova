@@ -255,7 +255,7 @@ export default function Login() {
 
               {/* TITLE */}
               <h1 className="fw-bold mb-3 mt-1" style={{ letterSpacing: "-0.5px" }}>
-                VOXCEL NOVA
+                VOXCL NOVA
               </h1>
 
               <h5
@@ -344,7 +344,7 @@ export default function Login() {
                   <i className="bi bi-building fs-3" />
                 </div>
                 <h4 className="fw-bold mb-0" style={{ color: "var(--text-title)" }}>
-                  VOXCEL NOVA
+                  VOXCL NOVA
                 </h4>
               </div>
 

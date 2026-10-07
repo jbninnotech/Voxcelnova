@@ -257,7 +257,7 @@ export default function Dashboard() {
         <div>
 
           <div style={styles.eyebrow}>
-            VOXCEL NOVA
+            VOXCL NOVA
           </div>
 
           <h1 style={styles.title}>

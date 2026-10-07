@@ -192,7 +192,7 @@ export default function Register() {
               </span>
 
               <h2 className="fw-bold mb-3 mt-1" style={{ letterSpacing: "-0.5px" }}>
-                Join VOXCEL NOVA
+                Join VOXCL NOVA
               </h2>
 
               <p

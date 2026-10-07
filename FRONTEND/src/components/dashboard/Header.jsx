@@ -40,7 +40,7 @@ const DashboardHeader = ({ setSidebarOpen }) => {
               marginBottom: "2px",
             }}
           >
-            VOXCEL NOVA / ADMIN
+            VOXEL NOVA / ADMIN
           </div>
 
           <h6

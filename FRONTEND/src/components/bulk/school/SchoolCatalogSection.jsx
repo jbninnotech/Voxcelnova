@@ -216,7 +216,7 @@ export default function SchoolCatalogSection() {
               margin: "0 auto 32px"
             }}
           >
-            At <b>Voxcel Nova</b>, academic uniform manufacturing combines kid-friendly skin-safe fabrics with industrial-grade durability. From stain-repellent kindergarten tunics to sweat-evaporating physical education kits and prestigious crested blazers.
+            At <b>Voxel Nova</b>, academic uniform manufacturing combines kid-friendly skin-safe fabrics with industrial-grade durability. From stain-repellent kindergarten tunics to sweat-evaporating physical education kits and prestigious crested blazers.
           </p>
         </div>
 

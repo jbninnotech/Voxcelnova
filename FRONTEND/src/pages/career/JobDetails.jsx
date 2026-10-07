@@ -323,7 +323,7 @@ const JobDetails = () => {
                 }}
               >
                 Take the next step in
-                your career with Voxcel
+                your career with Voxcl
                 Nova.
               </p>
 

@@ -58,7 +58,7 @@ export default function AddProduct() {
     salePrice: "",
     stock: "",
     material: "",
-    brand: "VOXCEL NOVA",
+    brand: "VOXCL NOVA",
     colors: "",
     isFeatured: false,
     isTrending: false,

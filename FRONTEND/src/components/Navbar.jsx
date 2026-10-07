@@ -41,7 +41,7 @@ export default function Navbar() {
   useEffect(() => {
     const updateWishCount = () => {
       try {
-        const saved = sessionStorage.getItem("voxcel_nova_wishlist");
+        const saved = sessionStorage.getItem("voxel_nova_wishlist");
         setLocalWishlistCount(saved ? JSON.parse(saved).length : wishlistTotal);
       } catch {
         setLocalWishlistCount(wishlistTotal);
@@ -165,7 +165,7 @@ export default function Navbar() {
               {!logoError ? (
                 <img
                   src={logo}
-                  alt="Voxcel Nova"
+                  alt="Voxel Nova"
                   className="vx-logo-img"
                   onError={() => setLogoError(true)}
                 />
@@ -176,7 +176,7 @@ export default function Navbar() {
               )}
             </div>
             <div className="vx-brand-text">
-              <span className="brand-title">VOXCEL NOVA</span>
+              <span className="brand-title">VOXEL NOVA</span>
               <span className="brand-subtitle">
                 CLOTHING <span className="sub-accent">&</span> UNIFORMS
               </span>

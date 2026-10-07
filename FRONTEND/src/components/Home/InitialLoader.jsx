@@ -613,7 +613,7 @@ const InitialLoader = ({ onComplete }) => {
               fontFamily: "'Playfair Display', Georgia, serif",
             }}
           >
-            VOXCEL NOVA
+            VOXEL NOVA
           </h1>
 
           <p

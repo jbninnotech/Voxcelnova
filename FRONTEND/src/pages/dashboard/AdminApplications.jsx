@@ -33,25 +33,40 @@ import {
 // API CONFIG
 // =========================================================
 
-const API_URL =
-  import.meta.env.VITE_API_URL ||
-  "http://localhost:5000/api";
+const API_URL = (
+  import.meta.env.VITE_API_BASE_URL ||
+  "http://localhost:5000/api"
+).replace(/\/$/, "");
 
 // =========================================================
-// TOKEN HELPER
+// =========================================================
+// TOKEN / AUTH HELPERS
 // =========================================================
 
 const getToken = () => {
   return (
+    localStorage.getItem("adminToken") ||
     localStorage.getItem("token") ||
     localStorage.getItem("accessToken") ||
+    sessionStorage.getItem("adminToken") ||
     sessionStorage.getItem("token") ||
     sessionStorage.getItem("accessToken") ||
     ""
   );
 };
 
-// =========================================================
+const clearAuthTokens = () => {
+  ["adminToken", "token", "accessToken"].forEach((key) => {
+    localStorage.removeItem(key);
+    sessionStorage.removeItem(key);
+  });
+};
+
+const handleUnauthorized = () => {
+  clearAuthTokens();
+  return new Error("Admin session expired or invalid. Please login again.");
+};
+
 // STATUS CONFIG
 // =========================================================
 
@@ -218,12 +233,11 @@ const AdminApplications = () => {
     try {
       setLoading(true);
       setError("");
+
       const token = getToken();
 
       if (!token) {
-        throw new Error(
-          "Authentication token not found. Please login again."
-        );
+        throw new Error("Admin authentication token not found. Please login again.");
       }
 
       const response = await fetch(`${API_URL}/applications/admin`, {
@@ -234,9 +248,21 @@ const AdminApplications = () => {
         },
       });
 
-      const data = await response.json();
+      let data = {};
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
+
+      if (response.status === 401) {
+        throw handleUnauthorized();
+      }
+
       if (!response.ok) {
-        throw new Error(data?.message || "Failed to load applications.");
+        throw new Error(
+          data?.message || "Failed to load applications."
+        );
       }
 
       setApplications(
@@ -255,8 +281,12 @@ const AdminApplications = () => {
   const fetchStats = useCallback(async () => {
     try {
       setStatsLoading(true);
+
       const token = getToken();
-      if (!token) return;
+      if (!token) {
+        setStatsLoading(false);
+        return;
+      }
 
       const response = await fetch(`${API_URL}/applications/admin/stats`, {
         method: "GET",
@@ -266,9 +296,21 @@ const AdminApplications = () => {
         },
       });
 
-      const data = await response.json();
+      let data = {};
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
+
+      if (response.status === 401) {
+        throw handleUnauthorized();
+      }
+
       if (!response.ok) {
-        throw new Error(data?.message || "Failed to load statistics.");
+        throw new Error(
+          data?.message || "Failed to load statistics."
+        );
       }
 
       if (data?.stats) {
@@ -276,6 +318,10 @@ const AdminApplications = () => {
       }
     } catch (err) {
       console.error("Fetch stats error:", err);
+      if (err?.message?.toLowerCase().includes("session expired") ||
+          err?.message?.toLowerCase().includes("invalid")) {
+        setError(err.message);
+      }
     } finally {
       setStatsLoading(false);
     }
@@ -350,6 +396,11 @@ const AdminApplications = () => {
       );
 
       const data = await response.json();
+
+      if (response.status === 401) {
+        throw handleUnauthorized();
+      }
+
       if (response.ok && data?.application) {
         setSelectedApplication(data.application);
       } else {
@@ -385,6 +436,11 @@ const AdminApplications = () => {
       );
 
       const data = await response.json();
+
+      if (response.status === 401) {
+        throw handleUnauthorized();
+      }
+
       if (!response.ok) {
         throw new Error(data?.message || "Failed to update status.");
       }
@@ -430,6 +486,11 @@ const AdminApplications = () => {
       );
 
       const data = await response.json();
+
+      if (response.status === 401) {
+        throw handleUnauthorized();
+      }
+
       if (!response.ok) {
         throw new Error(data?.message || "Failed to delete application.");
       }

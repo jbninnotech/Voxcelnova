@@ -20,12 +20,16 @@ import Home from "../pages/Home";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
 import OurClients from "../pages/OurClientsPage";
+
+// =========================================================
+// PRODUCT PAGES
+// =========================================================
 import Products from "../pages/Products";
 import CategoryProducts from "../pages/CategoryProducts";
 import ProductDetails from "../pages/ProductDetails";
 
 // =========================================================
-// CAREERS - PUBLIC
+// CAREERS
 // =========================================================
 import Careers from "./career/Careers";
 import JobDetails from "./career/JobDetails";
@@ -70,23 +74,33 @@ import ChangePassword from "../components/profile/ChangePassword";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 // =========================================================
-// PUBLIC APP COMPONENT
+// PUBLIC APP
 // =========================================================
 const PublicApp = () => {
-  // Always true on fresh load / page refresh (F5 or entering URL)
+  // -------------------------------------------------------
+  // INITIAL LOADER STATE
+  // -------------------------------------------------------
   const [isLoading, setIsLoading] = useState(true);
 
-  // Triggered when InitialLoader reaches 100% and finishes fading out
+  // -------------------------------------------------------
+  // LOADER COMPLETE
+  // -------------------------------------------------------
   const handleLoaderComplete = () => {
     setIsLoading(false);
   };
 
   return (
     <>
-      {/* 1. 3D ATELIER LOADER (Runs every time the site is opened or refreshed) */}
-      {isLoading && <InitialLoader onComplete={handleLoaderComplete} />}
+      {/* =====================================================
+          INITIAL 3D LOADER
+      ====================================================== */}
+      {isLoading && (
+        <InitialLoader onComplete={handleLoaderComplete} />
+      )}
 
-      {/* 2. MAIN APPLICATION CONTENT */}
+      {/* =====================================================
+          MAIN APPLICATION
+      ====================================================== */}
       <div
         className="d-flex flex-column min-vh-100"
         style={{
@@ -96,76 +110,281 @@ const PublicApp = () => {
           margin: 0,
           padding: 0,
           overflowX: "hidden",
-          // Smooth fade-in reveal when loader completes
+
+          // Smooth reveal after loader
           opacity: isLoading ? 0 : 1,
           transition: "opacity 0.45s ease-in-out",
         }}
       >
-        {/* NAVBAR */}
+        {/* ===================================================
+            NAVBAR
+        ==================================================== */}
         <Navbar />
 
-        {/* MAIN CONTENT ROUTING */}
+        {/* ===================================================
+            MAIN CONTENT
+        ==================================================== */}
         <main className="flex-grow-1">
           <Routes>
-            {/* HOME */}
-            <Route path="/" element={<Home />} />
 
-            {/* COMPANY & CLIENTS */}
-            <Route path="/about" element={<About />} />
-            <Route path="/clients" element={<OurClients />} />
-            <Route path="/contact" element={<Contact />} />
+            {/* =================================================
+                HOME
+            ================================================= */}
+            <Route
+              path="/"
+              element={<Home />}
+            />
 
-            {/* CAREERS */}
-            <Route path="/careers" element={<Careers />} />
-            <Route path="/careers/:id" element={<JobDetails />} />
-            <Route path="/careers/:id/apply" element={<ApplyJob />} />
+            {/* =================================================
+                COMPANY
+            ================================================= */}
+            <Route
+              path="/about"
+              element={<About />}
+            />
 
-            {/* PRODUCTS */}
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/product/:id" element={<ProductDetails />} />
-            <Route path="/products/:id" element={<ProductDetails />} />
-            <Route path="/products/:categorySlug" element={<CategoryProducts />} />
+            <Route
+              path="/clients"
+              element={<OurClients />}
+            />
 
-            {/* BULK ORDERS */}
-            <Route path="/bulk-orders/school-uniforms" element={<SchoolUniforms />} />
-            <Route path="/bulk/school-uniforms" element={<SchoolUniforms />} />
-            <Route path="/bulk-orders/college-uniforms" element={<CollegeUniforms />} />
-            <Route path="/bulk/college-uniforms" element={<CollegeUniforms />} />
-            <Route path="/bulk-orders/corporate-uniforms" element={<CorporateUniforms />} />
-            <Route path="/bulk/corporate-uniforms" element={<CorporateUniforms />} />
-            <Route path="/bulk-orders/hotel-uniforms" element={<HotelUniforms />} />
-            <Route path="/bulk/hotel-uniforms" element={<HotelUniforms />} />
-            <Route path="/bulk-orders" element={<CorporateUniforms />} />
-            <Route path="/bulk" element={<CorporateUniforms />} />
+            <Route
+              path="/contact"
+              element={<Contact />}
+            />
 
-            {/* SHOPPING */}
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/order/:orderId" element={<OrderTracking />} />
+            {/* =================================================
+                CAREERS
+            ================================================= */}
+            <Route
+              path="/careers"
+              element={<Careers />}
+            />
 
-            {/* AUTH */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<Forget />} />
-            <Route path="/reset-password/:token" element={<Reset />} />
+            <Route
+              path="/careers/:id"
+              element={<JobDetails />}
+            />
 
-            {/* USER PROFILE (PROTECTED) */}
+            <Route
+              path="/careers/:id/apply"
+              element={<ApplyJob />}
+            />
+
+            {/* =================================================
+                PRODUCTS
+            ================================================= */}
+
+            {/* Main Products Page */}
+            <Route
+              path="/products"
+              element={<Products />}
+            />
+
+            {/* Product Details */}
+            <Route
+              path="/products/product/:id"
+              element={<ProductDetails />}
+            />
+
+            {/* =================================================
+                CATEGORY PRODUCTS
+
+                IMPORTANT:
+                Footer uses:
+
+                /category/t-shirts
+                /category/polo-t-shirts
+                /category/shirts
+                /category/hoodies-sweatshirts
+                /category/school-uniforms
+
+                So this route is REQUIRED.
+            ================================================= */}
+            <Route
+              path="/category/:categorySlug"
+              element={<CategoryProducts />}
+            />
+
+            {/* =================================================
+                OPTIONAL LEGACY CATEGORY URL
+
+                If you already have links using:
+
+                /products/t-shirts
+                /products/shirts
+
+                they can still work.
+
+                Keep this only if your existing application
+                uses these URLs.
+            ================================================= */}
+            <Route
+              path="/products/category/:categorySlug"
+              element={<CategoryProducts />}
+            />
+
+            {/* =================================================
+                BULK ORDERS
+            ================================================= */}
+
+            {/* School Uniforms */}
+            <Route
+              path="/bulk-orders/school-uniforms"
+              element={<SchoolUniforms />}
+            />
+
+            <Route
+              path="/bulk/school-uniforms"
+              element={<SchoolUniforms />}
+            />
+
+            {/* College Uniforms */}
+            <Route
+              path="/bulk-orders/college-uniforms"
+              element={<CollegeUniforms />}
+            />
+
+            <Route
+              path="/bulk/college-uniforms"
+              element={<CollegeUniforms />}
+            />
+
+            {/* Corporate Uniforms */}
+            <Route
+              path="/bulk-orders/corporate-uniforms"
+              element={<CorporateUniforms />}
+            />
+
+            <Route
+              path="/bulk/corporate-uniforms"
+              element={<CorporateUniforms />}
+            />
+
+            {/* Hotel Uniforms */}
+            <Route
+              path="/bulk-orders/hotel-uniforms"
+              element={<HotelUniforms />}
+            />
+
+            <Route
+              path="/bulk/hotel-uniforms"
+              element={<HotelUniforms />}
+            />
+
+            {/* General Bulk Orders */}
+            <Route
+              path="/bulk-orders"
+              element={<CorporateUniforms />}
+            />
+
+            <Route
+              path="/bulk"
+              element={<CorporateUniforms />}
+            />
+
+            {/* =================================================
+                SHOPPING
+            ================================================= */}
+
+            <Route
+              path="/cart"
+              element={<Cart />}
+            />
+
+            <Route
+              path="/wishlist"
+              element={<Wishlist />}
+            />
+
+            <Route
+              path="/checkout"
+              element={<Checkout />}
+            />
+
+            <Route
+              path="/order/:orderId"
+              element={<OrderTracking />}
+            />
+
+            {/* =================================================
+                AUTHENTICATION
+            ================================================= */}
+
+            <Route
+              path="/login"
+              element={<Login />}
+            />
+
+            <Route
+              path="/register"
+              element={<Register />}
+            />
+
+            <Route
+              path="/forgot-password"
+              element={<Forget />}
+            />
+
+            <Route
+              path="/reset-password/:token"
+              element={<Reset />}
+            />
+
+            {/* =================================================
+                USER PROFILE
+            ================================================= */}
+
             <Route
               element={
-                <ProtectedRoute allowedRoles={["USER", "MANAGER", "EMPLOYEE"]} />
+                <ProtectedRoute
+                  allowedRoles={[
+                    "USER",
+                    "MANAGER",
+                    "EMPLOYEE",
+                  ]}
+                />
               }
             >
-              <Route path="/profile" element={<Profile />}>
-                <Route index element={<ProfileOrders />} />
-                <Route path="addresses" element={<Addresses />} />
-                <Route path="orders" element={<ProfileOrders />} />
-                <Route path="wishlist" element={<ProfileWishlist />} />
-                <Route path="password" element={<ChangePassword />} />
+              <Route
+                path="/profile"
+                element={<Profile />}
+              >
+                {/* Default Profile Page */}
+                <Route
+                  index
+                  element={<ProfileOrders />}
+                />
+
+                {/* Addresses */}
+                <Route
+                  path="addresses"
+                  element={<Addresses />}
+                />
+
+                {/* Orders */}
+                <Route
+                  path="orders"
+                  element={<ProfileOrders />}
+                />
+
+                {/* Wishlist */}
+                <Route
+                  path="wishlist"
+                  element={<ProfileWishlist />}
+                />
+
+                {/* Change Password */}
+                <Route
+                  path="password"
+                  element={<ChangePassword />}
+                />
               </Route>
             </Route>
 
-            {/* 404 NOT FOUND */}
+            {/* =================================================
+                404 PAGE
+            ================================================= */}
             <Route
               path="*"
               element={
@@ -180,26 +399,65 @@ const PublicApp = () => {
                   }}
                 >
                   <div>
-                    <h1 className="fw-bold" style={{ fontSize: "60px", marginBottom: "10px" }}>
+                    <div
+                      style={{
+                        fontSize: "14px",
+                        color: "#60A5FA",
+                        fontWeight: "700",
+                        letterSpacing: "3px",
+                        marginBottom: "12px",
+                      }}
+                    >
+                      VOXELNOVA
+                    </div>
+
+                    <h1
+                      className="fw-bold"
+                      style={{
+                        fontSize: "70px",
+                        lineHeight: 1,
+                        marginBottom: "15px",
+                      }}
+                    >
                       404
                     </h1>
-                    <h3 className="fw-semibold" style={{ marginBottom: "10px" }}>
+
+                    <h3
+                      className="fw-semibold"
+                      style={{
+                        marginBottom: "12px",
+                      }}
+                    >
                       Page Not Found
                     </h3>
-                    <p className="text-white-50 mb-0">
-                      The page you requested does not exist.
+
+                    <p
+                      className="text-white-50"
+                      style={{
+                        maxWidth: "450px",
+                        margin: "0 auto",
+                        lineHeight: "1.7",
+                      }}
+                    >
+                      The page you requested does not exist or
+                      may have been moved.
                     </p>
                   </div>
                 </div>
               }
             />
+
           </Routes>
         </main>
 
-        {/* FOOTER */}
+        {/* ===================================================
+            FOOTER
+        ==================================================== */}
         <Footer />
 
-        {/* WHATSAPP FLOATING BUTTON */}
+        {/* ===================================================
+            WHATSAPP
+        ==================================================== */}
         <WhatsAppButton />
       </div>
     </>

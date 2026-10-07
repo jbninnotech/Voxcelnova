@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaGraduationCap, FaWhatsapp, FaBookOpen, FaCheckCircle, FaShieldAlt } from 'react-icons/fa';
+import { FaGraduationCap, FaWhatsapp, FaBookOpen, FaCheckCircle, FaShieldAlt, FaAward } from 'react-icons/fa';
 import CollegeUniformCategories from "../../components/bulk/CollegeUniformCategories";
 import CustomUniforms from "../../components/bulk/CustomUniforms"; 
 import OurProcess from "../../components/bulk/OurProcess";
@@ -21,40 +21,41 @@ const CollegeUniformsHero = () => {
         =========================================================== */
         .college-hero-section {
           position: relative;
-          min-height: 85vh;
+          min-height: 80vh;
           display: flex;
           align-items: center;
           justify-content: center;
           text-align: center;
-          padding: 110px 24px 95px;
+          padding: 90px 20px 75px;
           overflow: hidden;
+          max-width: 100vw;
           background-color: #060b18;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
-        /* High-Definition Apparel Rack Backdrop with cinematic dark overlay */
+        /* High-Definition Apparel Backdrop with Overflow Fix */
         .college-hero-bg {
           position: absolute;
           inset: 0;
+          width: 100%;
+          height: 100%;
           background-image: 
-            linear-gradient(180deg, rgba(6, 12, 24, 0.86) 0%, rgba(3, 8, 18, 0.94) 100%),
-            url('https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=2000&q=85');
+            linear-gradient(180deg, rgba(6, 12, 24, 0.82) 0%, rgba(3, 8, 18, 0.92) 100%),
+            url('https://res.cloudinary.com/d4oald11/image/upload/v1790837149/5.jpg');
           background-size: cover;
           background-position: center;
           background-repeat: no-repeat;
-          transform: scale(1.03);
-          animation: subtleZoom 14s infinite alternate ease-in-out;
           z-index: 1;
         }
 
         /* Ambient Cyan Center Glow */
         .college-ambient-glow {
           position: absolute;
-          width: 580px;
-          height: 380px;
+          width: 500px;
+          height: 320px;
           border-radius: 50%;
-          background: radial-gradient(circle, rgba(0, 212, 255, 0.22) 0%, transparent 70%);
-          top: 45%;
+          background: radial-gradient(circle, rgba(0, 212, 255, 0.16) 0%, transparent 70%);
+          top: 48%;
           left: 50%;
           transform: translate(-50%, -50%);
           filter: blur(65px);
@@ -66,20 +67,16 @@ const CollegeUniformsHero = () => {
         .college-content-wrapper {
           position: relative;
           z-index: 3;
-          max-width: 980px;
+          max-width: 860px;
           margin: 0 auto;
+          width: 100%;
         }
 
         /* KEYFRAME ANIMATIONS */
-        @keyframes subtleZoom {
-          0% { transform: scale(1.0); }
-          100% { transform: scale(1.06); }
-        }
-
         @keyframes fadeInDown {
           from {
             opacity: 0;
-            transform: translateY(-22px);
+            transform: translateY(-16px);
           }
           to {
             opacity: 1;
@@ -90,7 +87,7 @@ const CollegeUniformsHero = () => {
         @keyframes fadeInUp {
           from {
             opacity: 0;
-            transform: translateY(28px);
+            transform: translateY(20px);
           }
           to {
             opacity: 1;
@@ -104,71 +101,71 @@ const CollegeUniformsHero = () => {
             opacity: 0.6;
           }
           100% {
-            transform: translate(-50%, -46%) scale(1.2);
+            transform: translate(-50%, -46%) scale(1.1);
             opacity: 1;
           }
         }
 
-        /* BADGE */
+        /* BADGE - DECREASED FONT SIZE */
         .college-pill-badge {
           display: inline-flex;
           align-items: center;
-          gap: 9px;
+          gap: 7px;
           background: rgba(0, 212, 255, 0.12);
           color: #00d4ff;
-          border: 1px solid rgba(0, 212, 255, 0.38);
+          border: 1px solid rgba(0, 212, 255, 0.35);
           backdrop-filter: blur(10px);
-          padding: 8px 22px;
+          padding: 6px 18px;
           border-radius: 50px;
-          font-size: 13px;
+          font-size: 11.5px;
           font-weight: 700;
           letter-spacing: 0.8px;
           text-transform: uppercase;
-          margin-bottom: 22px;
+          margin-bottom: 20px;
           animation: fadeInDown 0.7s ease-out forwards;
         }
 
-        /* HEADLINE */
+        /* HEADLINE - DECREASED FONT SIZE */
         .college-center-headline {
           color: #ffffff;
-          font-size: clamp(2.4rem, 5.2vw, 4.3rem);
+          font-size: clamp(1.8rem, 3.8vw, 3.2rem);
           font-weight: 800;
-          line-height: 1.15;
-          letter-spacing: -1px;
-          margin: 0 auto 20px;
+          line-height: 1.18;
+          letter-spacing: -0.5px;
+          margin: 0 auto 16px;
           animation: fadeInUp 0.8s ease-out forwards;
         }
 
-        /* REFERENCE-STYLE CYAN EMPHASIS */
+        /* CYAN EMPHASIS */
         .cyan-emphasis {
           color: #00d4ff;
           position: relative;
           display: inline-block;
-          text-shadow: 0 0 25px rgba(0, 212, 255, 0.45);
+          text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
           transition: transform 0.3s ease;
         }
 
         .cyan-emphasis:hover {
-          transform: scale(1.03);
+          transform: scale(1.02);
         }
 
-        /* QUOTATION / PARAGRAPH */
+        /* QUOTATION / PARAGRAPH - DECREASED FONT SIZE */
         .college-sub-quotation {
-          color: #e2e8f0;
-          font-size: clamp(1.02rem, 1.4vw, 1.22rem);
-          line-height: 1.7;
-          max-width: 820px;
-          margin: 0 auto 36px;
+          color: #cbd5e1;
+          font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+          line-height: 1.6;
+          max-width: 720px;
+          margin: 0 auto 30px;
           font-weight: 400;
           animation: fadeInUp 0.9s ease-out forwards;
         }
 
-        /* ACTION BUTTONS */
+        /* ACTION BUTTONS - DECREASED FONT SIZE & PADDING */
         .college-action-buttons {
           display: flex;
           justify-content: center;
           align-items: center;
-          gap: 16px;
+          gap: 14px;
           flex-wrap: wrap;
           animation: fadeInUp 1s ease-out forwards;
         }
@@ -176,80 +173,54 @@ const CollegeUniformsHero = () => {
         .btn-whatsapp-action {
           background-color: #25d366;
           color: #ffffff;
-          padding: 15px 32px;
-          border-radius: 12px;
-          font-size: 15px;
+          padding: 12px 26px;
+          border-radius: 10px;
+          font-size: 13.5px;
           font-weight: 700;
           text-decoration: none;
           display: inline-flex;
           align-items: center;
-          gap: 11px;
+          gap: 9px;
           border: none;
-          box-shadow: 0 6px 24px rgba(37, 211, 102, 0.35);
+          box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3);
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .btn-whatsapp-action:hover {
           background-color: #1ebe5d;
           color: #ffffff;
-          transform: translateY(-3px) scale(1.02);
-          box-shadow: 0 10px 32px rgba(37, 211, 102, 0.55);
+          transform: translateY(-2px) scale(1.01);
+          box-shadow: 0 8px 28px rgba(37, 211, 102, 0.48);
         }
 
         .btn-glass-action {
           background: rgba(255, 255, 255, 0.08);
           color: #ffffff;
-          border: 1.5px solid rgba(255, 255, 255, 0.22);
+          border: 1.5px solid rgba(255, 255, 255, 0.2);
           backdrop-filter: blur(12px);
-          padding: 15px 28px;
-          border-radius: 12px;
-          font-size: 15px;
+          padding: 12px 24px;
+          border-radius: 10px;
+          font-size: 13.5px;
           font-weight: 600;
           text-decoration: none;
           display: inline-flex;
           align-items: center;
-          gap: 10px;
+          gap: 9px;
           transition: all 0.3s ease;
         }
 
         .btn-glass-action:hover {
-          background: rgba(255, 255, 255, 0.16);
+          background: rgba(255, 255, 255, 0.15);
           border-color: #00d4ff;
           color: #00d4ff;
-          transform: translateY(-3px);
-          box-shadow: 0 8px 24px rgba(0, 212, 255, 0.25);
-        }
-
-        /* TRUST PILLARS */
-        .college-trust-bar {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 34px;
-          margin-top: 48px;
-          padding-top: 24px;
-          border-top: 1px solid rgba(255, 255, 255, 0.14);
-          flex-wrap: wrap;
-          animation: fadeInUp 1.1s ease-out forwards;
-        }
-
-        .trust-item {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          font-size: 13.5px;
-          color: #cbd5e1;
-          font-weight: 500;
-        }
-
-        .trust-item svg {
-          color: #00d4ff;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(0, 212, 255, 0.22);
         }
 
         @media (max-width: 768px) {
           .college-hero-section {
-            padding: 85px 18px 70px;
-            min-height: 70vh;
+            padding: 70px 16px 55px;
+            min-height: 65vh;
           }
           .college-action-buttons {
             flex-direction: column;
@@ -258,9 +229,6 @@ const CollegeUniformsHero = () => {
           .btn-whatsapp-action, .btn-glass-action {
             width: 100%;
             justify-content: center;
-          }
-          .college-trust-bar {
-            gap: 16px;
           }
         }
       `}</style>
@@ -273,22 +241,17 @@ const CollegeUniformsHero = () => {
         <div className="college-ambient-glow" />
 
         <div className="college-content-wrapper">
-          {/* TAG BADGE */}
-          <div className="college-pill-badge">
-            <FaGraduationCap size={16} /> Campus Identity & Academic Apparel
-          </div>
+          
 
           {/* MAIN HEADLINE WITH CYAN ACCENT */}
-          <h1 className="college-center-headline">
+          <h3 className="college-center-headline">
             Engineered for Campus Pride, Built for <br />
             <span className="cyan-emphasis">Excellence</span>
-          </h1>
+          </h3>
 
-          {/* NEW COLLEGE QUOTATION */}
+          {/* SUB-HEADLINE QUOTATION */}
           <p className="college-sub-quotation">
-            “Unity, discipline, and identity begin with what your students wear.” Browse our
-            institutional uniform line crafted with breathable, fade-resistant fabrics designed 
-            for university campuses, colleges, lab work, and direct faculty bulk supply.
+            “Unity, discipline, and identity begin with what your students wear.” Browse our institutional uniform line crafted with premium breathable fabrics, custom crest embroidery, and reliable faculty bulk supply.
           </p>
 
           {/* CTA BUTTONS WITH DIRECT WHATSAPP ORDER */}
@@ -299,25 +262,12 @@ const CollegeUniformsHero = () => {
               rel="noopener noreferrer" 
               className="btn-whatsapp-action"
             >
-              <FaWhatsapp size={19} /> Order Bulk on WhatsApp
+              <FaWhatsapp size={17} /> Order Bulk on WhatsApp
             </a>
 
             <a href="#college-catalog" className="btn-glass-action">
-              <FaBookOpen size={15} /> Explore Fabric Catalog
+              <FaBookOpen size={14} /> Explore Fabric Catalog
             </a>
-          </div>
-
-          {/* TRUST PILLARS */}
-          <div className="college-trust-bar">
-            <div className="trust-item">
-              <FaCheckCircle size={14} /> Direct Institutional Pricing
-            </div>
-            <div className="trust-item">
-              <FaShieldAlt size={14} /> High Tear-Strength & Fade Resistant
-            </div>
-            <div className="trust-item">
-              <FaCheckCircle size={14} /> Custom College Crest Embroidery
-            </div>
           </div>
         </div>
       </section>

@@ -63,7 +63,7 @@ const ManagerSidebar = () => {
       <div className="mb-5 px-2">
 
         <h4 className="fw-bold mb-1">
-          VOXCEL NOVA
+          VOXCL NOVA
         </h4>
 
         <small

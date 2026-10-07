@@ -73,7 +73,7 @@ const Wishlist = () => {
               }}
             >
               Your favorite
-              VOXCEL NOVA
+              VOXCL NOVA
               products.
             </p>
           </div>

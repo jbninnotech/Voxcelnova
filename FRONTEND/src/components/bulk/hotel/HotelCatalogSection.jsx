@@ -496,7 +496,7 @@ export default function InstitutionalCatalogSection() {
           </h2>
 
           <p className="intro-description">
-            <b>Voxcel Nova</b> manufactures high-performance institutional apparel for leading hospitals, medical centers, 
+            <b>Voxel Nova</b> manufactures high-performance institutional apparel for leading hospitals, medical centers, 
             and 5-star hotels. Engineered with hospital-grade antimicrobial finishes, fluid-repellent barriers, and 
             stain-resistant suiting fabrics designed to withstand demanding shifts and 100+ commercial wash cycles.
           </p>

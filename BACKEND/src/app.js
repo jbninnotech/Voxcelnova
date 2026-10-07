@@ -35,12 +35,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // =========================================================
-// CORS
+// CORS FIX
 // =========================================================
 const allowedOrigins = [
-  process.env.CLIENT_URL,
-  "http://localhost:5173",
-  "http://localhost:3000",
+  process.env.CLIENT_URL,                 // from .env if you set it
+  "http://localhost:5173",                // local dev
+  "http://localhost:3000",                // local dev
+  "https://voxelnovaininnovations.netlify.app" // ✅ your Netlify site
 ].filter(Boolean);
 
 app.use(

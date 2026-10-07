@@ -56,7 +56,7 @@ const FoundersPage = ({
       social: {
         linkedin: "#",
         twitter: "#",
-        email: "srinivas@voxcelnova.com",
+        email: "srinivas@voxelnova.com",
       },
     },
     {
@@ -76,7 +76,7 @@ const FoundersPage = ({
       social: {
         linkedin: "#",
         twitter: "#",
-        email: "srisailam@voxcelnova.com",
+        email: "srisailam@voxelnova.com",
       },
     },
   ];

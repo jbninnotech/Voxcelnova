@@ -4,7 +4,7 @@ const ProductSpecifications = ({ product = {} }) => {
   const specifications = [
     ["Product Type", product.category || "Clothing"],
     ["Material", product.material || "Premium Fabric"],
-    ["Brand", product.brand || "VOXCEL NOVA"],
+    ["Brand", product.brand || "VOXEL NOVA"],
     [
       "Available Sizes",
       product.sizes?.length

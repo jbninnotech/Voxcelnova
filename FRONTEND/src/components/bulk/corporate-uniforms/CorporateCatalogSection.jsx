@@ -532,7 +532,7 @@ export default function CorporateCatalogSection() {
           </h2>
 
           <p className="intro-description">
-            At <b>Voxcel Nova</b>, corporate uniform manufacturing goes beyond generic clothing. We engineer 
+            At <b>Voxel Nova</b>, corporate uniform manufacturing goes beyond generic clothing. We engineer 
             custom workplace apparel built with crease-retentive Giza cotton blends, anti-pilling poly-viscose, 
             and Japanese multi-head embroidery. Each uniform is individually bagged, department-coded, and 
             scaled to preserve your company’s brand prestige across every department.

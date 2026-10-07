@@ -284,7 +284,7 @@ export default function WhyChooseUsSection() {
             }}
           >
             <FaBolt size={12} color="var(--color-cobalt)" />
-            <span>WHY CHOOSE VOXCEL NOVA</span>
+            <span>WHY CHOOSE VOXEL NOVA</span>
           </div>
 
           <h2

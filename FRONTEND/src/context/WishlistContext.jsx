@@ -8,7 +8,7 @@ import authStorage from "../utils/authStorage";
 import * as wishlistApi from "../services/wishlistService";
 
 const WishlistContext = createContext(null);
-const WISHLIST_STORAGE_KEY = "voxcel_nova_wishlist";
+const WISHLIST_STORAGE_KEY = "voxel_nova_wishlist";
 
 export const WishlistProvider = ({ children }) => {
   const [wishlistItems, setWishlistItems] = useState(() => {

@@ -95,13 +95,11 @@ export default function ResponsiveCylindricalRibbon() {
     typeof window !== 'undefined' ? window.innerWidth : 1200
   );
 
-  // References for drag & 60/120Hz smooth animation
   const scrollRef = useRef(0);
   const lastXRef = useRef(0);
   const velocityRef = useRef(0);
   const animFrameRef = useRef(null);
 
-  // Screen breakpoints
   const isSmallMobile = windowWidth < 480;
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
@@ -112,7 +110,6 @@ export default function ResponsiveCylindricalRibbon() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Adaptive Geometry: Scales down cards on mobile so multiple cards curve into view
   const CARD_WIDTH = isSmallMobile ? 165 : isMobile ? 185 : isTablet ? 210 : 245;
   const CARD_HEIGHT = isSmallMobile ? 260 : isMobile ? 290 : isTablet ? 330 : 375;
   const CARD_GAP = isMobile ? 5 : 7;
@@ -120,12 +117,10 @@ export default function ResponsiveCylindricalRibbon() {
   const TOTAL_ITEMS = COLLECTIONS.length;
   const TOTAL_LOOP_WIDTH = TOTAL_ITEMS * ITEM_STRIDE;
 
-  // Adaptive Cylinder Radius and Perspective for natural mobile curve
   const CYLINDER_RADIUS = isMobile ? 680 : isTablet ? 920 : 1180;
   const PERSPECTIVE = isMobile ? 650 : 950;
   const STAGE_HEIGHT = isSmallMobile ? 320 : isMobile ? 360 : 470;
 
-  // 1. High-Performance Right-to-Left Auto-Scroll Engine
   useEffect(() => {
     let lastTime = performance.now();
 
@@ -136,9 +131,8 @@ export default function ResponsiveCylindricalRibbon() {
       if (!isInteracting) {
         if (Math.abs(velocityRef.current) > 0.1) {
           scrollRef.current += velocityRef.current;
-          velocityRef.current *= 0.93; // Inertial coasting friction
+          velocityRef.current *= 0.93;
         } else if (!isHovered) {
-          // Speed: ~115px/s on desktop, scaled gently to ~90px/s on mobile
           const speed = isMobile ? 90 : 115;
           scrollRef.current += speed * Math.min(delta, 0.1);
         }
@@ -152,7 +146,6 @@ export default function ResponsiveCylindricalRibbon() {
     return () => cancelAnimationFrame(animFrameRef.current);
   }, [isInteracting, isHovered, isMobile]);
 
-  // 2. Mobile Touch & Mouse Gestures
   const handleTouchStart = (clientX) => {
     setIsInteracting(true);
     lastXRef.current = clientX;
@@ -173,7 +166,6 @@ export default function ResponsiveCylindricalRibbon() {
     setIsInteracting(false);
   };
 
-  // Stepper Controller Buttons
   const stepScroll = (direction) => {
     velocityRef.current = direction * (isMobile ? 20 : 28);
   };
@@ -187,24 +179,44 @@ export default function ResponsiveCylindricalRibbon() {
         userSelect: 'none',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justify: 'space-between',
         padding: isMobile ? '16px 12px 20px 12px' : '26px 24px',
         fontFamily: "'Playfair Display', Georgia, serif",
       }}
       onMouseUp={handleTouchEnd}
       onTouchEnd={handleTouchEnd}
     >
-      {/* ================= HEADER ROW WITH TOP-RIGHT CONTROLLERS ================= */}
+      {/* Inline Keyframe Styles for Title Animation */}
+      <style>{`
+        @keyframes fadeInUpTitle {
+          from {
+            opacity: 0;
+            transform: translateY(18px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+
+      {/* ================= HEADER ROW WITH CENTERED TITLE & NAVIGATION CONTROLLERS ================= */}
       <div className="container-fluid px-1 px-md-3">
-        <div className="d-flex align-items-center justify-content-between gap-2">
-          {/* Title Area */}
-          <div>
+        <div className="d-flex align-items-center justify-content-between gap-2 position-relative">
+          {/* Centered Animated Title */}
+          <div
+            className="text-center mx-auto"
+            style={{
+              animation: 'fadeInUpTitle 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            }}
+          >
             <p
               className="text-uppercase mb-1 fw-bold"
               style={{
                 letterSpacing: isMobile ? '2px' : '3.5px',
                 fontSize: isMobile ? '9.5px' : '11px',
                 color: '#6B82A0',
+                animation: 'fadeInUpTitle 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
               }}
             >
               The Signature Silk Horizon
@@ -213,10 +225,12 @@ export default function ResponsiveCylindricalRibbon() {
               style={{
                 fontSize: 'clamp(1.35rem, 4.2vw, 2.7rem)',
                 fontWeight: '400',
-                letterSpacing: '-0.5px',
+                letterSpacing: '-1.5px',
                 color: '#071838',
                 margin: 0,
                 lineHeight: 1.15,
+                animation: 'fadeInUpTitle 1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards',
+                opacity: 0,
               }}
             >
               Woven to Be{' '}
@@ -226,8 +240,8 @@ export default function ResponsiveCylindricalRibbon() {
             </h1>
           </div>
 
-          {/* Top-Right Controllers */}
-          <div className="d-flex align-items-center gap-1 gap-sm-2 flex-shrink-0">
+          {/* Absolute Positioned Controllers to Preserve True Center Alignment */}
+          <div className="position-absolute end-0 d-flex align-items-center gap-1 gap-sm-2 flex-shrink-0">
             <button
               onClick={() => stepScroll(-1)}
               className="btn rounded-circle d-flex align-items-center justify-content-center"
@@ -310,23 +324,19 @@ export default function ResponsiveCylindricalRibbon() {
               const itemBaseX = (idx + copyIndex * TOTAL_ITEMS) * ITEM_STRIDE;
               const relativeX = itemBaseX - (scrollPos % TOTAL_LOOP_WIDTH);
 
-              // Seamless infinite wrapping
               const halfSpan = TOTAL_LOOP_WIDTH * 1.5;
               const wrappedX =
                 ((((relativeX + halfSpan) % TOTAL_LOOP_WIDTH) + TOTAL_LOOP_WIDTH) % TOTAL_LOOP_WIDTH) -
                 TOTAL_LOOP_WIDTH / 2;
 
-              // Viewport Culling for maximum mobile performance
               const maxViewX = isMobile ? 550 : 1200;
               if (Math.abs(wrappedX) > maxViewX) return null;
 
-              // Cylindrical Arc Transformations
               const angleRad = wrappedX / CYLINDER_RADIUS;
               const posX = CYLINDER_RADIUS * Math.sin(angleRad);
               const posZ = CYLINDER_RADIUS * (Math.cos(angleRad) - 1);
               const rotY = (angleRad * 180) / Math.PI;
 
-              // Subtle shadow fade as cards curve back
               const depthDarkness = Math.min(Math.abs(wrappedX) / (isMobile ? 420 : 750), 1) * 0.42;
 
               return (
@@ -350,7 +360,6 @@ export default function ResponsiveCylindricalRibbon() {
                     transition: isInteracting ? 'none' : 'box-shadow 0.2s ease',
                   }}
                 >
-                  {/* Card Image */}
                   <img
                     src={card.img}
                     alt={card.title}
@@ -364,7 +373,6 @@ export default function ResponsiveCylindricalRibbon() {
                     }}
                   />
 
-                  {/* Cylindrical Edge Depth Shading */}
                   <div
                     style={{
                       position: 'absolute',
@@ -374,7 +382,6 @@ export default function ResponsiveCylindricalRibbon() {
                     }}
                   />
 
-                  {/* Dark Bottom Gradient for High Readability */}
                   <div
                     style={{
                       position: 'absolute',
@@ -385,7 +392,6 @@ export default function ResponsiveCylindricalRibbon() {
                     }}
                   />
 
-                  {/* Category Chip Badge */}
                   <span
                     style={{
                       position: 'absolute',
@@ -405,7 +411,6 @@ export default function ResponsiveCylindricalRibbon() {
                     {card.tag}
                   </span>
 
-                  {/* Overlay Title & Price */}
                   <div
                     style={{
                       position: 'absolute',

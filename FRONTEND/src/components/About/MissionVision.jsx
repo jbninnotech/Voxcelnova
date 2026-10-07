@@ -307,7 +307,7 @@ export default function MissionVision() {
             </h2>
 
             <p className="vx-section-description">
-              At VOXCEL NOVA, apparel is an engineering feat of organizational identity. 
+              At VOXEL NOVA, apparel is an engineering feat of organizational identity. 
               We combine automated digital cutting lines with certified textile benchmarks to produce garments that inspire confidence.
             </p>
           </div>

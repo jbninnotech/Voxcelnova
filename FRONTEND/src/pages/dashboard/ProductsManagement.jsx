@@ -154,7 +154,7 @@ const ProductsManagement = () => {
               fontSize: "14px",
             }}
           >
-            Manage all products added to VOXCEL NOVA.
+            Manage all products added to VOXCL NOVA.
           </p>
         </div>
 
